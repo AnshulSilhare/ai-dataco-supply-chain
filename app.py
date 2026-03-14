@@ -30,6 +30,15 @@ scaler_path = os.path.join(BASE_DIR, "dataco_scaler.joblib")
 cols_path   = os.path.join(BASE_DIR, "dataco_columns.joblib")
 
 # ──────────────────────────────────────────────
+# 2b. CACHED MODEL LOADER (must be defined before any
+#     complex st.markdown / components.html strings to
+#     avoid tokenize.TokenError in inspect.getsource)
+# ──────────────────────────────────────────────
+@st.cache_resource(show_spinner=False)
+def load_nexus_models():
+    return joblib.load(model_path), joblib.load(scaler_path), joblib.load(cols_path)
+
+# ──────────────────────────────────────────────
 # 3. DEMO CSV — embedded, no external file needed
 #    Uses only valid regions/modes so it predicts
 #    cleanly right out of the box.
@@ -613,12 +622,8 @@ document.querySelectorAll('.cnt').forEach(el=>{
 """, height=145)
 
 # ──────────────────────────────────────────────
-# 10. LOAD MODEL
+# 10. LOAD MODEL (function defined at top of file)
 # ──────────────────────────────────────────────
-@st.cache_resource(show_spinner=False)
-def load_nexus_models():
-    return joblib.load(model_path), joblib.load(scaler_path), joblib.load(cols_path)
-
 try:
     model, scaler, model_columns = load_nexus_models()
     st.success("⬡  AI BRAIN ONLINE — Random Forest ensemble loaded successfully")
