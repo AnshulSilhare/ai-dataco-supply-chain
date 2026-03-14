@@ -487,7 +487,8 @@ with tab_single:
         with adv_col2:
             adv_profit = st.number_input("Profit Per Order ($)", min_value=0.0, value=20.0, step=5.0)
 
-    run_btn = st.button("⬡  RUN PREDICTIVE ANALYSIS")
+    run_btn = st.button("⬡  RUN PREDICTIVE ANALYSIS",
+    use_container_width=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
     if run_btn:
@@ -721,7 +722,8 @@ with tab_bulk:
     with dl1:
         st.download_button("⬡  DOWNLOAD DEMO CSV", data=DEMO_CSV_BYTES,
                            file_name="nexus_demo_batch.csv", mime="text/csv",
-                           width='stretch')
+                           ,
+    use_container_width=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown('<div class="sec-sub">Upload Your CSV File</div>', unsafe_allow_html=True)
@@ -775,7 +777,8 @@ with tab_bulk:
             st.dataframe(bulk_df.head(8), width='stretch')
 
             btn_label = "⬡  RUN DEMO PREDICTION" if using_demo else "⬡  EXECUTE ENTERPRISE BATCH PREDICTION"
-            if st.button(btn_label, width='stretch'):
+            if st.button(btn_label, ,
+    use_container_width=True):
                 pred_ok = False
                 try:
                     with st.spinner("⬡  Nexus Engine classifying batch..."):
@@ -829,7 +832,8 @@ with tab_bulk:
                     st.download_button(
                         "⬡  EXPORT CLASSIFIED RECORDS (.CSV)",
                         data=bulk_df.to_csv(index=False).encode("utf-8"),
-                        file_name=export_name, mime="text/csv", width='stretch',
+                        file_name=export_name, mime="text/csv", ,
+    use_container_width=True,
                     )
 
     st.markdown('</div>', unsafe_allow_html=True)
