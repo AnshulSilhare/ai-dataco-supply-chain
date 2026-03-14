@@ -94,7 +94,16 @@ DEMO_CSV_BYTES = DEMO_CSV_CONTENT.encode("utf-8")
 REQUIRED_COLS    = ["Shipping Mode", "Order Region"]
 OPTIONAL_COLS    = ["Days_Scheduled", "Order_Item_Quantity", "Sales", "Order_Profit_Per_Order"]
 VALID_SHIP_MODES = ["Standard Class", "First Class", "Second Class", "Same Day"]
-VALID_REGIONS    = ["Southeast Asia", "South Asia", "Oceania", "Eastern Asia", "West Asia", "Europe", "Africa", "Central America", "South America"]
+VALID_REGIONS    = ["Southeast Asia", "South Asia", "Oceania", "Eastern Asia", "West Asia"]
+REGION_MAPPING   = {
+    "Europe": "West Asia",
+    "Africa": "West Asia",
+    "Central America": "South Asia",
+    "South America": "South Asia",
+    "North America": "Eastern Asia",
+    "Caribbean": "South Asia",
+    "Middle East": "West Asia",
+}
 DEFAULT_VALS     = {
     "Days_Scheduled": 3,
     "Order_Item_Quantity": 1,
@@ -137,6 +146,11 @@ def validate_and_clean(df: pd.DataFrame):
         df["Shipping Mode"] = df["Shipping Mode"].where(
             df["Shipping Mode"].isin(VALID_SHIP_MODES), "Standard Class"
         )
+
+    # Apply region mapping first for known aliases
+    mapped_mask = ~df["Order Region"].isin(VALID_REGIONS) & df["Order Region"].isin(REGION_MAPPING.keys())
+    if mapped_mask.any():
+        df.loc[mapped_mask, "Order Region"] = df.loc[mapped_mask, "Order Region"].map(REGION_MAPPING)
 
     bad_regions = df[~df["Order Region"].isin(VALID_REGIONS)]["Order Region"].unique().tolist()
     if bad_regions:
