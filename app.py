@@ -94,7 +94,7 @@ DEMO_CSV_BYTES = DEMO_CSV_CONTENT.encode("utf-8")
 REQUIRED_COLS    = ["Shipping Mode", "Order Region"]
 OPTIONAL_COLS    = ["Days_Scheduled", "Order_Item_Quantity", "Sales", "Order_Profit_Per_Order"]
 VALID_SHIP_MODES = ["Standard Class", "First Class", "Second Class", "Same Day"]
-VALID_REGIONS    = ["Southeast Asia", "South Asia", "Oceania", "Eastern Asia", "West Asia"]
+VALID_REGIONS    = ["Southeast Asia", "South Asia", "Oceania", "Eastern Asia", "West Asia", "Europe", "Africa", "Central America", "South America"]
 DEFAULT_VALS     = {
     "Days_Scheduled": 3,
     "Order_Item_Quantity": 1,
@@ -910,11 +910,11 @@ with tab_about:
         st.markdown("""
         <table style="width:100%;font-family:var(--font-mono);font-size:.75rem;border-collapse:collapse;color:#e2e8f0">
           <tr style="border-bottom:1px solid rgba(0,229,255,0.1)"><th style="color:#00e5ff;text-align:left;padding:.4rem 0">Order Region</th></tr>
-          <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.35rem 0;color:#94a3b8">Southeast Asia</td></tr>
-          <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.35rem 0;color:#94a3b8">South Asia</td></tr>
-          <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.35rem 0;color:#94a3b8">Oceania</td></tr>
-          <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.35rem 0;color:#94a3b8">Eastern Asia</td></tr>
-          <tr><td style="padding:.35rem 0;color:#94a3b8">West Asia</td></tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.35rem 0;color:#94a3b8">Southeast / South Asia</td></tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.35rem 0;color:#94a3b8">Eastern / West Asia</td></tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.35rem 0;color:#94a3b8">Europe / Africa</td></tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.35rem 0;color:#94a3b8">Central / South America</td></tr>
+          <tr><td style="padding:.35rem 0;color:#94a3b8">Oceania</td></tr>
         </table>""", unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
