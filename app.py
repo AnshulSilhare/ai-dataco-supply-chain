@@ -34,8 +34,7 @@ cols_path   = os.path.join(BASE_DIR, "dataco_columns.joblib")
 #    Uses only valid regions/modes so it predicts
 #    cleanly right out of the box.
 # ──────────────────────────────────────────────
-DEMO_CSV_CONTENT = """\
-Shipping Mode,Order Region,Days_Scheduled,Order_Item_Quantity,Sales,Order_Profit_Per_Order
+DEMO_CSV_CONTENT = """Shipping Mode,Order Region,Days_Scheduled,Order_Item_Quantity,Sales,Order_Profit_Per_Order
 Standard Class,Southeast Asia,5,2,250.50,40.20
 Second Class,South Asia,4,1,120.00,18.50
 First Class,Oceania,2,3,450.75,80.40
@@ -56,6 +55,16 @@ First Class,Southeast Asia,2,3,410.00,75.50
 Second Class,West Asia,4,2,190.00,28.40
 Standard Class,South Asia,6,4,350.00,55.00
 First Class,Oceania,2,1,160.00,25.10
+Same Day,South Asia,1,1,92.00,14.50
+Standard Class,Eastern Asia,5,3,340.00,46.00
+First Class,Southeast Asia,2,2,210.00,45.50
+Second Class,West Asia,4,1,90.00,18.40
+Standard Class,South Asia,6,2,150.00,25.00
+First Class,Oceania,2,4,460.00,95.10
+Standard Class,Southeast Asia,5,1,150.50,20.20
+Second Class,South Asia,4,3,320.00,48.50
+First Class,Oceania,2,2,250.75,40.40
+Standard Class,Eastern Asia,6,1,100.60,15.00
 """
 DEMO_CSV_BYTES = DEMO_CSV_CONTENT.encode("utf-8")
 
