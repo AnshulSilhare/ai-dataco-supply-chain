@@ -104,6 +104,14 @@ REGION_MAPPING   = {
     "Caribbean": "South Asia",
     "Middle East": "West Asia",
 }
+COLUMN_ALIASES = {
+    "Shipping Mode": ["ship mode", "shipping", "shipping class", "shipment mode", "shipping_mode"],
+    "Order Region": ["region", "order_region", "destination region", "hub", "delivery region"],
+    "Days_Scheduled": ["days scheduled", "scheduled days", "sla", "transit days", "days_scheduled"],
+    "Order_Item_Quantity": ["qty", "quantity", "item quantity", "item_qty", "order quantity", "pieces"],
+    "Sales": ["sales", "order value", "revenue", "total sales", "amount"],
+    "Order_Profit_Per_Order": ["profit", "margin", "order profit", "profit_per_order", "net profit"],
+}
 DEFAULT_VALS     = {
     "Days_Scheduled": 3,
     "Order_Item_Quantity": 1,
@@ -121,6 +129,22 @@ def validate_and_clean(df: pd.DataFrame):
     if df.empty:
         errors.append("FILE IS EMPTY — upload a file with at least one data row.")
         return df, warnings, errors
+
+    # 1. Column Alias Resolution (Case & space insensitive)
+    # Give users grace if they name their columns slightly differently
+    renames = {}
+    for actual_col in df.columns:
+        normalized_actual = str(actual_col).lower().replace("_", " ").strip()
+        for expected_col, aliases in COLUMN_ALIASES.items():
+            normalized_aliases = [str(a).lower().replace("_", " ").strip() for a in aliases]
+            if normalized_actual == expected_col.lower().replace("_", " ").strip() or normalized_actual in normalized_aliases:
+                if actual_col != expected_col:
+                    renames[actual_col] = expected_col
+                    warnings.append(f"Auto-mapped column `{actual_col}` ➔ `{expected_col}`")
+                break
+                
+    if renames:
+        df = df.rename(columns=renames)
 
     missing_required = [c for c in REQUIRED_COLS if c not in df.columns]
     if missing_required:
