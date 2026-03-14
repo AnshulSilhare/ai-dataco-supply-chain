@@ -1,0 +1,6 @@
+# Ignore massive AI models
+*.joblib
+
+# Ignore environment folders
+__pycache__/
+PythonWe/
