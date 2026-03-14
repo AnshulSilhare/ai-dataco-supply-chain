@@ -831,7 +831,7 @@ with tab_bulk:
                     st.download_button(
                         "⬡  EXPORT CLASSIFIED RECORDS (.CSV)",
                         data=bulk_df.to_csv(index=False).encode("utf-8"),
-                        file_name=export_name, mime="text/csv", ,
+                        file_name=export_name, mime="text/csv",
     use_container_width=True,
                     )
 
