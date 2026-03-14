@@ -441,17 +441,26 @@ hr { border-color:var(--border) !important; margin:2rem 0 !important; }
 # 7. PARTICLE CANVAS
 # ──────────────────────────────────────────────
 components.html("""
-<canvas id="c" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.5;"></canvas>
 <script>
 (function(){
-  const cv=document.getElementById('c'),cx=cv.getContext('2d');
+  const parent = window.parent.document;
+  if(parent.getElementById('nexus-bg-canvas')) return; // Prevent duplicate injection on re-renders
+  
+  const cv = parent.createElement('canvas');
+  cv.id = 'nexus-bg-canvas';
+  cv.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.5;';
+  parent.body.insertBefore(cv, parent.body.firstChild);
+  
+  const cx = cv.getContext('2d');
   let W,H,P=[],N=[], mx=-1000, my=-1000;
-  function resize(){ W=cv.width=window.innerWidth; H=cv.height=window.innerHeight; }
-  window.addEventListener('resize',resize); resize();
+  
+  function resize(){ W = cv.width = window.parent.innerWidth; H = cv.height = window.parent.innerHeight; }
+  window.parent.addEventListener('resize', resize);
+  resize();
   
   // Track mouse coordinates from parent Streamlit window
-  window.parent.document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-  window.parent.document.addEventListener('mouseleave', () => { mx = -1000; my = -1000; });
+  window.parent.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  window.parent.addEventListener('mouseleave', () => { mx = -1000; my = -1000; });
 
   for(let i=0;i<55;i++) P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5,a:Math.random()});
   for(let i=0;i<12;i++) N.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18});
