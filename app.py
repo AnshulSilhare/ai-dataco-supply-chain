@@ -244,10 +244,10 @@ div[data-testid="stVerticalBlock"] { gap: 0 !important; }
 
 .glass {
     background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-    padding: 2rem 2.25rem; backdrop-filter: blur(24px) saturate(160%);
+    padding: 2.5rem; backdrop-filter: blur(24px) saturate(160%);
     -webkit-backdrop-filter: blur(24px) saturate(160%);
     box-shadow: 0 0 0 1px rgba(0,229,255,0.04) inset, 0 24px 48px -12px rgba(0,0,0,0.7);
-    margin-bottom: 1.5rem; position: relative; overflow: hidden;
+    margin-bottom: 2rem; position: relative; overflow: hidden;
     transition: border-color .35s ease, box-shadow .35s ease;
 }
 .glass::before { content:''; position:absolute; top:0; left:0; right:0; height:1px;
@@ -291,8 +291,8 @@ div[data-testid="stVerticalBlock"] { gap: 0 !important; }
 }
 @keyframes pulse-badge { 0%,100%{box-shadow:0 0 0 0 rgba(0,229,255,0.3)} 50%{box-shadow:0 0 0 8px rgba(0,229,255,0)} }
 .hero-title {
-    font-family:var(--font-body); font-weight:800; font-size:clamp(2.8rem,6vw,4.8rem);
-    line-height:1.05; letter-spacing:-1px; margin:0 0 .8rem;
+    font-family:var(--font-body); font-weight:800; font-size:clamp(3rem,6vw,5.5rem);
+    line-height:1.1; letter-spacing:-1.5px; margin:0 0 1rem;
     background:linear-gradient(135deg,#ffffff 0%,var(--cyan) 50%,var(--violet) 100%);
     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
 }
@@ -388,33 +388,45 @@ hr { border-color:var(--border) !important; margin:2rem 0 !important; }
 
 /* ── Mobile responsive ── */
 @media (max-width: 768px) {
-    .hero-title { font-size: 2.4rem !important; }
-    .hero-badge { font-size: .6rem !important; letter-spacing: 2px !important; }
-    .hero-sub   { font-size: .78rem !important; }
-    .glass      { padding: 1.25rem 1rem !important; }
-    .sec-header { font-size: 1rem !important; }
-    .kpi-num    { font-size: 1.4rem !important; }
-    .feat-name  { width: 80px !important; font-size: .65rem !important; }
-    .result-danger, .result-success { padding: 1rem !important; }
-    .result-icon { font-size: 1.8rem !important; }
+    .hero-title { font-size: 2.8rem !important; }
+    .hero-badge { font-size: .65rem !important; letter-spacing: 2px !important; margin-bottom: 1.2rem !important; }
+    .hero-sub   { font-size: .85rem !important; padding: 0 1rem; }
+    .glass      { padding: 1.5rem 1.25rem !important; border-radius: 12px !important; margin-bottom: 1.25rem !important; }
+    .sec-header { font-size: 1.1rem !important; margin-bottom: 1rem !important; }
+    .kpi-num    { font-size: 1.6rem !important; }
+    .feat-name  { width: 90px !important; font-size: .7rem !important; }
+    .result-danger, .result-success { padding: 1.25rem !important; }
+    .result-icon { font-size: 2rem !important; }
 
-    /* Stack columns vertically on mobile */
+    /* Stack columns vertically on mobile with proper spacing */
     [data-testid="column"] {
         width: 100% !important;
         flex: 1 1 100% !important;
         min-width: 100% !important;
+        padding-bottom: 1rem !important;
+    }
+    
+    /* Remove bottom padding from last column to prevent double spacing */
+    [data-testid="column"]:last-child {
+        padding-bottom: 0 !important;
     }
 
-    /* Shrink tab labels */
+    /* Shrink tab labels proportionally */
     .stTabs [data-baseweb="tab"] {
-        font-size: .65rem !important;
-        padding: 6px 10px !important;
-        letter-spacing: 0px !important;
+        font-size: .7rem !important;
+        padding: 8px 12px !important;
+        letter-spacing: .5px !important;
     }
-
+    
+    /* Ensure charts fit on mobile */
+    .g-wrap { width: 180px !important; }
+    
     /* Prevent horizontal scroll */
     .stApp { overflow-x: hidden !important; }
     .glass { overflow-x: hidden !important; }
+    
+    /* Improve terminal display on mobile */
+    .terminal { padding: 1rem !important; font-size: .75rem !important; }
 }
 </style>
 """, unsafe_allow_html=True)
