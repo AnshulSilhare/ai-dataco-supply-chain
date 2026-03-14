@@ -722,7 +722,6 @@ with tab_bulk:
     with dl1:
         st.download_button("⬡  DOWNLOAD DEMO CSV", data=DEMO_CSV_BYTES,
                            file_name="nexus_demo_batch.csv", mime="text/csv",
-                           ,
     use_container_width=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
