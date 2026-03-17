@@ -24,11 +24,10 @@ st.set_page_config(
 # ──────────────────────────────────────────────
 # 2. PATHS
 # ──────────────────────────────────────────────
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(BASE_DIR, "dataco_rf_model.joblib")
+BASE_DIR    = os.path.dirname(os.path.abspath(__file__))
+model_path  = os.path.join(BASE_DIR, "dataco_rf_model.joblib")
 scaler_path = os.path.join(BASE_DIR, "dataco_scaler.joblib")
-cols_path = os.path.join(BASE_DIR, "dataco_columns.joblib")
-
+cols_path   = os.path.join(BASE_DIR, "dataco_columns.joblib")
 
 # ──────────────────────────────────────────────
 # 2b. CACHED MODEL LOADER (must be defined before any
@@ -37,37 +36,7 @@ cols_path = os.path.join(BASE_DIR, "dataco_columns.joblib")
 # ──────────────────────────────────────────────
 @st.cache_resource(show_spinner=False)
 def load_nexus_models():
-    try:
-        return joblib.load(model_path), joblib.load(scaler_path), joblib.load(cols_path)
-    except ImportError as e:
-        if "DLL load failed" in str(e) or "cannot import" in str(e):
-            st.error(
-                """
-            ### ⚠️ MODEL ERROR — DLL Load Failed
-            
-            This error occurs when the saved model files were created with a different
-            version of numpy/scikit-learn than what's currently installed.
-            
-            **Solution:**
-            1. Ensure you have the correct package versions:
-               ```bash
-               pip install numpy==1.24.4 scikit-learn==1.3.2
-               ```
-            2. Install Microsoft Visual C++ Redistributable:
-               https://aka.ms/vs/17/release/vc_redist.x64.exe
-            3. Clear Streamlit cache:
-               ```bash
-               streamlit cache clear
-               ```
-            4. Restart the Streamlit server
-            
-            **Alternative:** If you have the training notebook, regenerate the model files
-            using the exact same package versions listed in requirements.txt.
-            """
-            )
-            st.stop()
-        raise
-
+    return joblib.load(model_path), joblib.load(scaler_path), joblib.load(cols_path)
 
 # ──────────────────────────────────────────────
 # 3. DEMO CSV — embedded, no external file needed
@@ -131,16 +100,11 @@ DEMO_CSV_BYTES = DEMO_CSV_CONTENT.encode("utf-8")
 # ──────────────────────────────────────────────
 # 4. VALIDATION CONSTANTS
 # ──────────────────────────────────────────────
-REQUIRED_COLS = ["Shipping Mode", "Order Region"]
-OPTIONAL_COLS = [
-    "Days_Scheduled",
-    "Order_Item_Quantity",
-    "Sales",
-    "Order_Profit_Per_Order",
-]
+REQUIRED_COLS    = ["Shipping Mode", "Order Region"]
+OPTIONAL_COLS    = ["Days_Scheduled", "Order_Item_Quantity", "Sales", "Order_Profit_Per_Order"]
 VALID_SHIP_MODES = ["Standard Class", "First Class", "Second Class", "Same Day"]
-VALID_REGIONS = ["Southeast Asia", "South Asia", "Oceania", "Eastern Asia", "West Asia"]
-REGION_MAPPING = {
+VALID_REGIONS    = ["Southeast Asia", "South Asia", "Oceania", "Eastern Asia", "West Asia"]
+REGION_MAPPING   = {
     "Europe": "West Asia",
     "Africa": "West Asia",
     "Central America": "South Asia",
@@ -150,51 +114,19 @@ REGION_MAPPING = {
     "Middle East": "West Asia",
 }
 COLUMN_ALIASES = {
-    "Shipping Mode": [
-        "ship mode",
-        "shipping",
-        "shipping class",
-        "shipment mode",
-        "shipping_mode",
-    ],
-    "Order Region": [
-        "region",
-        "order_region",
-        "destination region",
-        "hub",
-        "delivery region",
-    ],
-    "Days_Scheduled": [
-        "days scheduled",
-        "scheduled days",
-        "sla",
-        "transit days",
-        "days_scheduled",
-    ],
-    "Order_Item_Quantity": [
-        "qty",
-        "quantity",
-        "item quantity",
-        "item_qty",
-        "order quantity",
-        "pieces",
-    ],
+    "Shipping Mode": ["ship mode", "shipping", "shipping class", "shipment mode", "shipping_mode"],
+    "Order Region": ["region", "order_region", "destination region", "hub", "delivery region"],
+    "Days_Scheduled": ["days scheduled", "scheduled days", "sla", "transit days", "days_scheduled"],
+    "Order_Item_Quantity": ["qty", "quantity", "item quantity", "item_qty", "order quantity", "pieces"],
     "Sales": ["sales", "order value", "revenue", "total sales", "amount"],
-    "Order_Profit_Per_Order": [
-        "profit",
-        "margin",
-        "order profit",
-        "profit_per_order",
-        "net profit",
-    ],
+    "Order_Profit_Per_Order": ["profit", "margin", "order profit", "profit_per_order", "net profit"],
 }
-DEFAULT_VALS = {
+DEFAULT_VALS     = {
     "Days_Scheduled": 3,
     "Order_Item_Quantity": 1,
     "Sales": 150.0,
     "Order_Profit_Per_Order": 20.0,
 }
-
 
 # ──────────────────────────────────────────────
 # 5. VALIDATION FUNCTION
@@ -213,20 +145,13 @@ def validate_and_clean(df: pd.DataFrame):
     for actual_col in df.columns:
         normalized_actual = str(actual_col).lower().replace("_", " ").strip()
         for expected_col, aliases in COLUMN_ALIASES.items():
-            normalized_aliases = [
-                str(a).lower().replace("_", " ").strip() for a in aliases
-            ]
-            if (
-                normalized_actual == expected_col.lower().replace("_", " ").strip()
-                or normalized_actual in normalized_aliases
-            ):
+            normalized_aliases = [str(a).lower().replace("_", " ").strip() for a in aliases]
+            if normalized_actual == expected_col.lower().replace("_", " ").strip() or normalized_actual in normalized_aliases:
                 if actual_col != expected_col:
                     renames[actual_col] = expected_col
-                    warnings.append(
-                        f"Auto-mapped column `{actual_col}` ➔ `{expected_col}`"
-                    )
+                    warnings.append(f"Auto-mapped column `{actual_col}` ➔ `{expected_col}`")
                 break
-
+                
     if renames:
         df = df.rename(columns=renames)
 
@@ -245,11 +170,7 @@ def validate_and_clean(df: pd.DataFrame):
             f"Using defaults: {DEFAULT_VALS}"
         )
 
-    bad_modes = (
-        df[~df["Shipping Mode"].isin(VALID_SHIP_MODES)]["Shipping Mode"]
-        .unique()
-        .tolist()
-    )
+    bad_modes = df[~df["Shipping Mode"].isin(VALID_SHIP_MODES)]["Shipping Mode"].unique().tolist()
     if bad_modes:
         warnings.append(
             f"Unknown Shipping Mode value(s): `{bad_modes}`  \n"
@@ -260,17 +181,11 @@ def validate_and_clean(df: pd.DataFrame):
         )
 
     # Apply region mapping first for known aliases
-    mapped_mask = ~df["Order Region"].isin(VALID_REGIONS) & df["Order Region"].isin(
-        REGION_MAPPING.keys()
-    )
+    mapped_mask = ~df["Order Region"].isin(VALID_REGIONS) & df["Order Region"].isin(REGION_MAPPING.keys())
     if mapped_mask.any():
-        df.loc[mapped_mask, "Order Region"] = df.loc[mapped_mask, "Order Region"].map(
-            REGION_MAPPING
-        )
+        df.loc[mapped_mask, "Order Region"] = df.loc[mapped_mask, "Order Region"].map(REGION_MAPPING)
 
-    bad_regions = (
-        df[~df["Order Region"].isin(VALID_REGIONS)]["Order Region"].unique().tolist()
-    )
+    bad_regions = df[~df["Order Region"].isin(VALID_REGIONS)]["Order Region"].unique().tolist()
     if bad_regions:
         warnings.append(
             f"Unknown Order Region value(s): `{bad_regions}`  \n"
@@ -281,7 +196,7 @@ def validate_and_clean(df: pd.DataFrame):
         )
 
     for col in [c for c in OPTIONAL_COLS if c in df.columns]:
-        coerced = pd.to_numeric(df[col], errors="coerce")
+        coerced   = pd.to_numeric(df[col], errors="coerce")
         bad_count = int(coerced.isna().sum())
         if bad_count > 0:
             warnings.append(
@@ -290,7 +205,7 @@ def validate_and_clean(df: pd.DataFrame):
             )
             df[col] = coerced.fillna(DEFAULT_VALS[col])
 
-    key_cols = [c for c in REQUIRED_COLS if c in df.columns]
+    key_cols  = [c for c in REQUIRED_COLS if c in df.columns]
     null_rows = df[df[key_cols].isnull().all(axis=1)]
     if len(null_rows) > 0:
         warnings.append(f"{len(null_rows)} completely empty row(s) found and removed.")
@@ -302,8 +217,7 @@ def validate_and_clean(df: pd.DataFrame):
 # ══════════════════════════════════════════════
 # 6. GLOBAL CSS
 # ══════════════════════════════════════════════
-st.markdown(
-    """
+st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap');
 
@@ -541,16 +455,13 @@ hr { border:none !important; height:2px !important; margin:2.5rem 0 !important; 
     .terminal { padding: 1rem !important; font-size: .75rem !important; }
 }
 </style>
-""",
-    unsafe_allow_html=True,
-)
+""", unsafe_allow_html=True)
 
 # ──────────────────────────────────────────────
 # 7. AMBIENT PARTICLES + CURSOR GLOW
 # ──────────────────────────────────────────────
 # Cursor glow orb — pure CSS, positioned via custom properties set by JS below
-st.markdown(
-    """
+st.markdown("""
 <style>
 #nexus-cursor-glow {
   position:fixed; top:var(--mouse-y,-100px); left:var(--mouse-x,-100px);
@@ -561,13 +472,10 @@ st.markdown(
 }
 </style>
 <div id="nexus-cursor-glow"></div>
-""",
-    unsafe_allow_html=True,
-)
+""", unsafe_allow_html=True)
 
 # Interactive canvas particles — renders via components.html with position:fixed (escapes iframe clip)
-components.html(
-    """
+components.html("""
 <canvas id="c" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.55;"></canvas>
 <script>
 (function(){
@@ -647,25 +555,19 @@ components.html(
   draw();
 })();
 </script>
-""",
-    height=0,
-)
+""", height=0)
 
 # ──────────────────────────────────────────────
 # 8. HERO
 # ──────────────────────────────────────────────
-st.markdown(
-    """
+st.markdown("""
 <div class="hero-wrap">
     <div class="hero-badge">⬡ PREDICTIVE LOGISTICS ENGINE v3.0</div>
     <h1 class="hero-title">NEXUS AI</h1>
     <div class="hero-sub" id="typewriter-el">Initializing intelligence layer...</div>
 </div>
-""",
-    unsafe_allow_html=True,
-)
-components.html(
-    """
+""", unsafe_allow_html=True)
+components.html("""
 <script>
   const el=window.parent.document.getElementById('typewriter-el');
   if(el){ const msg="Real-time delivery risk intelligence · Route deviation analysis · Fleet optimization";
@@ -673,13 +575,10 @@ components.html(
     function tick(){ if(i<msg.length){ el.textContent+=msg[i++]; setTimeout(tick,32); } }
     setTimeout(tick,600); }
 </script>
-""",
-    height=0,
-)
+""", height=0)
 
 # Live status indicator
-st.markdown(
-    """
+st.markdown("""
 <div class="status-bar">
     <div class="status-dot"></div>
     <span>SYSTEM ONLINE</span>
@@ -688,15 +587,12 @@ st.markdown(
     <span style="color:#334155">·</span>
     <span style="color:#64748b">LATENCY: 0.4s</span>
 </div>
-""",
-    unsafe_allow_html=True,
-)
+""", unsafe_allow_html=True)
 
 # ──────────────────────────────────────────────
 # 9. KPI RIBBON
 # ──────────────────────────────────────────────
-components.html(
-    """
+components.html("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap');
 .kb{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:0 0 8px;font-family:'Space Mono',monospace;}
@@ -723,22 +619,16 @@ document.querySelectorAll('.cnt').forEach(el=>{
   },1000/60);
 });
 </script>
-""",
-    height=145,
-)
+""", height=145)
 
 # ──────────────────────────────────────────────
 # 10. LOAD MODEL (function defined at top of file)
 # ──────────────────────────────────────────────
-import traceback
-
 try:
     model, scaler, model_columns = load_nexus_models()
     st.success("⬡  AI BRAIN ONLINE — Random Forest ensemble loaded successfully")
 except Exception as e:
     st.error(f"⬡  MODEL ERROR — {e}")
-    st.error("Full Traceback:")
-    st.code(traceback.format_exc(), language="python")
     st.stop()
 
 st.markdown("<hr>", unsafe_allow_html=True)
@@ -746,108 +636,81 @@ st.markdown("<hr>", unsafe_allow_html=True)
 # ──────────────────────────────────────────────
 # 11. TABS
 # ──────────────────────────────────────────────
-tab_single, tab_bulk, tab_about = st.tabs(
-    ["⬡  SINGLE ORDER", "⬡  BULK BATCH", "⬡  SYSTEM INFO"]
-)
+tab_single, tab_bulk, tab_about = st.tabs(["⬡  SINGLE ORDER", "⬡  BULK BATCH", "⬡  SYSTEM INFO"])
 
 # ════════════════════════════════════════════════
 # TAB 1 — SINGLE ORDER
 # ════════════════════════════════════════════════
 with tab_single:
     st.markdown('<div class="glass">', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="sec-header">⬡ Configure Shipment Parameters</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown('<div class="sec-header">⬡ Configure Shipment Parameters</div>', unsafe_allow_html=True)
 
     col_l, col_r = st.columns(2, gap="large")
     with col_l:
-        shipping_mode = st.selectbox(
-            "Shipping Mode Carrier",
-            VALID_SHIP_MODES,
-            help="Carrier class affects baseline transit SLA",
-        )
-        order_region = st.selectbox(
-            "Destination Hub Region",
-            VALID_REGIONS,
-            help="Regional hub affects historical delay probability",
-        )
+        shipping_mode = st.selectbox("Shipping Mode Carrier", VALID_SHIP_MODES,
+                                     help="Carrier class affects baseline transit SLA")
+        order_region  = st.selectbox("Destination Hub Region", VALID_REGIONS,
+                                     help="Regional hub affects historical delay probability")
     with col_r:
-        days_scheduled = st.number_input(
-            "Scheduled Transit Days",
-            min_value=0,
-            max_value=10,
-            value=3,
-            help="SLA-agreed delivery window",
-        )
+        days_scheduled      = st.number_input("Scheduled Transit Days", min_value=0, max_value=10,
+                                              value=3, help="SLA-agreed delivery window")
         order_item_quantity = st.slider("Freight Quantity (Units)", 1, 5, 1)
 
     st.markdown("<br>", unsafe_allow_html=True)
     with st.expander("⬡  Advanced Parameters (optional)"):
         adv_col1, adv_col2 = st.columns(2)
         with adv_col1:
-            adv_sales = st.number_input(
-                "Order Value ($)", min_value=0.0, value=150.0, step=10.0
-            )
+            adv_sales  = st.number_input("Order Value ($)", min_value=0.0, value=150.0, step=10.0)
         with adv_col2:
-            adv_profit = st.number_input(
-                "Profit Per Order ($)", min_value=0.0, value=20.0, step=5.0
-            )
+            adv_profit = st.number_input("Profit Per Order ($)", min_value=0.0, value=20.0, step=5.0)
 
     run_btn = st.button("⬡  RUN PREDICTIVE ANALYSIS", use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     if run_btn:
         term_ph = st.empty()
         logs = [
-            ("Initializing Nexus Neural Core v3.0", "ok"),
-            ("Loading Random Forest ensemble (n=100)", "ok"),
-            ("Extracting logistics feature tensor", "ok"),
+            ("Initializing Nexus Neural Core v3.0",        "ok"),
+            ("Loading Random Forest ensemble (n=100)",     "ok"),
+            ("Extracting logistics feature tensor",        "ok"),
             ("Encoding categorical embeddings → one-hot", "ok"),
-            ("Applying StandardScaler normalization", "ok"),
-            ("Running probability inference pipeline", "ok"),
-            ("Computing feature attribution scores", "ok"),
-            ("Building route deviation projection", "ok"),
-            ("Fusing multi-axis risk vectors", "ok"),
-            ("ANALYSIS COMPLETE", "done"),
+            ("Applying StandardScaler normalization",      "ok"),
+            ("Running probability inference pipeline",     "ok"),
+            ("Computing feature attribution scores",       "ok"),
+            ("Building route deviation projection",        "ok"),
+            ("Fusing multi-axis risk vectors",             "ok"),
+            ("ANALYSIS COMPLETE",                          "done"),
         ]
         rendered = ""
         for msg, kind in logs:
-            color = "#00ffa3" if kind == "ok" else "#00e5ff"
+            color  = "#00ffa3" if kind == "ok" else "#00e5ff"
             marker = "✓" if kind == "ok" else "■"
             rendered += f'<div class="t-line"><span class="t-prompt">[NEXUS] </span><span style="color:{color}">{marker} {msg}</span></div>'
             term_ph.markdown(
                 f'<div class="terminal" style="padding-top:2rem">{rendered}'
                 f'<div class="t-line"><span class="t-prompt">[NEXUS] </span><span class="t-cursor">█</span></div></div>',
-                unsafe_allow_html=True,
-            )
+                unsafe_allow_html=True)
             time.sleep(0.22)
         term_ph.empty()
 
         try:
             expected_cols = model.feature_names_in_
             data_dict = {col: 0 for col in expected_cols}
-            if "Days_Scheduled" in data_dict:
-                data_dict["Days_Scheduled"] = days_scheduled
-            if "Order_Item_Quantity" in data_dict:
-                data_dict["Order_Item_Quantity"] = order_item_quantity
-            if "Sales" in data_dict:
-                data_dict["Sales"] = adv_sales
-            if "Order_Profit_Per_Order" in data_dict:
-                data_dict["Order_Profit_Per_Order"] = adv_profit
+            if "Days_Scheduled"         in data_dict: data_dict["Days_Scheduled"]         = days_scheduled
+            if "Order_Item_Quantity"     in data_dict: data_dict["Order_Item_Quantity"]     = order_item_quantity
+            if "Sales"                  in data_dict: data_dict["Sales"]                  = adv_sales
+            if "Order_Profit_Per_Order"  in data_dict: data_dict["Order_Profit_Per_Order"]  = adv_profit
             ship_col = f"Shipping_Mode_{shipping_mode}"
-            reg_col = f"Order_Region_{order_region}"
-            if ship_col in data_dict:
-                data_dict[ship_col] = 1
-            if reg_col in data_dict:
-                data_dict[reg_col] = 1
+            reg_col  = f"Order_Region_{order_region}"
+            if ship_col in data_dict: data_dict[ship_col] = 1
+            if reg_col  in data_dict: data_dict[reg_col]  = 1
 
-            input_df = pd.DataFrame([data_dict])[expected_cols]
+            input_df    = pd.DataFrame([data_dict])[expected_cols]
             scaler_cols = scaler.feature_names_in_
             input_df[scaler_cols] = scaler.transform(input_df[scaler_cols])
-            prediction = model.predict(input_df)
+            prediction  = model.predict(input_df)
             probability = model.predict_proba(input_df)[0][1]
-            risk_pct = probability * 100
+            risk_pct    = probability * 100
 
             st.toast("⬡  Analysis complete", icon="✅")
             st.markdown("<hr>", unsafe_allow_html=True)
@@ -855,40 +718,26 @@ with tab_single:
 
             with r1:
                 st.markdown('<div class="glass">', unsafe_allow_html=True)
-                st.markdown(
-                    '<div class="sec-header">⬡ Risk Assessment</div>',
-                    unsafe_allow_html=True,
-                )
+                st.markdown('<div class="sec-header">⬡ Risk Assessment</div>', unsafe_allow_html=True)
 
                 if prediction[0] == 1:
-                    st.markdown(
-                        """<div class="result-danger">
+                    st.markdown("""<div class="result-danger">
                         <span class="result-icon">🚩</span>
                         <div style="font-family:var(--font-mono);font-size:1.05rem;font-weight:700;color:#fca5a5;letter-spacing:2px;">HIGH RISK DETECTED</div>
                         <div class="result-label">Shipment highly likely to be delayed</div>
-                    </div>""",
-                        unsafe_allow_html=True,
-                    )
+                    </div>""", unsafe_allow_html=True)
                 else:
-                    st.markdown(
-                        """<div class="result-success">
+                    st.markdown("""<div class="result-success">
                         <span class="result-icon">✅</span>
                         <div style="font-family:var(--font-mono);font-size:1.05rem;font-weight:700;color:#6ee7b7;letter-spacing:2px;">ON-TIME PREDICTION</div>
                         <div class="result-label">Shipment on track for standard delivery</div>
-                    </div>""",
-                        unsafe_allow_html=True,
-                    )
+                    </div>""", unsafe_allow_html=True)
 
-                dash_total = 157
+                dash_total      = 157
                 dash_offset_end = dash_total - (dash_total * probability)
-                gauge_color = (
-                    "#f43f5e"
-                    if probability > 0.65
-                    else "#f59e0b" if probability > 0.35 else "#00ffa3"
-                )
+                gauge_color     = "#f43f5e" if probability > 0.65 else "#f59e0b" if probability > 0.35 else "#00ffa3"
 
-                components.html(
-                    f"""
+                components.html(f"""
                 <style>
                   @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap');
                   .g-wrap{{position:relative;width:220px;margin:1.25rem auto 0;}}
@@ -918,160 +767,79 @@ with tab_single:
                     if(el) el.style.strokeDashoffset='{dash_offset_end:.4f}';
                   }},80);
                 </script>
-                """,
-                    height=200,
-                )
+                """, height=200)
 
-                conf_color = (
-                    "#00ffa3"
-                    if probability < 0.35
-                    else "#f59e0b" if probability < 0.65 else "#f43f5e"
-                )
-                conf_label = (
-                    "LOW RISK"
-                    if probability < 0.35
-                    else "MODERATE" if probability < 0.65 else "HIGH RISK"
-                )
-                st.markdown(
-                    f"""
+                conf_color = "#00ffa3" if probability < 0.35 else "#f59e0b" if probability < 0.65 else "#f43f5e"
+                conf_label = "LOW RISK" if probability < 0.35 else "MODERATE" if probability < 0.65 else "HIGH RISK"
+                st.markdown(f"""
                 <div style="display:flex;justify-content:space-between;margin-top:1.2rem;
                             font-family:var(--font-mono);font-size:.72rem;color:var(--muted);letter-spacing:1px;">
                     <span>CONFIDENCE BAND</span>
                     <span style="color:{conf_color}">{conf_label}</span>
-                </div>""",
-                    unsafe_allow_html=True,
-                )
-                st.markdown("</div>", unsafe_allow_html=True)
+                </div>""", unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
 
             with r2:
                 st.markdown('<div class="glass">', unsafe_allow_html=True)
-                st.markdown(
-                    '<div class="sec-header">⬡ Explainable AI</div>',
-                    unsafe_allow_html=True,
-                )
-                st.markdown(
-                    '<div class="sec-sub">Top Driving Factors</div>',
-                    unsafe_allow_html=True,
-                )
+                st.markdown('<div class="sec-header">⬡ Explainable AI</div>', unsafe_allow_html=True)
+                st.markdown('<div class="sec-sub">Top Driving Factors</div>', unsafe_allow_html=True)
 
-                importances = model.feature_importances_
+                importances   = model.feature_importances_
                 feature_names = model.feature_names_in_
-                imp_df = (
-                    pd.DataFrame({"Feature": feature_names, "Importance": importances})
-                    .sort_values("Importance", ascending=False)
-                    .head(6)
-                )
-                max_imp = imp_df["Importance"].max()
+                imp_df = (pd.DataFrame({'Feature': feature_names, 'Importance': importances})
+                          .sort_values('Importance', ascending=False).head(6))
+                max_imp   = imp_df['Importance'].max()
                 bars_html = '<div class="feat-bars">'
                 for _, row in imp_df.iterrows():
-                    label = (
-                        str(row["Feature"])
-                        .replace("Category_Name_", "")
-                        .replace("Customer_Segment_", "")
-                        .replace("Shipping_Mode_", "")
-                        .replace("Order_Region_", "")
-                    )
-                    w = (row["Importance"] / max_imp) * 100
+                    label = (str(row['Feature'])
+                             .replace('Category_Name_','').replace('Customer_Segment_','')
+                             .replace('Shipping_Mode_','').replace('Order_Region_',''))
+                    w         = (row['Importance'] / max_imp) * 100
                     pct_label = f"{row['Importance']*100:.1f}"
                     bars_html += f"""<div class="feat-row">
                       <div class="feat-name" title="{label}">{label}</div>
                       <div class="feat-track"><div class="feat-fill" style="--w:{w:.1f}%"></div></div>
                       <div class="feat-pct">{pct_label}</div></div>"""
-                bars_html += "</div>"
+                bars_html += '</div>'
                 st.markdown(bars_html, unsafe_allow_html=True)
 
-                st.markdown(
-                    '<div class="sec-sub" style="margin-top:1.5rem">Risk Vector Profile</div>',
-                    unsafe_allow_html=True,
-                )
-                radar_df = imp_df.head(5).copy()
-                fig_radar = go.Figure(
-                    data=go.Scatterpolar(
-                        r=radar_df["Importance"] * 100,
-                        theta=radar_df["Feature"].str.replace(r".+_", "", regex=True),
-                        fill="toself",
-                        fillcolor="rgba(124,58,237,0.25)",
-                        line={"color": "#00e5ff", "width": 2},
-                        marker={"color": "#00e5ff", "size": 5},
-                    )
-                )
+                st.markdown('<div class="sec-sub" style="margin-top:1.5rem">Risk Vector Profile</div>', unsafe_allow_html=True)
+                radar_df  = imp_df.head(5).copy()
+                fig_radar = go.Figure(data=go.Scatterpolar(
+                    r=radar_df['Importance'] * 100,
+                    theta=radar_df['Feature'].str.replace(r'.+_', '', regex=True),
+                    fill='toself', fillcolor='rgba(124,58,237,0.25)',
+                    line={'color':'#00e5ff','width':2}, marker={'color':'#00e5ff','size':5},
+                ))
                 fig_radar.update_layout(
-                    polar={
-                        "bgcolor": "rgba(0,0,0,0)",
-                        "radialaxis": {"visible": False, "range": [0, max_imp * 110]},
-                        "angularaxis": {
-                            "tickfont": {
-                                "color": "#64748b",
-                                "size": 9,
-                                "family": "Space Mono",
-                            }
-                        },
-                    },
-                    paper_bgcolor="rgba(0,0,0,0)",
-                    plot_bgcolor="rgba(0,0,0,0)",
-                    font=dict(color="#94a3b8", family="Space Mono"),
-                    margin=dict(l=30, r=30, t=20, b=20),
-                    height=220,
+                    polar={'bgcolor':'rgba(0,0,0,0)',
+                           'radialaxis':{'visible':False,'range':[0,max_imp*110]},
+                           'angularaxis':{'tickfont':{'color':'#64748b','size':9,'family':'Space Mono'}}},
+                    paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='#94a3b8',family='Space Mono'),
+                    margin=dict(l=30,r=30,t=20,b=20), height=220,
                 )
-                st.plotly_chart(
-                    fig_radar,
-                    use_container_width=True,
-                    config={"displayModeBar": False},
-                )
+                st.plotly_chart(fig_radar, use_container_width=True, config={'displayModeBar':False})
 
-                st.markdown(
-                    '<div class="sec-sub">Route Deviation Projection</div>',
-                    unsafe_allow_html=True,
-                )
-                extra = round(probability * 5) if prediction[0] == 1 else 0
+                st.markdown('<div class="sec-sub">Route Deviation Projection</div>', unsafe_allow_html=True)
+                extra       = round(probability * 5) if prediction[0] == 1 else 0
                 actual_days = days_scheduled + extra
-                tl_df = pd.DataFrame(
-                    [
-                        {
-                            "Task": "Scheduled SLA",
-                            "Start": 0,
-                            "Finish": days_scheduled,
-                            "Type": "Scheduled",
-                        },
-                        {
-                            "Task": "AI Projected",
-                            "Start": 0,
-                            "Finish": actual_days,
-                            "Type": "Delayed" if extra > 0 else "Scheduled",
-                        },
-                    ]
-                )
-                fig_tl = px.bar(
-                    tl_df,
-                    x="Finish",
-                    y="Task",
-                    color="Type",
-                    orientation="h",
-                    color_discrete_map={"Scheduled": "#00e5ff", "Delayed": "#f43f5e"},
-                    opacity=0.85,
-                )
+                tl_df = pd.DataFrame([
+                    {"Task":"Scheduled SLA","Start":0,"Finish":days_scheduled,"Type":"Scheduled"},
+                    {"Task":"AI Projected", "Start":0,"Finish":actual_days,   "Type":"Delayed" if extra>0 else "Scheduled"},
+                ])
+                fig_tl = px.bar(tl_df, x="Finish", y="Task", color="Type", orientation='h',
+                                color_discrete_map={"Scheduled":"#00e5ff","Delayed":"#f43f5e"}, opacity=0.85)
                 fig_tl.update_layout(
-                    paper_bgcolor="rgba(0,0,0,0)",
-                    plot_bgcolor="rgba(0,0,0,0)",
-                    font={"color": "#94a3b8", "family": "Space Mono", "size": 10},
-                    margin={"l": 0, "r": 10, "t": 5, "b": 30},
-                    xaxis={
-                        "title": "Days After Dispatch",
-                        "showgrid": True,
-                        "gridcolor": "rgba(255,255,255,0.06)",
-                        "color": "#64748b",
-                    },
-                    yaxis={"title": "", "color": "#64748b"},
-                    showlegend=False,
-                    height=140,
+                    paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+                    font={'color':'#94a3b8','family':'Space Mono','size':10},
+                    margin={'l':0,'r':10,'t':5,'b':30},
+                    xaxis={'title':'Days After Dispatch','showgrid':True,'gridcolor':'rgba(255,255,255,0.06)','color':'#64748b'},
+                    yaxis={'title':'','color':'#64748b'}, showlegend=False, height=140,
                 )
-                st.plotly_chart(
-                    fig_tl, use_container_width=True, config={"displayModeBar": False}
-                )
-                st.info(
-                    f"⬡  **Insight**: {'At-risk shipment — consider expediting or re-routing.' if prediction[0]==1 else 'All signals nominal — no intervention required.'}"
-                )
-                st.markdown("</div>", unsafe_allow_html=True)
+                st.plotly_chart(fig_tl, use_container_width=True, config={'displayModeBar':False})
+                st.info(f"⬡  **Insight**: {'At-risk shipment — consider expediting or re-routing.' if prediction[0]==1 else 'All signals nominal — no intervention required.'}")
+                st.markdown('</div>', unsafe_allow_html=True)
 
         except Exception as e:
             st.error(f"⬡  INFERENCE ERROR — {e}")
@@ -1081,14 +849,10 @@ with tab_single:
 # ════════════════════════════════════════════════
 with tab_bulk:
     st.markdown('<div class="glass">', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="sec-header">⬡ Enterprise Batch Processing</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown('<div class="sec-header">⬡ Enterprise Batch Processing</div>', unsafe_allow_html=True)
 
     # Required format reference card
-    st.markdown(
-        """
+    st.markdown("""
     <div style="background:rgba(0,229,255,0.03);border:1px solid rgba(0,229,255,0.15);
                 border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.25rem;">
         <div style="font-family:var(--font-mono);font-size:.7rem;letter-spacing:2px;
@@ -1105,70 +869,48 @@ with tab_bulk:
             ✱ Required &nbsp;·&nbsp; Others optional (defaults used if missing)
         </div>
     </div>
-    """,
-        unsafe_allow_html=True,
-    )
+    """, unsafe_allow_html=True)
 
     # Valid values expander
     with st.expander("⬡  Valid values for Shipping Mode & Order Region"):
         vc1, vc2 = st.columns(2)
         with vc1:
-            st.markdown(
-                """<div class="sec-sub">Shipping Mode</div>
+            st.markdown("""<div class="sec-sub">Shipping Mode</div>
             <ul style="font-family:var(--font-mono);font-size:.78rem;color:#94a3b8;line-height:2.2;margin:0;padding-left:1.2rem;">
               <li>Standard Class</li><li>First Class</li><li>Second Class</li><li>Same Day</li>
-            </ul>""",
-                unsafe_allow_html=True,
-            )
+            </ul>""", unsafe_allow_html=True)
         with vc2:
-            st.markdown(
-                """<div class="sec-sub">Order Region</div>
+            st.markdown("""<div class="sec-sub">Order Region</div>
             <ul style="font-family:var(--font-mono);font-size:.78rem;color:#94a3b8;line-height:2.2;margin:0;padding-left:1.2rem;">
               <li>Southeast Asia</li><li>South Asia</li><li>Oceania</li><li>Eastern Asia</li><li>West Asia</li>
-            </ul>""",
-                unsafe_allow_html=True,
-            )
+            </ul>""", unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
     # Demo download banner
-    st.markdown(
-        """
+    st.markdown("""
     <div class="demo-banner">
         <div class="demo-dot"></div>
         <span>No file yet? Download the demo CSV below — it shows correct formatting and runs predictions immediately.</span>
     </div>
-    """,
-        unsafe_allow_html=True,
-    )
+    """, unsafe_allow_html=True)
     dl1, _ = st.columns([1, 3])
     with dl1:
-        st.download_button(
-            "⬡  DOWNLOAD DEMO CSV",
-            data=DEMO_CSV_BYTES,
-            file_name=f"nexus_demo_batch_{int(time.time())}.csv",
-            mime="text/csv",
-            use_container_width=True,
-        )
+        st.download_button("⬡  DOWNLOAD DEMO CSV", data=DEMO_CSV_BYTES,
+                           file_name=f"nexus_demo_batch_{int(time.time())}.csv", mime="text/csv",
+                           use_container_width=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(
-        '<div class="sec-sub">Upload Your CSV File</div>', unsafe_allow_html=True
-    )
+    st.markdown('<div class="sec-sub">Upload Your CSV File</div>', unsafe_allow_html=True)
     # Removing type constraint entirely. Android file intent filters are notoriously buggy with CSVs.
-    uploaded = st.file_uploader(
-        "Upload CSV File", key="bulk_uploader", label_visibility="collapsed"
-    )
+    uploaded   = st.file_uploader("Upload CSV File", key="bulk_uploader", label_visibility="collapsed")
     using_demo = uploaded is None
 
     if using_demo:
-        st.markdown(
-            """<div class="val-ok">
+        st.markdown("""<div class="val-ok">
             ⬡ No file uploaded — demo data loaded automatically.
             Upload your own CSV above to replace it.
-        </div>""",
-            unsafe_allow_html=True,
-        )
+        </div>""", unsafe_allow_html=True)
         raw_source = io.BytesIO(DEMO_CSV_BYTES)
     else:
         raw_source = uploaded
@@ -1177,15 +919,12 @@ with tab_bulk:
     read_ok = False
     try:
         bulk_df_raw = pd.read_csv(raw_source)
-        read_ok = True
+        read_ok     = True
     except Exception as read_err:
-        st.markdown(
-            f"""<div class="val-error">
+        st.markdown(f"""<div class="val-error">
             ⬡ COULD NOT READ FILE — {read_err}<br><br>
             Make sure your file is a valid, UTF-8 encoded CSV and try again.
-        </div>""",
-            unsafe_allow_html=True,
-        )
+        </div>""", unsafe_allow_html=True)
 
     if read_ok:
         # ── Validate ─────────────────────────────
@@ -1194,198 +933,131 @@ with tab_bulk:
         # Show all errors — DO NOT run prediction
         if val_errors:
             for err in val_errors:
-                st.markdown(
-                    f'<div class="val-error">⬡ ERROR — {err}</div>',
-                    unsafe_allow_html=True,
-                )
-            st.markdown(
-                """
+                st.markdown(f'<div class="val-error">⬡ ERROR — {err}</div>',
+                            unsafe_allow_html=True)
+            st.markdown("""
             <div style="font-family:var(--font-mono);font-size:.75rem;color:#64748b;
                         text-align:center;padding:1.2rem 0 .5rem;">
                 Fix the error(s) above and re-upload your file. No prediction was run.
-            </div>""",
-                unsafe_allow_html=True,
-            )
+            </div>""", unsafe_allow_html=True)
 
         else:
             # Show all warnings — continue to predict
             for w in val_warnings:
-                st.markdown(
-                    f'<div class="val-warn">⬡ WARNING — {w}</div>',
-                    unsafe_allow_html=True,
-                )
+                st.markdown(f'<div class="val-warn">⬡ WARNING — {w}</div>',
+                            unsafe_allow_html=True)
 
             demo_label = " (demo)" if using_demo else ""
-            st.markdown(
-                f'<div class="sec-sub" style="margin-top:1rem">Preview{demo_label} — {len(bulk_df):,} records ready</div>',
-                unsafe_allow_html=True,
-            )
+            st.markdown(f'<div class="sec-sub" style="margin-top:1rem">Preview{demo_label} — {len(bulk_df):,} records ready</div>',
+                        unsafe_allow_html=True)
             st.dataframe(bulk_df.head(8), use_container_width=True)
 
-            btn_label = (
-                "⬡  RUN DEMO PREDICTION"
-                if using_demo
-                else "⬡  EXECUTE ENTERPRISE BATCH PREDICTION"
-            )
+            btn_label = "⬡  RUN DEMO PREDICTION" if using_demo else "⬡  EXECUTE ENTERPRISE BATCH PREDICTION"
             if st.button(btn_label, use_container_width=True):
                 pred_ok = False
                 try:
                     with st.spinner("⬡  Nexus Engine classifying batch..."):
                         expected_cols = model.feature_names_in_
-                        processed = []
+                        processed     = []
                         for _, row in bulk_df.iterrows():
                             d = {col: 0 for col in expected_cols}
-                            if "Days_Scheduled" in expected_cols:
-                                d["Days_Scheduled"] = row.get(
-                                    "Days_Scheduled", DEFAULT_VALS["Days_Scheduled"]
-                                )
-                            if "Order_Item_Quantity" in expected_cols:
-                                d["Order_Item_Quantity"] = row.get(
-                                    "Order_Item_Quantity",
-                                    DEFAULT_VALS["Order_Item_Quantity"],
-                                )
-                            if "Sales" in expected_cols:
-                                d["Sales"] = row.get("Sales", DEFAULT_VALS["Sales"])
-                            if "Order_Profit_Per_Order" in expected_cols:
-                                d["Order_Profit_Per_Order"] = row.get(
-                                    "Order_Profit_Per_Order",
-                                    DEFAULT_VALS["Order_Profit_Per_Order"],
-                                )
+                            if "Days_Scheduled"         in expected_cols: d["Days_Scheduled"]         = row.get("Days_Scheduled",         DEFAULT_VALS["Days_Scheduled"])
+                            if "Order_Item_Quantity"     in expected_cols: d["Order_Item_Quantity"]     = row.get("Order_Item_Quantity",    DEFAULT_VALS["Order_Item_Quantity"])
+                            if "Sales"                  in expected_cols: d["Sales"]                  = row.get("Sales",                  DEFAULT_VALS["Sales"])
+                            if "Order_Profit_Per_Order"  in expected_cols: d["Order_Profit_Per_Order"]  = row.get("Order_Profit_Per_Order", DEFAULT_VALS["Order_Profit_Per_Order"])
                             ship_col = f"Shipping_Mode_{row.get('Shipping Mode','Standard Class')}"
-                            reg_col = f"Order_Region_{row.get('Order Region','Southeast Asia')}"
-                            if ship_col in d:
-                                d[ship_col] = 1
-                            if reg_col in d:
-                                d[reg_col] = 1
+                            reg_col  = f"Order_Region_{row.get('Order Region','Southeast Asia')}"
+                            if ship_col in d: d[ship_col] = 1
+                            if reg_col  in d: d[reg_col]  = 1
                             processed.append(d)
 
                         in_df = pd.DataFrame(processed)[expected_cols].copy()
-                        in_df[scaler.feature_names_in_] = scaler.transform(
-                            in_df[scaler.feature_names_in_]
-                        )
+                        in_df[scaler.feature_names_in_] = scaler.transform(in_df[scaler.feature_names_in_])
                         preds = model.predict(in_df)
                         probs = model.predict_proba(in_df)[:, 1]
                     pred_ok = True
 
                 except Exception as pred_err:
-                    st.markdown(
-                        f"""<div class="val-error">
+                    st.markdown(f"""<div class="val-error">
                         ⬡ PREDICTION ENGINE ERROR — {pred_err}<br><br>
                         This is likely a data type mismatch. Ensure all numeric columns contain only numbers and try again.
-                    </div>""",
-                        unsafe_allow_html=True,
-                    )
+                    </div>""", unsafe_allow_html=True)
 
                 if pred_ok:
-                    bulk_df["⬡ Risk Verdict"] = [
-                        "🚩 Late Delivery Risk" if p == 1 else "✅ On Time"
-                        for p in preds
-                    ]
+                    bulk_df["⬡ Risk Verdict"]  = ["🚩 Late Delivery Risk" if p == 1 else "✅ On Time" for p in preds]
                     bulk_df["⬡ Risk Score %"] = (probs * 100).round(2)
                     n_at_risk = int(np.sum(preds == 1))
                     n_on_time = int(np.sum(preds == 0))
-                    avg_risk = float(probs.mean() * 100)
+                    avg_risk  = float(probs.mean() * 100)
 
                     s1, s2, s3 = st.columns(3)
-                    s1.metric(
-                        "At-Risk Shipments",
-                        f"{n_at_risk:,}",
-                        delta=f"{n_at_risk/len(preds)*100:.1f}% of batch",
-                        delta_color="inverse",
-                    )
-                    s2.metric(
-                        "On-Time Predicted",
-                        f"{n_on_time:,}",
-                        delta=f"{n_on_time/len(preds)*100:.1f}% of batch",
-                    )
+                    s1.metric("At-Risk Shipments",  f"{n_at_risk:,}",
+                              delta=f"{n_at_risk/len(preds)*100:.1f}% of batch", delta_color="inverse")
+                    s2.metric("On-Time Predicted",  f"{n_on_time:,}",
+                              delta=f"{n_on_time/len(preds)*100:.1f}% of batch")
                     s3.metric("Average Risk Score", f"{avg_risk:.1f}%")
 
                     if n_at_risk == 0:
                         st.balloons()
 
-                    st.success(
-                        f"⬡  Batch complete — {len(bulk_df):,} records classified"
-                    )
+                    st.success(f"⬡  Batch complete — {len(bulk_df):,} records classified")
                     st.dataframe(bulk_df, use_container_width=True)
 
-                    export_name = (
-                        "nexus_demo_predictions.csv"
-                        if using_demo
-                        else "nexus_batch_predictions.csv"
-                    )
+                    export_name = "nexus_demo_predictions.csv" if using_demo else "nexus_batch_predictions.csv"
                     st.download_button(
                         "⬡  EXPORT CLASSIFIED RECORDS (.CSV)",
                         data=bulk_df.to_csv(index=False).encode("utf-8"),
-                        file_name=export_name,
-                        mime="text/csv",
-                        use_container_width=True,
+                        file_name=export_name, mime="text/csv", use_container_width=True,
                     )
 
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ════════════════════════════════════════════════
 # TAB 3 — SYSTEM INFO
 # ════════════════════════════════════════════════
 with tab_about:
     st.markdown('<div class="glass">', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="sec-header">⬡ System Architecture</div>', unsafe_allow_html=True
-    )
+    st.markdown('<div class="sec-header">⬡ System Architecture</div>', unsafe_allow_html=True)
 
     a1, a2 = st.columns(2, gap="large")
     with a1:
-        st.markdown(
-            """<div class="sec-sub">Core Engine</div>
+        st.markdown("""<div class="sec-sub">Core Engine</div>
           <div class="list-row"><div class="list-key">Algorithm</div><div class="list-val">Random Forest Classifier</div></div>
           <div class="list-row"><div class="list-key">Estimators</div><div class="list-val">100 trees</div></div>
           <div class="list-row"><div class="list-key">Feature Set</div><div class="list-val">One-hot + Scaled numerics</div></div>
           <div class="list-row"><div class="list-key">Accuracy</div><div class="list-val" style="color:#00e5ff">73.31%</div></div>
           <div class="list-row"><div class="list-key">Dataset</div><div class="list-val">DataCo Global Supply Chain</div></div>
-        """,
-            unsafe_allow_html=True,
-        )
+        """, unsafe_allow_html=True)
     with a2:
-        st.markdown(
-            """<div class="sec-sub">Performance Metrics</div>
+        st.markdown("""<div class="sec-sub">Performance Metrics</div>
           <div class="list-row"><div class="list-key">Routes Indexed</div><div class="list-val" style="color:#00ffa3">180,519</div></div>
           <div class="list-row"><div class="list-key">Avg Inference</div><div class="list-val">0.4s</div></div>
           <div class="list-row"><div class="list-key">Throughput</div><div class="list-val">&gt;10k rows/min</div></div>
           <div class="list-row"><div class="list-key">Normalizer</div><div class="list-val">StandardScaler</div></div>
           <div class="list-row"><div class="list-key">Framework</div><div class="list-val">scikit-learn · Streamlit</div></div>
-        """,
-            unsafe_allow_html=True,
-        )
+        """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(
-        '<div class="sec-sub">Accepted Input Values</div>', unsafe_allow_html=True
-    )
+    st.markdown('<div class="sec-sub">Accepted Input Values</div>', unsafe_allow_html=True)
     b1, b2 = st.columns(2, gap="large")
-
+    
     with b1:
-        st.markdown(
-            """
+        st.markdown("""
         <div style="font-family:var(--font-mono);font-size:.78rem;border-bottom:1px solid rgba(0,229,255,0.1);padding-bottom:.4rem;margin-bottom:.4rem;color:#00e5ff">Shipping Mode</div>
         <div style="font-family:var(--font-mono);font-size:.75rem;color:#94a3b8;line-height:2">
           Standard Class<br>First Class<br>Second Class<br>Same Day
         </div>
-        """,
-            unsafe_allow_html=True,
-        )
+        """, unsafe_allow_html=True)
     with b2:
-        st.markdown(
-            """
+        st.markdown("""
         <div style="font-family:var(--font-mono);font-size:.78rem;border-bottom:1px solid rgba(0,229,255,0.1);padding-bottom:.4rem;margin-bottom:.4rem;color:#00e5ff">Order Region</div>
         <div style="font-family:var(--font-mono);font-size:.75rem;color:#94a3b8;line-height:2">
           Southeast / South Asia<br>Eastern / West Asia<br>Europe / Africa<br>Central / South America<br>Oceania
         </div>
-        """,
-            unsafe_allow_html=True,
-        )
+        """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(
-        """
+    st.markdown("""
     <div style="text-align:center;margin-bottom:1rem;">
         <span class="tech-badge"><span class="tech-dot"></span>Python</span>
         <span class="tech-badge"><span class="tech-dot"></span>scikit-learn</span>
@@ -1397,7 +1069,5 @@ with tab_about:
     </div>
     <div style="font-family:var(--font-mono);font-size:.68rem;color:#1e293b;text-align:center;letter-spacing:2px;padding-top:.5rem;border-top:1px solid rgba(0,229,255,0.06);">
     ⬡ NEXUS AI · BUILT ON DATACO GLOBAL SUPPLY CHAIN DATASET · © 2025
-    </div>""",
-        unsafe_allow_html=True,
-    )
-    st.markdown("</div>", unsafe_allow_html=True)
+    </div>""", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
