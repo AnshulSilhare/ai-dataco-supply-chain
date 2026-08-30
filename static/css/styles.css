@@ -2035,7 +2035,9 @@ body.dark .pill-edit-btn:hover {
   }
 
   .container {
-    padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important;
+    padding-left: 1.1rem !important;
+    padding-right: 1.1rem !important;
+    padding-bottom: calc(110px + env(safe-area-inset-bottom)) !important;
   }
 
   .two-col {
@@ -2045,6 +2047,34 @@ body.dark .pill-edit-btn:hover {
   .adaptive-control-capsule {
     top: 58px !important;
     margin-bottom: 1.2rem !important;
+  }
+
+  .adaptive-control-capsule.is-expanded {
+    max-height: calc(100vh - 145px) !important;
+    overflow-y: auto !important;
+  }
+
+  .capsule-body-card {
+    padding: 0.5rem 0.65rem 0.85rem !important;
+  }
+
+  .capsule-header {
+    margin-bottom: 0.35rem !important;
+    padding-bottom: 0.3rem !important;
+  }
+
+  .console-title {
+    font-size: 0.84rem !important;
+  }
+
+  .console-badge {
+    font-size: 0.6rem !important;
+    padding: 0.1rem 0.35rem !important;
+  }
+
+  .btn-collapse-capsule {
+    padding: 0.2rem 0.6rem !important;
+    font-size: 0.7rem !important;
   }
   
   .adaptive-control-capsule.is-collapsed {
@@ -2074,25 +2104,25 @@ body.dark .pill-edit-btn:hover {
   }
 
   .form-section-title {
-    font-size: 0.9rem !important;
-    margin-bottom: 0.45rem !important;
+    font-size: 0.85rem !important;
+    margin-bottom: 0.35rem !important;
   }
 
   .accordion-group {
-    border-radius: 8px !important;
-    margin-bottom: 0.4rem !important;
+    border-radius: 6px !important;
+    margin-bottom: 0.25rem !important;
   }
 
   .accordion-header {
-    padding: 0.45rem 0.75rem !important;
-    font-size: 0.82rem !important;
-    min-height: 34px !important;
+    padding: 0.3rem 0.6rem !important;
+    font-size: 0.78rem !important;
+    min-height: 28px !important;
   }
 
   .accordion-content {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 0.45rem !important;
-    padding: 0.4rem 0.75rem 0.65rem !important;
+    gap: 0.35rem 0.45rem !important;
+    padding: 0.25rem 0.55rem 0.45rem !important;
   }
 
   .form-group {
@@ -2100,27 +2130,28 @@ body.dark .pill-edit-btn:hover {
   }
 
   .form-group label {
-    font-size: 0.68rem !important;
+    font-size: 0.62rem !important;
     font-weight: 600 !important;
-    margin-bottom: 0.15rem !important;
+    margin-bottom: 0.08rem !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.03em !important;
+    letter-spacing: 0.02em !important;
   }
 
   .pill-input, .text-input, select, input[type="number"] {
-    height: 34px !important;
-    padding: 0.3rem 0.55rem !important;
-    font-size: 0.82rem !important;
-    border-radius: 6px !important;
+    height: 30px !important;
+    padding: 0.2rem 0.45rem !important;
+    font-size: 0.78rem !important;
+    border-radius: 5px !important;
   }
 
   .btn-execute {
     width: 100% !important;
-    height: 40px !important;
-    padding: 0 1rem !important;
-    font-size: 0.86rem !important;
+    height: 36px !important;
+    font-size: 0.82rem !important;
     border-radius: 50px !important;
-    margin-top: 0.4rem !important;
+    padding: 0 1rem !important;
+    margin-top: 0.35rem !important;
+    margin-bottom: 0.25rem !important;
   }
 
   .bottom-nav {
