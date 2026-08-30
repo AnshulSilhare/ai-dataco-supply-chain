@@ -22,7 +22,7 @@ except Exception:
     pass
 
 try:
-    model = joblib.load(os.path.join(BASE_DIR, "dataco_rf_model.joblib"), mmap_mode="r")
+    model = joblib.load(os.path.join(BASE_DIR, "dataco_rf_model_uncompressed.joblib"), mmap_mode="r")
     scaler = joblib.load(os.path.join(BASE_DIR, "dataco_scaler.joblib"))
     model_columns = joblib.load(os.path.join(BASE_DIR, "dataco_columns.joblib"))
     FEAT = list(model.feature_names_in_)

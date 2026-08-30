@@ -17,6 +17,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code and model files
 COPY . .
 
+# Uncompress the model during build (where we have more RAM) to allow true memory mapping in production
+RUN python -c "import joblib; model=joblib.load('dataco_rf_model.joblib'); joblib.dump(model, 'dataco_rf_model_uncompressed.joblib', compress=0)"
+
 # Render.com uses port 10000 by default
 EXPOSE 10000
 
