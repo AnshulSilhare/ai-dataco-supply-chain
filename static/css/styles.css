@@ -936,8 +936,8 @@ input[type=range]::-moz-range-thumb {
 }
 
 #shapChart {
-  height: 250px;
-  min-height: 230px;
+  height: 230px;
+  min-height: 200px;
 }
 
 #importanceChart {
@@ -2243,7 +2243,7 @@ body.dark .chevron-icon {
 
   .adaptive-control-capsule {
     top: 58px !important;
-    margin-bottom: 1.2rem !important;
+    margin-bottom: 0.75rem !important;
   }
 
   .adaptive-control-capsule.is-expanded {

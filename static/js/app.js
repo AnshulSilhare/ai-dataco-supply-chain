@@ -573,40 +573,102 @@ function renderChart(divId, data) {
             ]
         };
     } else if (divId === 'shapChart') {
-        // Prepare waterfall data
-        const base = data.values;
-        const transparentData = [];
-        const positiveData = [];
-        const negativeData = [];
-        let currentTotal = 0;
+        const labels = data.labels || [];
+        const values = data.values || [];
         
-        for (let i = 0; i < base.length; i++) {
-            const val = base[i];
-            if (val > 0) {
-                transparentData.push(currentTotal);
-                positiveData.push(val);
-                negativeData.push('-');
-                currentTotal += val;
-            } else {
-                currentTotal += val;
-                transparentData.push(currentTotal);
-                positiveData.push('-');
-                negativeData.push(Math.abs(val));
-            }
-        }
-        
+        // Build individual vertical bar objects with bidirectional coloring
+        const barData = values.map((val, idx) => {
+            const isPos = val >= 0;
+            return {
+                value: val,
+                name: labels[idx] || `Factor ${idx + 1}`,
+                itemStyle: {
+                    color: isPos 
+                        ? (isDark ? '#f87171' : '#dc2626')
+                        : (isDark ? '#34d399' : '#16a34a'),
+                    borderRadius: isPos ? [4, 4, 0, 0] : [0, 0, 4, 4]
+                }
+            };
+        });
+
         option = {
-            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function (params) {
-                let tar = params[1].value !== '-' ? params[1] : params[2];
-                return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value.toFixed(4);
-            }},
-            grid: { left: 4, right: 40, bottom: 6, top: 8, containLabel: true },
-            xAxis: { type: 'value', splitLine: { show: true, lineStyle: { color: splitLineColor } }, axisLabel: { color: textColor, fontSize: 10 } },
-            yAxis: { type: 'category', data: data.labels, axisLine: { lineStyle: { color: splitLineColor } }, axisLabel: { color: textColor, fontSize: 10 } },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'shadow' },
+                formatter: function (params) {
+                    const item = params[0];
+                    if (!item) return '';
+                    const val = item.value;
+                    const isPos = val >= 0;
+                    const icon = isPos ? '🔴' : '🟢';
+                    const effect = isPos ? 'Increases Delay Risk' : 'Reduces Delay Risk';
+                    const sign = val > 0 ? '+' : '';
+                    return `
+                        <div style="font-weight:700;font-size:12px;margin-bottom:3px;color:${titleColor};">${item.name}</div>
+                        <div style="font-size:11px;color:${isPos ? redColor : greenColor};">
+                            ${icon} ${effect}: <b>${sign}${val.toFixed(3)}</b>
+                        </div>
+                    `;
+                }
+            },
+            grid: { left: 6, right: 6, bottom: 26, top: 22, containLabel: true },
+            xAxis: {
+                type: 'category',
+                data: labels,
+                axisTick: { show: false },
+                axisLine: { 
+                    lineStyle: { color: splitLineColor } 
+                },
+                axisLabel: {
+                    color: textColor,
+                    fontSize: 10,
+                    interval: 0,
+                    formatter: function(val) {
+                        if (val.length > 12) {
+                            const words = val.split(' ');
+                            if (words.length > 1) {
+                                const mid = Math.ceil(words.length / 2);
+                                return words.slice(0, mid).join(' ') + '\n' + words.slice(mid).join(' ');
+                            }
+                            return val.slice(0, 10) + '..';
+                        }
+                        return val;
+                    }
+                }
+            },
+            yAxis: {
+                type: 'value',
+                splitLine: { show: true, lineStyle: { color: splitLineColor } },
+                axisLine: { 
+                    show: true,
+                    lineStyle: { color: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(15,23,42,0.15)' } 
+                },
+                axisLabel: { 
+                    color: textColor, 
+                    fontSize: 9,
+                    formatter: function(v) {
+                        return (v > 0 ? '+' : '') + v.toFixed(2);
+                    }
+                }
+            },
             series: [
-                { name: 'Placeholder', type: 'bar', stack: 'Total', itemStyle: { borderColor: 'transparent', color: 'transparent' }, emphasis: { itemStyle: { borderColor: 'transparent', color: 'transparent' } }, data: transparentData },
-                { name: 'Risk Increase (+)', type: 'bar', stack: 'Total', itemStyle: { color: redColor }, data: positiveData, label: { show: true, position: 'right', fontSize: 10, formatter: (p) => '+' + p.value.toFixed(2) } },
-                { name: 'Risk Decrease (-)', type: 'bar', stack: 'Total', itemStyle: { color: greenColor }, data: negativeData, label: { show: true, position: 'left', fontSize: 10, formatter: (p) => '-' + p.value.toFixed(2) } }
+                {
+                    name: 'SHAP Impact',
+                    type: 'bar',
+                    barWidth: '40%',
+                    data: barData,
+                    label: {
+                        show: true,
+                        position: 'top',
+                        color: textColor,
+                        fontSize: 10,
+                        fontWeight: '600',
+                        formatter: function(p) {
+                            const v = p.value;
+                            return (v > 0 ? '+' : '') + v.toFixed(2);
+                        }
+                    }
+                }
             ]
         };
     } else if (divId === 'batchMapChart') {
