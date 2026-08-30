@@ -75,6 +75,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             });
         });
+    }
+
     // 10. Execute initial baseline prediction so results & prescriptive strategy are immediately visible
     setTimeout(() => {
         runPrediction(false);
