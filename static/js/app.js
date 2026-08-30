@@ -126,6 +126,27 @@ function populateSelect(id, options, defaultVal) {
     });
 }
 
+function updateBottomNavIndicator(targetBtn) {
+    const nav = document.querySelector('.bottom-nav');
+    const indicator = document.getElementById('bnavIndicator');
+    if (!nav || !indicator) return;
+    
+    const activeBtn = targetBtn || nav.querySelector('.bnav-btn.active');
+    if (!activeBtn) return;
+    
+    const navRect = nav.getBoundingClientRect();
+    const btnRect = activeBtn.getBoundingClientRect();
+    
+    if (btnRect.width === 0) return;
+    
+    const left = btnRect.left - navRect.left;
+    const width = btnRect.width;
+    
+    indicator.style.transform = `translateX(${left}px)`;
+    indicator.style.width = `${width}px`;
+    indicator.style.opacity = '1';
+}
+
 function setupTabs() {
     const allTabs = document.querySelectorAll('.nav-tab, .tab-btn, .bnav-btn');
 
@@ -142,6 +163,18 @@ function setupTabs() {
             
             // Activate clicked buttons (sync top floating capsule and bottom nav)
             document.querySelectorAll(`[data-tab="${tabId}"]`).forEach(b => b.classList.add('active'));
+            
+            // Trigger liquid droplet squash & update indicator
+            const bnavIndicator = document.getElementById('bnavIndicator');
+            if (bnavIndicator) {
+                bnavIndicator.classList.remove('is-squashing');
+                void bnavIndicator.offsetWidth; // trigger reflow to restart animation
+                bnavIndicator.classList.add('is-squashing');
+                setTimeout(() => bnavIndicator.classList.remove('is-squashing'), 380);
+            }
+            
+            const activeBnav = document.querySelector(`.bnav-btn[data-tab="${tabId}"]`);
+            if (activeBnav) updateBottomNavIndicator(activeBnav);
             
             // Show corresponding tab pane
             const pane = document.getElementById('tab-' + tabId) || document.getElementById(tabId);
@@ -164,6 +197,14 @@ function setupTabs() {
             }, 100);
         });
     });
+
+    window.addEventListener('resize', () => {
+        updateBottomNavIndicator();
+    });
+    window.addEventListener('orientationchange', () => {
+        setTimeout(updateBottomNavIndicator, 150);
+    });
+    setTimeout(updateBottomNavIndicator, 150);
 }
 
 function setupSliders() {
