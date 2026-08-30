@@ -81,6 +81,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => {
         runPrediction(false);
     }, 250);
+
+    // 11. Auto-collapse brand version badge after initial 2 seconds
+    setTimeout(() => {
+        const vBadge = document.getElementById('appVersion');
+        if (vBadge) vBadge.classList.add('is-collapsed');
+    }, 2000);
 });
 
 function toggleTheme() {
@@ -94,7 +100,7 @@ function toggleTheme() {
 function updateThemeIcon() {
     const btn = document.getElementById('themeToggle');
     if (btn) {
-        btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+        btn.setAttribute('title', document.body.classList.contains('dark') ? 'Switch to Light Mode' : 'Switch to Dark Mode');
     }
 }
 
@@ -587,13 +593,13 @@ function renderFinancials(fin) {
             <div class="card-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
                 <span>Prescriptive Strategy & Decision</span>
                 <span class="prescriptive-badge ${isInterventionRec ? 'badge-intervene' : 'badge-absorb'}">
-                    ${isInterventionRec ? '⚡ INTERVENTION RECOMMENDED' : '🛡️ ABSORB OPERATIONAL RISK'}
+                    ${isInterventionRec ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>INTERVENTION RECOMMENDED' : '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>ABSORB OPERATIONAL RISK'}
                 </span>
             </div>
             
             <div class="prescriptive-action-box ${isInterventionRec ? 'box-intervene' : 'box-absorb'}">
                 <div class="prescriptive-action-header">
-                    ${isInterventionRec ? '🚀 Action: Expedite Shipping Freight' : '📦 Action: Maintain Standard Fulfillment'}
+                    ${isInterventionRec ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Action: Expedite Shipping Freight' : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Action: Maintain Standard Fulfillment'}
                 </div>
                 <div class="prescriptive-action-desc">
                     ${isInterventionRec 
@@ -717,13 +723,15 @@ function renderChart(divId, data) {
                     if (!item) return '';
                     const val = item.value;
                     const isPos = val >= 0;
-                    const icon = isPos ? '🔴' : '🟢';
+                    const dot = isPos 
+                        ? `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${redColor};margin-right:5px;vertical-align:middle;"></span>` 
+                        : `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${greenColor};margin-right:5px;vertical-align:middle;"></span>`;
                     const effect = isPos ? 'Increases Delay Risk' : 'Reduces Delay Risk';
                     const sign = val > 0 ? '+' : '';
                     return `
                         <div style="font-weight:700;font-size:12px;margin-bottom:3px;color:${titleColor};">${item.name}</div>
                         <div style="font-size:11px;color:${isPos ? redColor : greenColor};">
-                            ${icon} ${effect}: <b>${sign}${val.toFixed(3)}</b>
+                            ${dot}${effect}: <b>${sign}${val.toFixed(3)}</b>
                         </div>
                     `;
                 }
