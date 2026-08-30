@@ -1508,21 +1508,70 @@ body.dark .loading-overlay {
   background: rgba(15,23,42,0.7);
 }
 
-/* 24. Scrollbar Styling */
+/* 24. Scrollbar Styling (Minimal, Sleek & Semi-Transparent) */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 4px;
+  height: 4px;
 }
+
 ::-webkit-scrollbar-track {
-  background: var(--bg);
-  border-left: 1px solid var(--border);
+  background: transparent;
+  border: none;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: var(--text3);
-  border-radius: 4px;
+  background: rgba(148, 163, 184, 0.28);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text2);
+  background: rgba(13, 148, 136, 0.6);
+}
+
+body.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+body.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.6);
+}
+
+/* Control Capsule Discrete Scrollbar */
+.adaptive-control-capsule {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(13, 148, 136, 0.25) transparent;
+}
+
+body.dark .adaptive-control-capsule {
+  scrollbar-color: rgba(56, 189, 248, 0.25) transparent;
+}
+
+.adaptive-control-capsule::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+.adaptive-control-capsule::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 10px 0;
+}
+
+.adaptive-control-capsule::-webkit-scrollbar-thumb {
+  background: rgba(13, 148, 136, 0.25);
+  border-radius: 9999px;
+}
+
+.adaptive-control-capsule::-webkit-scrollbar-thumb:hover {
+  background: var(--teal);
+}
+
+body.dark .adaptive-control-capsule::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.25);
+}
+
+body.dark .adaptive-control-capsule::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-title);
 }
 
 @media (max-width: 480px) {
