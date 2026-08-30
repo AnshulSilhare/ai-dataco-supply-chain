@@ -68,16 +68,19 @@ function toggleTheme() {
     document.body.classList.toggle('dark');
     currentTheme = document.body.classList.contains('dark') ? 'dark' : 'light';
     localStorage.setItem('dataco-theme', currentTheme);
-    
-    // Re-render all visible charts with new theme
+    updateThemeIcon();
     refreshChartsForTheme();
 }
 
+function updateThemeIcon() {
+    const btn = document.getElementById('themeToggle');
+    if (btn) {
+        btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    }
+}
+
 function refreshChartsForTheme() {
-    // Re-fetch importance chart
     loadImportanceChart();
-    // If prediction results are showing, re-run prediction to get themed charts
-    // (or store the last prediction data and just re-render with layout updates)
 }
 
 async function loadConfig() {
@@ -109,31 +112,13 @@ function populateSelect(id, options, defaultVal) {
     });
 }
 
-function updateTabIndicator(btn) {
-    const nav = btn.closest('.tab-nav');
-    if (!nav) return;
-    const indicator = nav.querySelector('.tab-indicator');
-    if (indicator) {
-        indicator.style.width = `${btn.offsetWidth}px`;
-        indicator.style.left = `${btn.offsetLeft}px`;
-    }
-}
-
 function setupTabs() {
-    const allTabs = document.querySelectorAll('.tab-btn, .bnav-btn');
-    
-    // Initial setup for desktop indicator
-    const mainNav = document.getElementById('mainTabNav');
-    if (mainNav) {
-        setTimeout(() => { 
-            const a = mainNav.querySelector('.tab-btn.active'); 
-            if(a) updateTabIndicator(a); 
-        }, 100);
-    }
+    const allTabs = document.querySelectorAll('.nav-tab, .tab-btn, .bnav-btn');
 
     allTabs.forEach(btn => {
         btn.addEventListener('click', () => {
             const tabId = btn.getAttribute('data-tab');
+            if (!tabId) return;
             
             // Remove active from all nav buttons
             allTabs.forEach(b => b.classList.remove('active'));
@@ -141,16 +126,18 @@ function setupTabs() {
             // Hide all tab content panes
             document.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
             
-            // Activate clicked buttons (sync top and bottom)
+            // Activate clicked buttons (sync top floating capsule and bottom nav)
             document.querySelectorAll(`[data-tab="${tabId}"]`).forEach(b => b.classList.add('active'));
             
             // Show corresponding tab pane
             const pane = document.getElementById('tab-' + tabId) || document.getElementById(tabId);
-            if(pane) pane.classList.add('active');
-            
-            // Update desktop pill indicator if a top button exists
-            const topBtn = document.querySelector(`.tab-nav .tab-btn[data-tab="${tabId}"]`);
-            if (topBtn) updateTabIndicator(topBtn);
+            if(pane) {
+                pane.classList.add('active');
+                // Smooth scroll to top of pane if on mobile
+                if (window.innerWidth <= 768) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
             
             if(tabId === 'architecture' || tabId === 'tab-arch') loadImportanceChart();
         });
