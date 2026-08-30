@@ -1577,17 +1577,21 @@ body.dark ::-webkit-scrollbar-thumb:hover {
   z-index: 950;
   margin: 0 auto 0.85rem auto;
   background: var(--nav-bg);
-  backdrop-filter: blur(28px) saturate(190%);
-  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid var(--glass-border);
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1), inset 0 1px 1.5px rgba(255, 255, 255, 0.65);
   overflow: hidden;
-  will-change: height, max-width, border-radius, box-shadow;
+  will-change: height, max-width, border-radius;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   
   transition: 
-    max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    border-radius 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    max-width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    border-radius 0.28s ease,
     box-shadow 0.25s ease,
     background-color 0.25s ease,
     border-color 0.25s ease;
@@ -1599,8 +1603,6 @@ body.dark ::-webkit-scrollbar-thumb:hover {
   position: absolute;
   inset: 0;
   background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(32px) saturate(200%);
-  -webkit-backdrop-filter: blur(32px) saturate(200%);
   border-radius: inherit;
   z-index: -1;
   pointer-events: none;
@@ -1680,14 +1682,16 @@ body.dark .adaptive-control-capsule.is-collapsed {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.15s ease, visibility 0s 0.15s;
+  transform: scale(0.96);
+  transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0.18s;
 }
 
 .adaptive-control-capsule.is-collapsed .capsule-pill-bar {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transition: opacity 0.25s ease 0.15s, visibility 0s;
+  transform: scale(1);
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1) 0.06s, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1) 0.06s, visibility 0s;
 }
 
 .capsule-body-card {
@@ -1699,7 +1703,7 @@ body.dark .adaptive-control-capsule.is-collapsed {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(10px);
+  transform: translateY(6px);
   transition: opacity 0.15s ease, transform 0.15s ease, visibility 0s 0.15s;
 }
 
@@ -1708,7 +1712,7 @@ body.dark .adaptive-control-capsule.is-collapsed {
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
-  transition: opacity 0.3s ease 0.15s, transform 0.35s cubic-bezier(0.34, 1.35, 0.64, 1) 0.15s, visibility 0s;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.05s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.05s, visibility 0s;
 }
 
 /* Header & Action Buttons */

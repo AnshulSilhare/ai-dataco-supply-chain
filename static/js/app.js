@@ -361,24 +361,32 @@ function setupCollapsibleCapsule() {
         document.getElementById(id)?.addEventListener('input', updateCollapsedSummary);
     });
 
+    const bodyCard = document.getElementById('capsuleBodyCard');
+    if (bodyCard && typeof ResizeObserver !== 'undefined') {
+        const ro = new ResizeObserver(() => {
+            if (window.isUserExpanded && capsule && capsule.classList.contains('is-expanded')) {
+                capsule.style.height = bodyCard.scrollHeight + 'px';
+            }
+        });
+        ro.observe(bodyCard);
+    }
+
     setTimeout(() => {
         updateCollapsedSummary();
         applyCapsuleState(window.scrollY <= 15);
-    }, 200);
+    }, 120);
 }
 
 function toggleAccordion(id) {
     const el = document.getElementById(id);
     if (el) {
         el.classList.toggle('open');
-        if (window.isUserExpanded) {
-            setTimeout(() => {
-                const bodyCard = document.getElementById('capsuleBodyCard');
-                const capsule = document.getElementById('controlCapsule');
-                if (capsule && bodyCard) {
-                    capsule.style.height = bodyCard.scrollHeight + 'px';
-                }
-            }, 320);
+        const bodyCard = document.getElementById('capsuleBodyCard');
+        const capsule = document.getElementById('controlCapsule');
+        if (window.isUserExpanded && capsule && bodyCard) {
+            requestAnimationFrame(() => {
+                capsule.style.height = bodyCard.scrollHeight + 'px';
+            });
         }
     }
 }
