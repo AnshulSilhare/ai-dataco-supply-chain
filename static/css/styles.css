@@ -146,7 +146,7 @@ input[type=number] {
   padding: 0 1.5rem;
 }
 
-/* ─── FLOATING PILL CAPSULE NAV (DemandSense Design) ─── */
+/* ─── FLOATING PILL CAPSULE NAV (Portfolio Style) ─── */
 nav.top-nav {
   position: fixed;
   top: 1.25rem;
@@ -170,17 +170,34 @@ nav.top-nav::before {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--nav-bg, rgba(255, 255, 255, 0.75));
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 99px;
-  box-shadow: var(--glass-shadow);
-  transition: background .4s cubic-bezier(.4, 0, .2, 1), box-shadow .4s cubic-bezier(.4, 0, .2, 1);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.06);
+  transition: background .4s cubic-bezier(.4, 0, .2, 1), box-shadow .4s cubic-bezier(.4, 0, .2, 1), border-color .4s ease;
 }
 
 body.dark nav.top-nav::before {
-  background: rgba(15, 23, 42, 0.75);
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+nav.top-nav.scrolled {
+  top: 0.75rem;
+  height: 50px;
+}
+
+nav.top-nav.scrolled::before {
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.12);
+}
+
+body.dark nav.top-nav.scrolled::before {
+  background: rgba(15, 23, 42, 0.65);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
 }
 
 .nav-inner {
@@ -1693,28 +1710,29 @@ body.dark .loading-overlay {
   .bottom-nav {
     display: flex !important;
     position: fixed !important;
-    bottom: 16px !important;
+    bottom: 18px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     width: calc(100% - 1.5rem) !important;
     max-width: 380px !important;
     height: 54px !important;
-    background: var(--nav-bg, rgba(255, 255, 255, 0.88)) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    border: 1px solid var(--glass-border) !important;
+    background: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(20px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+    border: 1px solid rgba(15, 23, 42, 0.08) !important;
     border-radius: 99px !important;
     justify-content: space-around !important;
     align-items: center !important;
     padding: 0.3rem 0.5rem !important;
     z-index: 1000 !important;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 12px 36px rgba(15, 23, 42, 0.1) !important;
+    transition: all 0.3s ease !important;
   }
 
   body.dark .bottom-nav {
-    background: rgba(15, 23, 42, 0.88) !important;
+    background: rgba(15, 23, 42, 0.45) !important;
     border-color: rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45) !important;
   }
 
   .bnav-btn {

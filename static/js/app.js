@@ -611,6 +611,18 @@ function renderBatchTable(results) {
 }
 
 
+// Add scroll listener for dynamic top nav capsule glassmorphism
+window.addEventListener('scroll', () => {
+    const nav = document.getElementById('topNav');
+    if (nav) {
+        if (window.scrollY > 20) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    }
+});
+
 // Prevent Render from sleeping when user has tab open
 setInterval(() => {
     fetch('/api/config').catch(() => {});
