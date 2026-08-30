@@ -612,3 +612,10 @@ function renderBatchTable(results) {
     
     table.innerHTML = html;
 }
+
+
+// Prevent Render from sleeping when user has tab open
+setInterval(() => {
+    fetch('/api/config').catch(() => {});
+    console.log('Frontend heartbeat ping sent');
+}, 600000); // 10 minutes

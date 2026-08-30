@@ -220,7 +220,27 @@ def _chart_shap(vector, theme="dark"):
         print(err_msg)
         return _empty_chart(f"Error generating SHAP: {e}", theme)
 
-app = FastAPI(title="DataCo DSS")
+import urllib.request
+import asyncio
+from contextlib import asynccontextmanager
+
+async def keep_alive_ping():
+    url = "https://ai-dataco-supply-chain.onrender.com/api/config"
+    while True:
+        await asyncio.sleep(600)  # 10 minutes
+        try:
+            urllib.request.urlopen(url)
+            print("Backend keep-alive ping successful")
+        except Exception as e:
+            print(f"Backend keep-alive ping failed: {e}")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    task = asyncio.create_task(keep_alive_ping())
+    yield
+    task.cancel()
+
+app = FastAPI(title="DataCo DSS", lifespan=lifespan)
 os.makedirs(os.path.join(BASE_DIR, "static"), exist_ok=True)
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
