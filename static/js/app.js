@@ -40,13 +40,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         const guideNav = document.getElementById('guideTabNav');
-        setTimeout(() => { const a = guideNav.querySelector('.tab-btn.active'); if(a) updateTabIndicator(a); }, 150);
+        setTimeout(() => { const a = guideNav ? guideNav.querySelector('.tab-btn.active') : null; if(a) updateTabIndicator(a); }, 150);
 
         document.querySelectorAll('#guideTabNav .tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('#guideTabNav .tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.guide-tab').forEach(c => {
-                    c.style.display = 'none';
+                document.querySelectorAll('.guide-tab-pane').forEach(c => {
                     c.classList.remove('active');
                 });
                 
@@ -56,7 +55,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const target = btn.getAttribute('data-guidetab');
                 const targetEl = document.getElementById('guide-' + target);
                 if (targetEl) {
-                    targetEl.style.display = 'block';
                     targetEl.classList.add('active');
                 }
             });
@@ -196,11 +194,35 @@ function toggleAccordion(id) {
     }
 }
 
-async function runPrediction() {
+function toggleParamPanel(expand) {
+    const panel = document.getElementById('paramControlPanel');
+    if (!panel) return;
+    
+    if (expand) {
+        panel.classList.remove('collapsed');
+    } else {
+        updateParamSummaryText();
+        panel.classList.add('collapsed');
+    }
+}
+
+function updateParamSummaryText() {
+    const country = document.getElementById('country')?.value || 'United States';
+    const mode = document.getElementById('shippingMode')?.value || 'Standard Class';
+    const sales = document.getElementById('sales')?.value || '150';
+    const days = document.getElementById('daysScheduled')?.value || '3';
+    
+    const summaryEl = document.getElementById('paramSummaryText');
+    if (summaryEl) {
+        summaryEl.textContent = `${country} • ${mode} • $${parseFloat(sales).toFixed(0)} • ${days}d SLA`;
+    }
+}
+
+async function runPrediction(autoCollapse = true) {
     const btn = document.getElementById('predictBtn');
     if (!btn) return;
     btn.disabled = true;
-    btn.textContent = 'Analyzing...';
+    btn.innerHTML = '<span>Analyzing...</span>';
     
     const payload = {
         country: document.getElementById('country').value,
@@ -236,13 +258,24 @@ async function runPrediction() {
         renderFinancials(data.financials);
         renderChart('timelineChart', data.timeline_chart);
         renderChart('shapChart', data.shap_chart);
+
+        // Auto-collapse parameters to floating summary pill
+        if (autoCollapse) {
+            toggleParamPanel(false);
+            setTimeout(() => {
+                const verdictEl = document.getElementById('verdictContainer');
+                if (verdictEl) {
+                    verdictEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }, 250);
+        }
     } catch (e) {
         console.error('Prediction error:', e);
         document.getElementById('verdictContainer').innerHTML = 
             `<div class="glass-card" style="color:var(--red);padding:1.5rem;">Request failed. Please try again.</div>`;
     } finally {
         btn.disabled = false;
-        btn.textContent = 'Execute Analysis';
+        btn.innerHTML = '<span>Execute Analysis</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
     }
 }
 
