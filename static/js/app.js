@@ -260,7 +260,7 @@ function applyCapsuleState(expanded) {
         capsule.classList.remove('is-collapsed');
         capsule.classList.add('is-expanded');
         if (bodyCard) {
-            capsule.style.height = (bodyCard.scrollHeight + 12) + 'px';
+            capsule.style.height = bodyCard.scrollHeight + 'px';
         }
     } else {
         updateCollapsedSummary();
@@ -376,7 +376,7 @@ function toggleAccordion(id) {
                 const bodyCard = document.getElementById('capsuleBodyCard');
                 const capsule = document.getElementById('controlCapsule');
                 if (capsule && bodyCard) {
-                    capsule.style.height = (bodyCard.scrollHeight + 12) + 'px';
+                    capsule.style.height = bodyCard.scrollHeight + 'px';
                 }
             }, 320);
         }

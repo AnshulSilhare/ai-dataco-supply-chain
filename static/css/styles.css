@@ -1548,7 +1548,7 @@ body.dark .loading-overlay {
   position: sticky;
   top: 72px;
   z-index: 950;
-  margin: 0 auto 1.5rem auto;
+  margin: 0 auto 0.85rem auto;
   background: var(--nav-bg);
   backdrop-filter: blur(28px) saturate(190%);
   -webkit-backdrop-filter: blur(28px) saturate(190%);
@@ -1668,7 +1668,7 @@ body.dark .adaptive-control-capsule.is-collapsed {
   top: 0;
   left: 0;
   right: 0;
-  padding: 0.65rem 0.85rem;
+  padding: 0.55rem 0.8rem 0.45rem;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -2221,7 +2221,7 @@ body.dark .chevron-icon {
   }
 
   .capsule-body-card {
-    padding: 0.5rem 0.65rem 0.85rem !important;
+    padding: 0.4rem 0.55rem 0.4rem !important;
   }
 
   .capsule-header {
@@ -2316,8 +2316,8 @@ body.dark .chevron-icon {
     font-size: 0.82rem !important;
     border-radius: 50px !important;
     padding: 0 1rem !important;
-    margin-top: 0.35rem !important;
-    margin-bottom: 0.25rem !important;
+    margin-top: 0.25rem !important;
+    margin-bottom: 0 !important;
   }
 
   /* Liquid Glass Floating Bottom Navigation Bar */
