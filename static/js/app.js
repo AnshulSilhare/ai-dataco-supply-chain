@@ -1,5 +1,16 @@
 let currentTheme = localStorage.getItem('dataco-theme') || 'light';
 
+function updateTabIndicator(btn) {
+    if (!btn) return;
+    const nav = btn.closest('.tab-nav') || btn.closest('.nav-tabs');
+    if (!nav) return;
+    const indicator = nav.querySelector('.tab-indicator');
+    if (!indicator) return;
+    
+    indicator.style.width = `${btn.offsetWidth}px`;
+    indicator.style.left = `${btn.offsetLeft}px`;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Apply saved theme
     if (currentTheme === 'dark') document.body.classList.add('dark');
@@ -33,8 +44,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Guide Modal Logic
     const guideModal = document.getElementById('guideModal');
     if (guideModal) {
-        document.getElementById('openGuideBtn').addEventListener('click', () => guideModal.classList.add('active'));
-        document.getElementById('closeGuideBtn').addEventListener('click', () => guideModal.classList.remove('active'));
+        const openGuideBtn = document.getElementById('openGuideBtn');
+        const closeGuideBtn = document.getElementById('closeGuideBtn');
+        if (openGuideBtn) openGuideBtn.addEventListener('click', () => guideModal.classList.add('active'));
+        if (closeGuideBtn) closeGuideBtn.addEventListener('click', () => guideModal.classList.remove('active'));
         guideModal.addEventListener('click', (e) => {
             if (e.target === guideModal) guideModal.classList.remove('active');
         });

@@ -420,30 +420,57 @@ body.dark .hero-badge {
 }
 
 .hero-counters {
-  display: flex;
-  flex-direction: row;
-  gap: 2rem;
-  border-top: 1px solid var(--border);
-  padding-top: 1.2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 0.55rem 0.5rem;
+  max-width: 650px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+body.dark .hero-counters {
+  background: rgba(30, 41, 59, 0.35);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
 .hero-counters .counter {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.15rem 0.4rem;
+  border-right: 1px solid var(--border);
+}
+
+.hero-counters .counter:last-child {
+  border-right: none;
 }
 
 .counter-value {
-  font-size: 1.6rem;
+  font-family: var(--display);
+  font-size: 1.15rem;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
+  color: var(--text);
+  white-space: nowrap;
 }
 
 .counter-label {
-  font-size: 0.65rem;
+  font-family: var(--body);
+  font-size: 0.6rem;
   text-transform: uppercase;
   color: var(--text3);
   font-weight: 600;
-  margin-top: 0.2rem;
+  letter-spacing: 0.02em;
+  margin-top: 0.15rem;
+  white-space: nowrap;
 }
 
 /* 4. Tab Navigation (.tab-nav) */
@@ -1795,17 +1822,29 @@ body.dark .filter-bar-container.collapsed {
 
   .hero-counters {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 0.75rem 1rem !important;
-    padding-top: 0.85rem !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 0 !important;
+    padding: 0.45rem 0.25rem !important;
+    border-radius: 10px !important;
+    max-width: 100% !important;
+  }
+
+  .hero-counters .counter {
+    padding: 0.1rem 0.2rem !important;
+    border-right: 1px solid var(--border) !important;
+  }
+
+  .hero-counters .counter:last-child {
+    border-right: none !important;
   }
 
   .counter-value {
-    font-size: 1.4rem !important;
+    font-size: 0.92rem !important;
   }
 
   .counter-label {
-    font-size: 0.62rem !important;
+    font-size: 0.52rem !important;
+    letter-spacing: 0 !important;
   }
 
   .container {
