@@ -172,7 +172,7 @@ nav.top-nav {
   top: 1.25rem;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 100;
+  z-index: 1100;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1573,7 +1573,7 @@ body.dark ::-webkit-scrollbar-thumb:hover {
 /* ═══ ADAPTIVE CONTROL CAPSULE (Dynamic Island Morphing Physics) ═══ */
 .adaptive-control-capsule {
   position: sticky;
-  top: 72px;
+  top: 82px;
   z-index: 950;
   margin: 0 auto 0.85rem auto;
   background: var(--nav-bg);
@@ -2242,7 +2242,7 @@ body.dark .chevron-icon {
   }
 
   .adaptive-control-capsule {
-    top: 58px !important;
+    top: 72px !important;
     margin-bottom: 0.75rem !important;
   }
 
