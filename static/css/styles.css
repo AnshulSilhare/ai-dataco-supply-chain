@@ -1678,12 +1678,12 @@ body.dark .loading-overlay {
   .bottom-nav {
     display: flex !important;
     position: fixed !important;
-    bottom: 16px !important;
+    bottom: 12px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    width: calc(100% - 1.5rem) !important;
-    max-width: 380px !important;
-    height: 54px !important;
+    width: calc(100% - 2rem) !important;
+    max-width: 330px !important;
+    height: 44px !important;
     background: var(--nav-bg, rgba(255, 255, 255, 0.88)) !important;
     backdrop-filter: blur(16px) !important;
     -webkit-backdrop-filter: blur(16px) !important;
@@ -1691,15 +1691,15 @@ body.dark .loading-overlay {
     border-radius: 99px !important;
     justify-content: space-around !important;
     align-items: center !important;
-    padding: 0.3rem 0.5rem !important;
+    padding: 0.2rem 0.35rem !important;
     z-index: 1000 !important;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.14) !important;
   }
 
   body.dark .bottom-nav {
     background: rgba(15, 23, 42, 0.88) !important;
     border-color: rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45) !important;
   }
 
   .bnav-btn {
@@ -1712,19 +1712,19 @@ body.dark .loading-overlay {
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 2px !important;
-    padding: 0.2rem 0.4rem !important;
+    gap: 1px !important;
+    padding: 0.15rem 0.25rem !important;
     color: var(--text3) !important;
     font-family: var(--body) !important;
-    font-size: 0.66rem !important;
+    font-size: 0.62rem !important;
     font-weight: 600 !important;
     cursor: pointer !important;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 
   .bnav-btn svg {
-    width: 18px !important;
-    height: 18px !important;
+    width: 15px !important;
+    height: 15px !important;
     transition: transform 0.2s ease !important;
   }
 
