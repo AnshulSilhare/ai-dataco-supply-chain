@@ -1456,6 +1456,55 @@ body.dark .brief-drivers .tech-tag {
   color: var(--text);
 }
 
+/* 20.1 Prescriptive Decision Action Badges & Callout */
+.prescriptive-badge {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 99px;
+  letter-spacing: 0.03em;
+}
+
+.badge-intervene {
+  color: var(--teal);
+  background: rgba(13, 148, 136, 0.12);
+  border: 1px solid rgba(13, 148, 136, 0.35);
+  box-shadow: 0 0 10px rgba(13, 148, 136, 0.2);
+}
+
+.badge-absorb {
+  color: var(--amber);
+  background: rgba(217, 119, 6, 0.12);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+}
+
+.prescriptive-action-box {
+  border-radius: var(--radius);
+  padding: 0.75rem 0.9rem;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.box-intervene {
+  background: rgba(13, 148, 136, 0.08);
+  border-left: 3px solid var(--teal);
+  color: var(--text2);
+}
+
+.box-absorb {
+  background: rgba(217, 119, 6, 0.08);
+  border-left: 3px solid var(--amber);
+  color: var(--text2);
+}
+
+.prescriptive-action-header {
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+
 /* 21. Batch Info Box (.info-box) */
 .info-box {
   background: rgba(30, 58, 95, 0.07);

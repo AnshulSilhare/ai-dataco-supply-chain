@@ -75,7 +75,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             });
         });
-    }
+    // 10. Execute initial baseline prediction so results & prescriptive strategy are immediately visible
+    setTimeout(() => {
+        runPrediction(false);
+    }, 250);
 });
 
 function toggleTheme() {
@@ -569,23 +572,51 @@ function renderVerdict(data) {
 }
 
 function renderFinancials(fin) {
+    const isInterventionRec = fin.intervention_recommended === 'Yes';
     const epColor = fin.expected_profit < 0 ? 'var(--red)' : 'var(--green)';
     const epiColor = fin.expected_profit_with_intervention < 0 ? 'var(--red)' : 'var(--green)';
+    const profitSavings = Math.abs(fin.expected_profit_with_intervention - fin.expected_profit).toFixed(2);
     
     const container = document.getElementById('financialContainer');
     if (!container) return;
 
     container.innerHTML = `
-        <div class="glass-card form-card">
-            <div class="card-title">Scenario Financial Analysis</div>
-            <div class="financial-grid">
+        <div class="glass-card form-card prescriptive-result-card" style="margin-bottom: 1rem;">
+            <div class="card-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                <span>Prescriptive Strategy & Decision</span>
+                <span class="prescriptive-badge ${isInterventionRec ? 'badge-intervene' : 'badge-absorb'}">
+                    ${isInterventionRec ? '⚡ INTERVENTION RECOMMENDED' : '🛡️ ABSORB OPERATIONAL RISK'}
+                </span>
+            </div>
+            
+            <div class="prescriptive-action-box ${isInterventionRec ? 'box-intervene' : 'box-absorb'}">
+                <div class="prescriptive-action-header">
+                    ${isInterventionRec ? '🚀 Action: Expedite Shipping Freight' : '📦 Action: Maintain Standard Fulfillment'}
+                </div>
+                <div class="prescriptive-action-desc">
+                    ${isInterventionRec 
+                        ? `Expedited freight protects <strong>$${fin.sales.toFixed(2)}</strong> order revenue from a potential <strong>$${fin.penalty_loss.toFixed(2)}</strong> SLA violation penalty, delivering a net profit gain of <strong>+$${profitSavings}</strong> over inaction.` 
+                        : `SLA delay liability is lower than the expedited freight cost. Standard shipping yields the highest expected net profit margin of <strong>$${fin.expected_profit.toFixed(2)}</strong>.`
+                    }
+                </div>
+            </div>
+
+            <div class="financial-grid" style="grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); margin-top: 0.85rem; gap: 0.65rem;">
                 <div class="financial-item">
-                    <div class="financial-label">Expected Profit (No Intervention)</div>
-                    <div class="financial-value" style="color:${epColor}">$${fin.expected_profit.toFixed(2)}</div>
+                    <div class="financial-label">Base Order Profit</div>
+                    <div class="financial-value" style="color:var(--text); font-size:1.05rem;">$${fin.profit.toFixed(2)}</div>
                 </div>
                 <div class="financial-item">
-                    <div class="financial-label">Expected Profit (With Intervention)</div>
-                    <div class="financial-value" style="color:${epiColor}">$${fin.expected_profit_with_intervention.toFixed(2)}</div>
+                    <div class="financial-label">Penalty Loss Liability</div>
+                    <div class="financial-value" style="color:var(--red); font-size:1.05rem;">-$${fin.penalty_loss.toFixed(2)}</div>
+                </div>
+                <div class="financial-item">
+                    <div class="financial-label">Exp. Profit (No Action)</div>
+                    <div class="financial-value" style="color:${epColor}; font-size:1.05rem;">$${fin.expected_profit.toFixed(2)}</div>
+                </div>
+                <div class="financial-item" style="border: 1px solid ${isInterventionRec ? 'rgba(13,148,136,0.45)' : 'var(--border)'}; background: ${isInterventionRec ? 'rgba(13,148,136,0.08)' : 'var(--bg3)'};">
+                    <div class="financial-label">Exp. Profit (Expedited)</div>
+                    <div class="financial-value" style="color:${epiColor}; font-size:1.05rem;">$${fin.expected_profit_with_intervention.toFixed(2)}</div>
                 </div>
             </div>
         </div>
