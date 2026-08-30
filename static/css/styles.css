@@ -1537,41 +1537,19 @@ body.dark ::-webkit-scrollbar-thumb:hover {
   background: rgba(56, 189, 248, 0.6);
 }
 
-/* Control Capsule Discrete Scrollbar */
-.adaptive-control-capsule {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(13, 148, 136, 0.25) transparent;
+
+/* Control Capsule Clean Scroll (No protruding vertical bar) */
+.adaptive-control-capsule,
+.capsule-body-card {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 
-body.dark .adaptive-control-capsule {
-  scrollbar-color: rgba(56, 189, 248, 0.25) transparent;
-}
-
-.adaptive-control-capsule::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
-}
-
-.adaptive-control-capsule::-webkit-scrollbar-track {
-  background: transparent;
-  margin: 10px 0;
-}
-
-.adaptive-control-capsule::-webkit-scrollbar-thumb {
-  background: rgba(13, 148, 136, 0.25);
-  border-radius: 9999px;
-}
-
-.adaptive-control-capsule::-webkit-scrollbar-thumb:hover {
-  background: var(--teal);
-}
-
-body.dark .adaptive-control-capsule::-webkit-scrollbar-thumb {
-  background: rgba(56, 189, 248, 0.25);
-}
-
-body.dark .adaptive-control-capsule::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-title);
+.adaptive-control-capsule::-webkit-scrollbar,
+.capsule-body-card::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 @media (max-width: 480px) {
