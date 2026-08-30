@@ -1393,8 +1393,21 @@ body.dark .loading-overlay {
   border-bottom: 1px solid var(--glass-border);
   background: rgba(255,255,255,0.02);
 }
-.accordion-content { display: none; padding: 1.2rem; }
-.accordion-group.open .accordion-content { display: grid; }
+.accordion-content { 
+  max-height: 0; 
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+  opacity: 0;
+  overflow: hidden; 
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  display: grid;
+}
+.accordion-group.open .accordion-content { 
+  max-height: 800px; 
+  padding: 1.2rem;
+  opacity: 1;
+}
 .accordion-group .chevron { transition: transform 0.3s; opacity: 0.7; }
 .accordion-group.open .chevron { transform: rotate(180deg); }
 .bottom-nav { display: none; }
