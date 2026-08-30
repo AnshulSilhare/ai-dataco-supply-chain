@@ -223,31 +223,46 @@
 
     <!-- MAIN DASHBOARD CONTENT -->
     <div class="two-col">
-      <!-- LEFT COLUMN -->
+      <!-- LEFT COLUMN: Primary Prediction Verdict, Financials & Timeline -->
       <div>
-        <!-- Timeline Chart Moved to Left Col for better space distribution -->
+        <h3 class="form-section-title">Prediction Output</h3>
+        
+        <!-- Verdict Card (Risk % Donut Ring & Verdict Badge) -->
+        <div id="verdictContainer"></div>
+        
+        <!-- Scenario Financial Analysis -->
+        <div id="financialContainer"></div>
+
+        <!-- Delivery Timeline Projection Chart -->
         <div class="glass-card chart-card">
           <div class="chart-title">Delivery Timeline Projection</div>
           <div class="chart-container" id="timelineChart"></div>
         </div>
       </div>
       
-      <!-- RIGHT COLUMN -->
+      <!-- RIGHT COLUMN: Explainable AI & Decision Drivers -->
       <div>
-        <h3 class="form-section-title">Prediction Output</h3>
-        
-        <!-- Verdict card -->
-        <div id="verdictContainer"></div>
-        
-        <!-- Financial Analysis -->
-        <div id="financialContainer"></div>
+        <h3 class="form-section-title">Decision Intelligence</h3>
 
-        <!-- SHAP Chart -->
+        <!-- Top Risk Factor Drivers (SHAP) -->
         <div class="glass-card chart-card">
           <div class="chart-title">Top Risk Factor Drivers (SHAP)</div>
           <div class="chart-container" id="shapChart"></div>
           <div class="chart-hint">
             💡 <strong>Driver Impact:</strong> <span style="color:var(--red);font-weight:600;">Red columns (+)</span> elevate late delivery probability; <span style="color:var(--green);font-weight:600;">Green columns (-)</span> pull probability down towards on-time fulfillment.
+          </div>
+        </div>
+
+        <!-- Decision Strategy & Model Notes -->
+        <div class="glass-card form-card">
+          <div class="card-title">Prescriptive Decision Strategy</div>
+          <p style="font-size:0.78rem;color:var(--text2);line-height:1.55;margin-bottom:0.6rem;">
+            <strong>Prescriptive Rule:</strong> Expedited shipment intervention is triggered whenever <code>Expected Profit (No Action) &lt; Expected Profit (Expedited)</code>, protecting high-value orders from SLA penalty exposure.
+          </p>
+          <div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+            <span class="tech-tag">RandomForest v3.0</span>
+            <span class="tech-tag">71.9% Validation AUC</span>
+            <span class="tech-tag">SHAP TreeExplainer</span>
           </div>
         </div>
       </div>
