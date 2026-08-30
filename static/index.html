@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="/static/css/styles.css?v=3.3.0">
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   <script src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
   <link rel="icon" type="image/jpeg" href="/static/favicon.jpg?v=3">
@@ -276,18 +276,8 @@
           </div>
         </div>
 
-        <!-- Decision Strategy & Model Notes -->
-        <div class="glass-card form-card">
-          <div class="card-title">Prescriptive Decision Strategy</div>
-          <p style="font-size:0.78rem;color:var(--text2);line-height:1.55;margin-bottom:0.6rem;">
-            <strong>Prescriptive Rule:</strong> Expedited shipment intervention is triggered whenever <code>Expected Profit (No Action) &lt; Expected Profit (Expedited)</code>, protecting high-value orders from SLA penalty exposure.
-          </p>
-          <div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
-            <span class="tech-tag">RandomForest v3.0</span>
-            <span class="tech-tag">71.9% Validation AUC</span>
-            <span class="tech-tag">SHAP TreeExplainer</span>
-          </div>
-        </div>
+        <!-- Dynamic Prescriptive Decision Strategy Container -->
+        <div id="prescriptiveContainer"></div>
       </div>
     </div>
   </div>
@@ -630,6 +620,6 @@
     </button>
   </nav>
 
-<script src="/static/js/app.js"></script>
+<script src="/static/js/app.js?v=3.3.0"></script>
 </body>
 </html>
