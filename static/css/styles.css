@@ -1494,16 +1494,30 @@ body.dark .loading-overlay {
 
 
 /* ─── DEMANDSENSE DESIGN SYSTEM & MOBILE ERGONOMICS ─── */
+.filter-bar-container {
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.2rem;
+  border-radius: 14px;
+}
+
+.form-section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: var(--display);
+  color: var(--text);
+  margin-bottom: 0.6rem;
+}
+
 .accordion-group { 
   border: 1px solid var(--glass-border); 
-  border-radius: 16px; 
-  margin-bottom: 1rem; 
+  border-radius: 10px; 
+  margin-bottom: 0.5rem; 
   overflow: hidden; 
   background: var(--glass-bg); 
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .accordion-group:hover {
@@ -1512,19 +1526,20 @@ body.dark .loading-overlay {
 }
 
 .accordion-header { 
-  padding: 1rem 1.4rem; 
+  padding: 0.55rem 0.9rem; 
   display: flex; 
   justify-content: space-between; 
   align-items: center; 
   cursor: pointer; 
-  font-weight: 700; 
-  font-size: 0.92rem;
-  font-family: var(--display);
+  font-weight: 600; 
+  font-size: 0.86rem; 
+  font-family: var(--body);
   color: var(--text); 
   background: transparent; 
   user-select: none; 
   border-bottom: 1px solid transparent;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
+  min-height: 38px;
 }
 
 .accordion-group.open .accordion-header {
@@ -1544,19 +1559,19 @@ body.dark .loading-overlay {
 
 .accordion-content { 
   max-height: 0; 
-  padding: 0 1.4rem;
+  padding: 0 0.9rem;
   opacity: 0;
   overflow: hidden; 
-  transition: max-height 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease, padding 0.35s ease;
+  transition: max-height 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease, padding 0.3s ease;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.75rem;
   align-items: end;
 }
 
 .accordion-group.open .accordion-content { 
   max-height: 800px; 
-  padding: 1.2rem 1.4rem;
+  padding: 0.65rem 0.9rem 0.75rem;
   opacity: 1;
 }
 
@@ -1624,7 +1639,7 @@ body.dark .loading-overlay {
   }
 
   .hero {
-    padding: 4.8rem 0 1.5rem;
+    padding: 4.8rem 0 1.2rem;
   }
 
   .hero-title {
@@ -1636,18 +1651,18 @@ body.dark .loading-overlay {
   .hero-subtitle {
     font-size: 0.88rem;
     line-height: 1.55;
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
   }
 
   .hero-counters {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 0.85rem 1.2rem !important;
-    padding-top: 1rem !important;
+    gap: 0.75rem 1rem !important;
+    padding-top: 0.85rem !important;
   }
 
   .counter-value {
-    font-size: 1.45rem !important;
+    font-size: 1.4rem !important;
   }
 
   .counter-label {
@@ -1663,46 +1678,57 @@ body.dark .loading-overlay {
   }
 
   .filter-bar-container {
-    padding: 1rem !important;
-    margin-bottom: 1.2rem !important;
+    padding: 0.75rem 0.85rem !important;
+    margin-bottom: 1rem !important;
+    border-radius: 12px !important;
+  }
+
+  .form-section-title {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.45rem !important;
   }
 
   .accordion-group {
-    border-radius: 12px !important;
-    margin-bottom: 0.65rem !important;
+    border-radius: 8px !important;
+    margin-bottom: 0.4rem !important;
   }
 
   .accordion-header {
-    padding: 0.85rem 1rem !important;
-    font-size: 0.88rem !important;
+    padding: 0.45rem 0.75rem !important;
+    font-size: 0.82rem !important;
+    min-height: 34px !important;
   }
 
   .accordion-content {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 0.6rem !important;
-    padding: 0.2rem 0.85rem 0.85rem !important;
+    gap: 0.45rem !important;
+    padding: 0.4rem 0.75rem 0.65rem !important;
+  }
+
+  .form-group {
+    margin-bottom: 0 !important;
   }
 
   .form-group label {
-    font-size: 0.7rem !important;
+    font-size: 0.68rem !important;
     font-weight: 600 !important;
-    margin-bottom: 0.25rem !important;
+    margin-bottom: 0.15rem !important;
     text-transform: uppercase !important;
     letter-spacing: 0.03em !important;
   }
 
   .pill-input, .text-input, select, input[type="number"] {
-    height: 38px !important;
-    padding: 0.4rem 0.65rem !important;
-    font-size: 0.84rem !important;
-    border-radius: 8px !important;
+    height: 34px !important;
+    padding: 0.3rem 0.55rem !important;
+    font-size: 0.82rem !important;
+    border-radius: 6px !important;
   }
 
   .btn-execute {
     width: 100% !important;
-    height: 44px !important;
+    height: 40px !important;
     padding: 0 1rem !important;
-    font-size: 0.9rem !important;
+    font-size: 0.86rem !important;
     border-radius: 50px !important;
     margin-top: 0.4rem !important;
   }
