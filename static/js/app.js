@@ -131,7 +131,10 @@ function updateBottomNavIndicator(targetBtn) {
     const indicator = document.getElementById('bnavIndicator');
     if (!nav || !indicator) return;
     
-    const activeBtn = targetBtn || nav.querySelector('.bnav-btn.active');
+    let activeBtn = targetBtn;
+    if (!activeBtn) {
+        activeBtn = nav.querySelector('.bnav-btn.active') || nav.querySelector('.bnav-btn');
+    }
     if (!activeBtn) return;
     
     const left = activeBtn.offsetLeft;
@@ -139,9 +142,9 @@ function updateBottomNavIndicator(targetBtn) {
     
     if (!width || width === 0) return;
     
-    indicator.style.transform = `translate3d(${left}px, 0, 0)`;
-    indicator.style.width = `${width}px`;
-    indicator.style.opacity = '1';
+    indicator.style.setProperty('transform', `translate3d(${left}px, 0, 0)`, 'important');
+    indicator.style.setProperty('width', `${width}px`, 'important');
+    indicator.style.setProperty('opacity', '1', 'important');
     
     const blob = indicator.querySelector('.bnav-liquid-blob');
     if (blob) {

@@ -2406,7 +2406,6 @@ body.dark .chevron-icon {
     z-index: 1 !important;
     opacity: 0;
     will-change: transform, width !important;
-    transform: translate3d(0, 0, 0) !important;
     
     /* Fluid Organic Gliding Spring Physics */
     transition: 
