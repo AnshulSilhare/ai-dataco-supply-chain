@@ -1354,3 +1354,12 @@ body.dark .loading-overlay {
     font-size: 0.8rem;
   }
 }
+
+
+/* Added Responsive Fixes */
+@media (max-width: 768px) {
+  .filter-grid { grid-template-columns: 1fr !important; }
+  .site-header { flex-direction: column !important; border-radius: 20px !important; min-width: unset !important; width: 95% !important; padding: 1rem !important; gap: 10px !important; }
+  .tab-nav { flex-wrap: wrap; }
+  .hero { margin-top: 100px; }
+}

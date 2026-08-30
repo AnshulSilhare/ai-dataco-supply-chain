@@ -1,4 +1,4 @@
-let currentTheme = localStorage.getItem('dataco-theme') || 'dark';
+let currentTheme = localStorage.getItem('dataco-theme') || 'light';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Apply saved theme
