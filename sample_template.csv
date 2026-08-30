@@ -1,0 +1,51 @@
+Order ID,Order Country,Sales,Days_Scheduled,Order_Item_Quantity,Order_Profit_Per_Order,Payment Type,Customer Segment,Product Category,Order Month,Order Day of Week,Customer Country
+ORD-1000,Brazil,604.57,3,5,150.0,TRANSFER,Consumer,Camping & Hiking,June,Friday,Other
+ORD-1001,United Kingdom,1475.68,5,1,155.72,CASH,Corporate,Women's Clothing,July,Thursday,Other
+ORD-1002,Italy,726.81,4,3,66.91,CASH,Corporate,Camping & Hiking,October,Saturday,Other
+ORD-1003,Belgium,1296.91,5,3,220.03,TRANSFER,Consumer,Electronics,July,Sunday,Other
+ORD-1004,Australia,1036.45,5,1,85.12,CASH,Consumer,Women's Clothing,October,Wednesday,Other
+ORD-1005,India,703.22,3,5,58.34,TRANSFER,Consumer,Computers,March,Sunday,Other
+ORD-1006,Italy,69.23,2,1,11.01,PAYMENT,Home Office,Consumer Electronics,February,Thursday,Other
+ORD-1007,Canada,1416.19,3,3,556.32,TRANSFER,Corporate,Computers,September,Friday,Other
+ORD-1008,Brazil,866.77,4,2,96.53,TRANSFER,Consumer,Camping & Hiking,August,Tuesday,Other
+ORD-1009,Japan,608.85,4,4,34.1,TRANSFER,Corporate,Camping & Hiking,December,Thursday,Other
+ORD-1010,France,73.15,3,3,23.2,CASH,Home Office,Women's Clothing,October,Tuesday,Other
+ORD-1011,Brazil,384.8,3,1,127.92,CASH,Home Office,Women's Clothing,July,Saturday,Other
+ORD-1012,Australia,399.49,3,4,68.4,TRANSFER,Consumer,Electronics,September,Wednesday,Other
+ORD-1013,Australia,1040.73,3,1,221.3,CASH,Home Office,Fishing,April,Monday,Other
+ORD-1014,India,934.5,6,1,259.25,DEBIT,Corporate,Computers,April,Sunday,Other
+ORD-1015,Canada,1258.13,4,2,84.07,DEBIT,Consumer,Women's Clothing,January,Wednesday,Other
+ORD-1016,United Kingdom,301.38,4,4,115.19,CASH,Corporate,Men's Clothing,August,Thursday,Other
+ORD-1017,India,617.04,2,4,222.34,CASH,Corporate,Electronics,December,Tuesday,Other
+ORD-1018,India,314.24,3,2,44.41,TRANSFER,Home Office,Indoor/Outdoor Games,March,Sunday,Other
+ORD-1019,France,1145.27,1,3,63.4,PAYMENT,Home Office,Camping & Hiking,July,Tuesday,Other
+ORD-1020,Mexico,666.48,4,1,251.06,CASH,Home Office,Electronics,December,Friday,Other
+ORD-1021,Canada,351.52,2,5,79.22,DEBIT,Home Office,Computers,February,Tuesday,Other
+ORD-1022,Germany,873.17,3,1,208.5,TRANSFER,Home Office,Women's Clothing,February,Friday,Other
+ORD-1023,India,95.4,2,1,27.61,CASH,Consumer,Camping & Hiking,July,Saturday,Other
+ORD-1024,Spain,1271.31,5,3,337.59,DEBIT,Corporate,Consumer Electronics,June,Sunday,Other
+ORD-1025,Netherlands,702.14,3,1,267.07,DEBIT,Corporate,Electronics,March,Sunday,Other
+ORD-1026,Mexico,622.97,3,2,237.03,PAYMENT,Corporate,Fitness Accessories,September,Monday,Other
+ORD-1027,Germany,1393.66,4,2,492.69,TRANSFER,Corporate,Camping & Hiking,October,Thursday,Other
+ORD-1028,Spain,1104.54,2,4,301.25,TRANSFER,Home Office,Computers,June,Friday,Other
+ORD-1029,Canada,523.48,3,5,172.92,PAYMENT,Corporate,Cardio Equipment,October,Monday,Other
+ORD-1030,United States,877.14,3,1,251.75,PAYMENT,Consumer,Men's Clothing,October,Tuesday,Other
+ORD-1031,Spain,805.21,2,1,201.85,TRANSFER,Consumer,Men's Footwear,June,Tuesday,Other
+ORD-1032,Japan,1443.7,5,3,137.12,TRANSFER,Corporate,Fishing,January,Monday,Other
+ORD-1033,Mexico,1274.57,3,2,425.61,CASH,Corporate,Men's Footwear,April,Sunday,Other
+ORD-1034,Italy,1133.61,4,5,382.28,CASH,Consumer,Computers,October,Tuesday,Other
+ORD-1035,Spain,832.55,5,4,224.02,PAYMENT,Consumer,Indoor/Outdoor Games,June,Saturday,Other
+ORD-1036,China,900.79,3,2,303.7,CASH,Home Office,Indoor/Outdoor Games,June,Saturday,Other
+ORD-1037,United States,1449.62,3,4,403.02,DEBIT,Consumer,Cardio Equipment,November,Monday,Other
+ORD-1038,Australia,930.2,2,3,113.8,CASH,Home Office,Fishing,December,Friday,Other
+ORD-1039,Australia,450.2,3,3,65.68,CASH,Home Office,Fitness Accessories,May,Friday,Other
+ORD-1040,Belgium,479.6,2,1,60.0,DEBIT,Home Office,Cardio Equipment,January,Monday,Other
+ORD-1041,Japan,289.64,3,5,52.73,PAYMENT,Home Office,Women's Apparel,August,Friday,Other
+ORD-1042,Spain,72.67,5,4,4.62,DEBIT,Home Office,Men's Footwear,May,Sunday,Other
+ORD-1043,Spain,663.93,3,2,176.86,CASH,Corporate,Cardio Equipment,December,Sunday,Other
+ORD-1044,Belgium,622.58,2,3,104.47,PAYMENT,Consumer,Men's Footwear,December,Friday,Other
+ORD-1045,Netherlands,475.56,3,1,132.92,CASH,Home Office,Camping & Hiking,December,Saturday,Other
+ORD-1046,Netherlands,70.42,5,1,13.02,DEBIT,Consumer,Indoor/Outdoor Games,May,Friday,Other
+ORD-1047,Belgium,338.32,3,4,97.63,DEBIT,Consumer,Camping & Hiking,July,Sunday,Other
+ORD-1048,Netherlands,1081.45,3,3,183.0,CASH,Home Office,Men's Clothing,April,Wednesday,Other
+ORD-1049,France,1195.75,1,5,168.89,TRANSFER,Corporate,Women's Apparel,June,Thursday,Other

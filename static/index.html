@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataCo DSS — Supply Chain Risk Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <script src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
+</head>
+<body>
+<!-- Ambient Glow Background -->
+<div class="gradient-mesh">
+  <div class="mesh-blob blob1"></div>
+  <div class="mesh-blob blob2"></div>
+  <div class="mesh-blob blob3"></div>
+</div>
+
+<header class="site-header">
+  <div class="header-content">
+    <div class="logo">DataCo<span>DSS</span></div>
+    <div class="header-right">
+      <button id="openGuideBtn" class="nav-link" style="background:none; border:none; cursor:pointer;">Guide</button>
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span>System Online</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode">
+        <!-- Sun icon for dark mode, Moon icon for light mode -->
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero container">
+  <div class="hero-badge">Portfolio Showcase / Proof of Concept</div>
+  <h1 class="hero-title">Supply Chain <span class="accent">Risk Intelligence</span></h1>
+  <p class="hero-subtitle">
+    A late delivery risk prediction and prescriptive mitigation engine. Trained on the benchmark
+    <strong>DataCo Smart Supply Chain Dataset</strong>, this demonstration portal uses Random Forest
+    to evaluate fulfillment operations, SLA penalty exposure, and shipping intervention ROI.
+  </p>
+  <div class="hero-counters">
+    <div class="counter"><div class="counter-value">180,519</div><div class="counter-label">Training Records</div></div>
+    <div class="counter"><div class="counter-value">71.9%</div><div class="counter-label">Validation AUC</div></div>
+    <div class="counter"><div class="counter-value">66.6%</div><div class="counter-label">Test Accuracy</div></div>
+    <div class="counter"><div class="counter-value">66.3%</div><div class="counter-label">F1-Score</div></div>
+  </div>
+</section>
+
+<div class="container">
+  <nav class="tab-nav" id="mainTabNav">
+    <div class="tab-indicator"></div>
+    <button class="tab-btn active" data-tab="single">Single Order</button>
+    <button class="tab-btn" data-tab="batch">Bulk Batch</button>
+    <button class="tab-btn" data-tab="architecture">Model Architecture</button>
+    <button class="tab-btn" data-tab="dictionary">Data Dictionary</button>
+  </nav>  <!-- TAB 1: SINGLE ORDER -->
+  <div class="tab-content active" id="tab-single">
+    
+    <!-- HORIZONTAL FILTER BAR (DemandSense Style) -->
+    <div class="glass-card filter-bar-container" style="margin-bottom: 2rem; padding: 1.5rem;">
+      <h3 class="form-section-title" style="margin-bottom: 1rem;">Simulation Parameters</h3>
+      <div class="filter-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; align-items: end;">
+        
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="country">Destination</label>
+          <select id="country" class="pill-input"></select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="shippingMode">Shipping</label>
+          <select id="shippingMode" class="pill-input"></select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="segment">Segment</label>
+          <select id="segment" class="pill-input"></select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="category">Category</label>
+          <select id="category" class="pill-input"></select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="payment">Payment</label>
+          <select id="payment" class="pill-input"></select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="dayOfWeek">Day</label>
+          <select id="dayOfWeek" class="pill-input"></select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="quantity">Quantity</label>
+          <input type="number" id="quantity" value="1" min="1" class="pill-input">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="sales">Order Value ($)</label>
+          <input type="number" id="sales" value="150.0" step="0.01" class="pill-input">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="profit">Net Profit ($)</label>
+          <input type="number" id="profit" value="20.0" step="0.01" class="pill-input">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="interventionCost">Expedite Cost ($)</label>
+          <input type="number" id="interventionCost" value="50.0" step="0.01" class="pill-input">
+        </div>
+        
+        <!-- Sliders -->
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="daysScheduled">SLA Days (<span id="daysScheduledValue">3</span>)</label>
+          <input type="range" id="daysScheduled" min="0" max="10" step="1" value="3" style="width: 100%;">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="penaltyRate">Penalty % (<span id="penaltyRateValue">25</span>%)</label>
+          <input type="range" id="penaltyRate" min="0" max="50" step="5" value="25" style="width: 100%;">
+        </div>
+        
+        <button class="btn-primary pill-input" id="predictBtn" onclick="runPrediction()" style="border-radius: 50px; height: 100%; padding: 0.8rem 1rem;">Execute Analysis</button>
+      </div>
+    </div>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <div class="two-col">
+      <!-- LEFT COLUMN -->
+      <div>
+        <!-- Timeline Chart Moved to Left Col for better space distribution -->
+        <div class="glass-card chart-card">
+          <div class="chart-title">Delivery Timeline Projection</div>
+          <div class="chart-container" id="timelineChart"></div>
+        </div>
+      </div>
+      
+      <!-- RIGHT COLUMN -->
+      <div>
+        <h3 class="form-section-title">Prediction Output</h3>
+        
+        <!-- Verdict card -->
+        <div id="verdictContainer"></div>
+        
+        <!-- Financial Analysis -->
+        <div id="financialContainer"></div>
+
+        <!-- SHAP Chart -->
+        <div class="glass-card chart-card">
+          <div class="chart-title">Top Risk Factors (SHAP)</div>
+          <div class="chart-container" id="shapChart"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: BULK BATCH -->
+  <div class="tab-content" id="tab-batch">
+    <h3 class="form-section-title">Enterprise Batch Prescriptive Analytics</h3>
+    
+    <div class="supported-formats">
+      <span class="formats-label">Supported Formats:</span>
+      <span class="tech-tag">CSV (.csv)</span>
+      <span class="tech-tag">Excel (.xlsx)</span>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="glass-card form-card">
+          <h3 class="form-section-title">Parameters & Files</h3>
+          <div class="form-group">
+            <label for="bulkPenaltyRate">Bulk SLA Penalty Rate (% of Sales)</label>
+            <div class="slider-container">
+              <input type="range" id="bulkPenaltyRate" min="0" max="100" step="1" value="15">
+              <span class="slider-value" id="bulkPenaltyRateValue">15</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bulkInterventionCost">Bulk Intervention Cost ($/order)</label>
+            <input type="number" id="bulkInterventionCost" value="50.0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>Upload Operations Data</label>
+            <div class="upload-area" id="uploadArea">
+              <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" hidden>
+              <div class="upload-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <div class="upload-text">Drop your CSV/XLSX here or click to browse</div>
+              <div class="upload-filename" id="uploadFilename"></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:0.5rem;flex-direction:column;">
+            <a href="/api/template" download class="btn-secondary" style="text-align:center;text-decoration:none;">Download Schema Template</a>
+            <button class="btn-primary" id="batchBtn" onclick="runBatch()">Execute Batch Analysis</button>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+
+        <!-- KPI cards populated by JS -->
+        <div id="batchKpiContainer"></div>
+      </div>
+    </div>
+
+    <!-- Batch message -->
+    <div id="batchMessage"></div>
+    
+    <!-- Batch results table -->
+    <div class="results-table-container" id="batchTableContainer" style="display:none;">
+      <div style="overflow-x:auto;">
+        <table class="results-table" id="batchResultsTable"></table>
+      </div>
+    </div>
+    
+    <!-- Download button -->
+    <div id="batchDownloadContainer" style="display:none;margin:1rem 0;">
+      <a class="btn-primary btn-download" id="batchDownloadBtn" href="#" download>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Formatted Output Excel (.xlsx)
+      </a>
+    </div>
+
+    <!-- Charts row -->
+    <div class="two-col" id="batchChartsRow" style="display:none;">
+      <div class="glass-card chart-card">
+        <div class="chart-title">Geographic Risk Density</div>
+        <div class="chart-container" id="batchMapChart"></div>
+      </div>
+      <div class="glass-card chart-card">
+        <div class="chart-title">Top Mitigation Savings</div>
+        <div class="chart-container" id="batchRoiChart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: MODEL ARCHITECTURE -->
+  <div class="tab-content" id="tab-architecture">
+    <h3 class="form-section-title">Machine Learning Interpretability</h3>
+    
+    <!-- System Info KPIs -->
+    <div class="kpi-grid">
+      <div class="glass-card kpi-card">
+        <div class="kpi-label">Core Algorithm</div>
+        <div class="kpi-value" style="font-size:1.1rem;">Random Forest Classifier</div>
+      </div>
+      <div class="glass-card kpi-card">
+        <div class="kpi-label">Ensemble Size</div>
+        <div class="kpi-value">100</div>
+        <div class="kpi-sub">Decision Trees</div>
+      </div>
+      <div class="glass-card kpi-card">
+        <div class="kpi-label">Max Depth</div>
+        <div class="kpi-value">20</div>
+        <div class="kpi-sub">Nodes</div>
+      </div>
+      <div class="glass-card kpi-card">
+        <div class="kpi-label">Data Scaling</div>
+        <div class="kpi-value" style="font-size:1.1rem;">StandardScaler</div>
+      </div>
+    </div>
+
+    <!-- Architecture Flow -->
+    <div class="arch-flow">
+      <div class="glass-card arch-node arch-accent">
+        <div class="arch-label">Input Layer</div>
+        <div class="arch-value">4 Drivers</div>
+        <div class="arch-sub">Selected Features</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="glass-card arch-node arch-accent">
+        <div class="arch-label">Ensemble</div>
+        <div class="arch-value">100 Trees</div>
+        <div class="arch-sub">Parallel Processing</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="glass-card arch-node">
+        <div class="arch-label">Aggregation</div>
+        <div class="arch-value">Voting</div>
+        <div class="arch-sub">Soft Probability</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="glass-card arch-node arch-green">
+        <div class="arch-label">Output</div>
+        <div class="arch-value">Risk %</div>
+        <div class="arch-sub">Binary Classification</div>
+      </div>
+    </div>
+
+    <!-- Feature Importance + Limitations -->
+    <div class="two-col">
+      <div class="glass-card chart-card">
+        <div class="chart-title">Global Feature Attribution</div>
+        <div class="chart-container" id="importanceChart"></div>
+      </div>
+      <div class="glass-card form-card">
+        <div class="card-title">Model Governance & Limitations</div>
+        <ul class="limitations-list">
+          <li><strong>Feature Reduction:</strong> The model relies exclusively on 4 core predictive drivers. If other factors (like destination country customs strikes) occur, the model cannot capture them directly.</li>
+          <li><strong>SLA Fluidity:</strong> Hardcoded SLA threshold assumptions must be regularly reviewed against carrier contractual updates to maintain accuracy.</li>
+          <li><strong>Feature Drift:</strong> Seasonal volume spikes (e.g., Q4 holidays) can cause data distributions to drift, requiring periodic model retraining.</li>
+          <li><strong>Categorical Sparsity:</strong> Dropping secondary categorical dimensions like product category reduces model overfitting but limits sub-segment drift detection.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: DATA DICTIONARY -->
+  <div class="tab-content" id="tab-dictionary">
+    <h3 class="form-section-title">Feature Dictionary & ERP Schema</h3>
+    <div class="glass-card form-card">
+      <p class="dict-description">Active mapping definitions between corporate SCM ERP columns and target machine learning features. Following the feature selection pipeline, only 4 features are active in the model.</p>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Feature Column Name</th>
+              <th>Status</th>
+              <th>Type</th>
+              <th>ERP Equivalent</th>
+              <th>Business Context & Selection Rationale</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-active">
+              <td class="feature-active">Sales</td>
+              <td class="status-active">ACTIVE</td>
+              <td>Float</td>
+              <td>Sales ($)</td>
+              <td>Total revenue generated by the order. Primary driver of value-at-risk and SLA penalty liability. Selected by RandomForest importance.</td>
+            </tr>
+            <tr class="row-active">
+              <td class="feature-active">Order_Profit_Per_Order</td>
+              <td class="status-active">ACTIVE</td>
+              <td>Float</td>
+              <td>Profit ($)</td>
+              <td>Expected profit margin per order. Base financial buffer used to calculate expedited freight ROI. Selected by RandomForest importance.</td>
+            </tr>
+            <tr class="row-active">
+              <td class="feature-active">Days_Scheduled</td>
+              <td class="status-active">ACTIVE</td>
+              <td>Integer</td>
+              <td>Transit SLA</td>
+              <td>Contractual scheduled delivery days. Sets transit deadline to compare against AI delay probability. Selected by RandomForest importance.</td>
+            </tr>
+            <tr class="row-active">
+              <td class="feature-active">Shipping_Type_TRANSFER</td>
+              <td class="status-active">ACTIVE</td>
+              <td>Categorical</td>
+              <td>Payment = TRANSFER</td>
+              <td>Orders paid via TRANSFER. Strong indicator of warehouse hold and credit clearance delay. Selected by RandomForest importance.</td>
+            </tr>
+            <tr class="row-dropped">
+              <td>Order Country</td>
+              <td>DROPPED</td>
+              <td>Categorical (163)</td>
+              <td>Order Country</td>
+              <td>Destination country. Dropped because it fell below variance and mean Gini importance thresholds.</td>
+            </tr>
+            <tr class="row-dropped">
+              <td>Order_Item_Quantity</td>
+              <td>DROPPED</td>
+              <td>Integer</td>
+              <td>Quantity</td>
+              <td>Total item volume. Dropped because it had high collinearity with Sales and low predictive power.</td>
+            </tr>
+            <tr class="row-dropped">
+              <td>Customer Segment</td>
+              <td>DROPPED</td>
+              <td>Categorical (3)</td>
+              <td>Segment</td>
+              <td>Consumer, Corporate, or Home Office. Dropped due to lack of distinct signal relative to core variables.</td>
+            </tr>
+            <tr class="row-dropped">
+              <td>Product Category</td>
+              <td>DROPPED</td>
+              <td>Categorical (49)</td>
+              <td>Category</td>
+              <td>Product category. Dropped because it had very low individual feature importance (under 1%).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div> <!-- close .container -->
+
+<footer class="site-footer container">
+  <div class="footer-title">DataCo DSS - Supply Chain Risk Intelligence</div>
+  <div class="footer-subtitle">Anshul Silhare - PGDM Research &amp; Business Analytics, WeSchool Mumbai</div>
+  <div class="footer-links">
+    <a href="https://linkedin.com/in/anshul-silhare" target="_blank" class="footer-link">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+      <span>LinkedIn</span>
+    </a>
+    <a href="https://github.com/AnshulSilhare" target="_blank" class="footer-link">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      <span>GitHub</span>
+    </a>
+    <a href="https://anshulsilhare.github.io" target="_blank" class="footer-link">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-2v-3.188c0-1.149-.684-1.563-1.378-1.563-.776 0-1.622.549-1.622 1.622v3.129h-2v-6h2v.912c.398-.57 1.205-1.044 2.158-1.044 1.513 0 2.842.909 2.842 2.919v3.213z"/></svg>
+      <span>Portfolio</span>
+    </a>
+  </div>
+  <div class="footer-tags">
+    <span class="tech-tag">Python 3.11</span>
+    <span class="tech-tag">scikit-learn</span>
+    <span class="tech-tag">Random Forest</span>
+    <span class="tech-tag">FastAPI</span>
+    <span class="tech-tag">Plotly</span>
+    <span class="tech-tag">pandas</span>
+  </div>
+</footer>
+
+<!-- Guide Modal -->
+<div class="modal-overlay" id="guideModal">
+  <div class="modal-content glass-card">
+    <div class="modal-header">
+      <h2>DataCo DSS Guide</h2>
+      <button class="modal-close" id="closeGuideBtn">&times;</button>
+    </div>
+    
+    <div class="tab-nav" id="guideTabNav" style="margin-bottom: 1.5rem; justify-content: center; width: 100%;">
+      <div class="tab-indicator"></div>
+      <button class="tab-btn active" data-guidetab="single">Single Order</button>
+      <button class="tab-btn" data-guidetab="batch">Bulk Batch</button>
+      <button class="tab-btn" data-guidetab="model">Model details</button>
+    </div>
+    
+    <div class="tab-content guide-tab active" id="guide-single" style="display:block;">
+      <h3>SCM Business Challenge</h3>
+      <p style="margin-top: 0.5rem; color: var(--text2); line-height: 1.5;">Late delivery SLA violations erode margins by up to 25%. This DSS acts as a <strong>Prescriptive Mitigation Engine</strong> - leveraging the benchmark <strong>DataCo Smart Supply Chain Dataset</strong> to quantify SLA liability and determine when to spend expedited freight costs to salvage net order profits.</p>
+      
+      <h3 style="margin-top: 1.5rem;">Operations Decision Logic (ROI)</h3>
+      <p style="margin-top: 0.5rem; color: var(--text2); line-height: 1.5;"><strong>Prescriptive Action:</strong> Intervene if <code>Expected Profit (No Intervention) &lt; Expected Profit (Expedited Shipping)</code>.</p>
+      
+      <h3 style="margin-top: 1.5rem;">How to Interpret the SHAP Waterfall</h3>
+      <p style="margin-top: 0.5rem; color: var(--text2); line-height: 1.5;">
+        • <strong>Base Value:</strong> Average historical probability of late delivery.<br>
+        • <span style="color:var(--red);font-weight:600;">Red blocks (+):</span> Increase delay risk for this specific order.<br>
+        • <span style="color:var(--green);font-weight:600;">Green blocks (-):</span> Decrease delay risk, pulling the probability down.
+      </p>
+    </div>
+    
+    <div class="tab-content guide-tab" id="guide-batch" style="display:none;">
+      <h3>How to Use the Batch Engine</h3>
+      <ol style="margin-top: 0.5rem; padding-left: 1.2rem; color: var(--text2); line-height: 1.6;">
+        <li><strong>Upload Data:</strong> Drop your CSV/Excel file with order records. Use the sample template as a starting point.</li>
+        <li><strong>Set SLA Penalty Rate:</strong> The % of order sales value forfeited when delivery breaches the SLA window.</li>
+        <li><strong>Set Intervention Cost:</strong> The flat fee (per order) to expedite a risky shipment and avoid the penalty.</li>
+        <li><strong>Run & Export:</strong> Get risk flags, financial ROI, geographic map, and download a formatted Excel report.</li>
+      </ol>
+    </div>
+
+    <div class="tab-content guide-tab" id="guide-model" style="display:none;">
+      <h3>Model Evaluation Metrics</h3>
+      <div class="brief-metrics" style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: space-around; text-align: center;">
+        <div><span class="brief-metric-value" style="font-size: 1.5rem; font-weight: 700; color: var(--accent-title);">71.9%</span><br><span class="brief-metric-label" style="font-size: 0.75rem; color: var(--text3);">AUC-ROC</span></div>
+        <div><span class="brief-metric-value" style="font-size: 1.5rem; font-weight: 700; color: var(--accent-title);">66.6%</span><br><span class="brief-metric-label" style="font-size: 0.75rem; color: var(--text3);">Accuracy</span></div>
+        <div><span class="brief-metric-value" style="font-size: 1.5rem; font-weight: 700; color: var(--accent-title);">66.3%</span><br><span class="brief-metric-label" style="font-size: 0.75rem; color: var(--text3);">F1-Score</span></div>
+        <div><span class="brief-metric-value accent-val" style="font-size: 1.5rem; font-weight: 700; color: var(--teal);">100</span><br><span class="brief-metric-label" style="font-size: 0.75rem; color: var(--text3);">Trees</span></div>
+      </div>
+      <div class="brief-note" style="margin-top: 1.5rem; padding: 1rem; background: rgba(217, 119, 6, 0.1); border-left: 3px solid var(--amber); color: var(--amber); border-radius: 4px; font-size: 0.85rem;">
+        ⚠️ Note: This is a standalone portfolio demonstration. SCM ERP parameters are mock-simulated.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: dataco-supply-chain-dss
+    env: docker
+    region: ohio
+    plan: free
+    autoDeploy: true

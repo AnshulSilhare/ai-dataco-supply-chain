@@ -1,0 +1,9 @@
+data/OnePlus*
+data/*.zip
+data/*.zip.part
+__pycache__/
+.venv/
+*.bin
+*.exe
+*.dll
+*.ops
