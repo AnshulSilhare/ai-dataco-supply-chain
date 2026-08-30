@@ -183,32 +183,42 @@ def _chart_timeline(sched, pred, prob, theme="dark"):
     }
 
 def _chart_shap(vector, theme="dark"):
-    if not HAS_SHAP or model is None:
-        return _empty_chart("SHAP explanation unavailable", theme)
+    if model is None:
+        return _empty_chart("Model not loaded", theme)
     try:
-        import shap
-        explainer = shap.TreeExplainer(model)
-        shap_values = explainer.shap_values(vector)
+        vec_1d = vector.values[0]
+        n_features = len(model_columns)
+        contributions = np.zeros(n_features)
         
-        # Handle different SHAP output formats (list vs 3D array vs 2D array)
-        if isinstance(shap_values, list):
-            sv = np.array(shap_values[1][0])
-        else:
-            shap_arr = np.array(shap_values)
-            if shap_arr.ndim == 3:
-                sv = shap_arr[0, :, 1]
-            elif shap_arr.ndim == 2:
-                sv = shap_arr[0]
-            else:
-                sv = shap_arr.flatten()
+        # Traverse all decision trees in the ensemble to compute path contributions
+        for tree in model.estimators_:
+            t = tree.tree_
+            node = 0
+            values = t.value[:, 0, :]
+            probs = values / values.sum(axis=1, keepdims=True)
             
+            while t.children_left[node] != t.children_right[node]:
+                feat = t.feature[node]
+                threshold = t.threshold[node]
+                parent_prob = probs[node, 1] if probs.shape[1] > 1 else probs[node, 0]
+                
+                if vec_1d[feat] <= threshold:
+                    next_node = t.children_left[node]
+                else:
+                    next_node = t.children_right[node]
+                    
+                child_prob = probs[next_node, 1] if probs.shape[1] > 1 else probs[next_node, 0]
+                contributions[feat] += (child_prob - parent_prob)
+                node = next_node
+                
+        contributions /= len(model.estimators_)
+        
         feature_names = list(vector.columns)
-        sv = sv.flatten() # ensure 1D
-        abs_sv = np.abs(sv)
+        abs_sv = np.abs(contributions)
         top_idx = np.argsort(abs_sv)[-5:]
         
         y_labels = [get_label(str(feature_names[int(i)])) for i in top_idx]
-        x_vals = [float(sv[int(i)]) for i in top_idx]
+        x_vals = [float(contributions[int(i)]) for i in top_idx]
         
         return {
             "labels": y_labels,
@@ -218,7 +228,7 @@ def _chart_shap(vector, theme="dark"):
         import traceback
         err_msg = traceback.format_exc()
         print(err_msg)
-        return _empty_chart(f"Error generating SHAP: {e}", theme)
+        return _empty_chart(f"Error generating factors: {e}", theme)
 
 import urllib.request
 import asyncio
