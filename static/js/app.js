@@ -209,13 +209,16 @@ function toggleAccordion(id) {
 
 function toggleParamPanel(expand) {
     const panel = document.getElementById('paramControlPanel');
+    const backdrop = document.getElementById('paramBackdrop');
     if (!panel) return;
     
     if (expand) {
         panel.classList.remove('collapsed');
+        if (backdrop) backdrop.classList.add('active');
     } else {
         updateParamSummaryText();
         panel.classList.add('collapsed');
+        if (backdrop) backdrop.classList.remove('active');
     }
 }
 
@@ -660,12 +663,12 @@ function renderBatchTable(results) {
 // Add scroll listener for dynamic top nav capsule glassmorphism
 window.addEventListener('scroll', () => {
     const nav = document.getElementById('topNav');
-    if (nav) {
-        if (window.scrollY > 20) {
-            nav.classList.add('scrolled');
-        } else {
-            nav.classList.remove('scrolled');
-        }
+    if (window.scrollY > 20) {
+        if (nav) nav.classList.add('scrolled');
+        document.body.classList.add('nav-scrolled');
+    } else {
+        if (nav) nav.classList.remove('scrolled');
+        document.body.classList.remove('nav-scrolled');
     }
 });
 

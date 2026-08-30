@@ -1520,13 +1520,56 @@ body.dark .loading-overlay {
 }
 
 
-/* ─── DEMANDSENSE DESIGN SYSTEM & MOBILE ERGONOMICS ─── */
+/* ─── FLOATING PARAMETER CONSOLE (Overlays Visuals Just Below Nav) ─── */
+.param-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 15, 25, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 92;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.param-drawer-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .filter-bar-container {
-  padding: 1rem 1.2rem;
-  margin-bottom: 1.2rem;
-  border-radius: 14px;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
+  position: fixed;
+  top: 4.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 95;
+  width: calc(100% - 2.5rem);
+  max-width: 920px;
+  padding: 1rem 1.3rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(13, 148, 136, 0.35);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28), 0 0 20px rgba(13, 148, 136, 0.12);
+  transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              padding 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-radius 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease;
+  max-height: calc(85vh - 5.5rem);
+  overflow-y: auto;
+}
+
+body.dark .filter-bar-container {
+  background: rgba(15, 23, 42, 0.94);
+  border-color: rgba(45, 212, 191, 0.3);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 20px rgba(45, 212, 191, 0.15);
+}
+
+body.nav-scrolled .filter-bar-container {
+  top: 4.25rem;
 }
 
 .param-header-strip {
@@ -1634,20 +1677,29 @@ body.dark .loading-overlay {
 
 /* Collapsed State: Turn into sleek floating pill */
 .filter-bar-container.collapsed {
-  padding: 0.55rem 1.1rem !important;
+  top: 4.85rem;
+  height: 42px;
+  max-width: 680px;
+  padding: 0 1rem !important;
   border-radius: 99px !important;
   background: rgba(255, 255, 255, 0.55) !important;
   backdrop-filter: blur(20px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
   border: 1px solid var(--teal) !important;
-  box-shadow: 0 8px 28px rgba(13, 148, 136, 0.15) !important;
-  margin-bottom: 1.5rem !important;
+  box-shadow: 0 8px 28px rgba(13, 148, 136, 0.2) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 body.dark .filter-bar-container.collapsed {
-  background: rgba(15, 23, 42, 0.6) !important;
+  background: rgba(15, 23, 42, 0.65) !important;
   border: 1px solid var(--teal) !important;
-  box-shadow: 0 8px 28px rgba(45, 212, 191, 0.2) !important;
+  box-shadow: 0 8px 28px rgba(45, 212, 191, 0.25) !important;
+}
+
+body.nav-scrolled .filter-bar-container.collapsed {
+  top: 4.25rem;
 }
 
 .filter-bar-container.collapsed .param-expanded-body {
@@ -1856,14 +1908,28 @@ body.dark .filter-bar-container.collapsed {
   }
 
   .filter-bar-container {
-    padding: 0.75rem 0.85rem !important;
-    margin-bottom: 1rem !important;
-    border-radius: 12px !important;
+    top: 3.9rem !important;
+    width: calc(100% - 1.25rem) !important;
+    max-width: 480px !important;
+    padding: 0.8rem 0.85rem !important;
+    max-height: calc(85vh - 4.5rem) !important;
+    border-radius: 14px !important;
+  }
+
+  body.nav-scrolled .filter-bar-container {
+    top: 3.45rem !important;
   }
 
   .filter-bar-container.collapsed {
-    padding: 0.45rem 0.8rem !important;
-    margin-bottom: 1.2rem !important;
+    top: 3.9rem !important;
+    height: 38px !important;
+    max-width: 380px !important;
+    padding: 0 0.75rem !important;
+    border-radius: 99px !important;
+  }
+
+  body.nav-scrolled .filter-bar-container.collapsed {
+    top: 3.45rem !important;
   }
 
   .summary-pill-title {
@@ -1872,12 +1938,12 @@ body.dark .filter-bar-container.collapsed {
 
   .summary-pill-tags {
     font-size: 0.72rem !important;
-    max-width: 170px !important;
+    max-width: 160px !important;
   }
 
   .summary-pill-expand-btn {
-    padding: 0.25rem 0.6rem !important;
-    font-size: 0.74rem !important;
+    padding: 0.2rem 0.55rem !important;
+    font-size: 0.72rem !important;
   }
 
   .form-section-title {

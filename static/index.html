@@ -72,8 +72,9 @@
   <!-- TAB 1: SINGLE ORDER -->
   <div class="tab-content active" id="tab-single">
     
-    <!-- COLLAPSIBLE PARAMETER CONTROL CONSOLE (DemandSense Floating Pill Style) -->
-    <div class="glass-card filter-bar-container" id="paramControlPanel">
+    <!-- FLOATING PARAMETER CONSOLE (Overlays Page Content Just Below Nav) -->
+    <div class="param-drawer-backdrop" id="paramBackdrop" onclick="toggleParamPanel(false)"></div>
+    <div class="glass-card filter-bar-container collapsed" id="paramControlPanel">
       
       <!-- Collapsed Compact Floating Pill (shown when collapsed) -->
       <div class="param-summary-pill" id="paramSummaryPill" onclick="toggleParamPanel(true)">
@@ -81,7 +82,7 @@
           <div class="summary-pill-icon">⚙️</div>
           <div class="summary-pill-details">
             <span class="summary-pill-title">Simulation Profile:</span>
-            <span class="summary-pill-tags" id="paramSummaryText">United States • Standard Class • $150.00 • 3d SLA</span>
+            <span class="summary-pill-tags" id="paramSummaryText">United States • Standard Class • $150 • 3d SLA</span>
           </div>
         </div>
         <button class="summary-pill-expand-btn" id="expandParamBtn" title="Edit Parameters">
@@ -95,8 +96,8 @@
         <div class="param-header-strip">
           <h3 class="form-section-title" style="margin-bottom:0;">Simulation Parameters</h3>
           <button class="param-collapse-btn" onclick="toggleParamPanel(false)" title="Collapse Panel">
-            <span>Collapse</span>
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            <span>Close</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
         </div>
         
