@@ -13,6 +13,17 @@
   <link rel="icon" type="image/jpeg" href="/static/favicon.jpg?v=3">
 </head>
 <body>
+<!-- SVG Liquid Glass Optical Lens Filter -->
+<svg style="position: absolute; width: 0; height: 0; pointer-events: none; overflow: hidden;" aria-hidden="true">
+  <defs>
+    <filter id="droplet-lens-refract" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+      <feTurbulence type="sineWave" baseFrequency="0.003 0.001" numOctaves="1" result="wave" />
+      <feDisplacementMap in="SourceGraphic" in2="wave" scale="12" xChannelSelector="R" yChannelSelector="G" result="bent" />
+      <feBlend in="bent" in2="SourceGraphic" mode="normal" />
+    </filter>
+  </defs>
+</svg>
+
 <!-- Ambient Glow Background -->
 <div class="gradient-mesh">
   <div class="mesh-blob blob1"></div>
