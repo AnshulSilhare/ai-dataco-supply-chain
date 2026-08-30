@@ -10,11 +10,8 @@ from typing import Optional
 import io
 import uvicorn
 
-try:
-    import shap
-    HAS_SHAP = True
-except ImportError:
-    HAS_SHAP = False
+import gc
+HAS_SHAP = True
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_VERSION = "v3.0"
@@ -25,11 +22,12 @@ except Exception:
     pass
 
 try:
-    model = joblib.load(os.path.join(BASE_DIR, "dataco_rf_model.joblib"))
+    model = joblib.load(os.path.join(BASE_DIR, "dataco_rf_model.joblib"), mmap_mode="r")
     scaler = joblib.load(os.path.join(BASE_DIR, "dataco_scaler.joblib"))
     model_columns = joblib.load(os.path.join(BASE_DIR, "dataco_columns.joblib"))
     FEAT = list(model.feature_names_in_)
     SCOLS = list(scaler.feature_names_in_)
+    gc.collect()
 except Exception as e:
     print(f"Error loading models: {e}")
     model, scaler, model_columns = None, None, None
@@ -188,6 +186,7 @@ def _chart_shap(vector, theme="dark"):
     if not HAS_SHAP or model is None:
         return _empty_chart("SHAP explanation unavailable", theme)
     try:
+        import shap
         explainer = shap.TreeExplainer(model)
         shap_values = explainer.shap_values(vector)
         
