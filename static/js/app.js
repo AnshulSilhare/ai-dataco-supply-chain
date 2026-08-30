@@ -209,16 +209,13 @@ function toggleAccordion(id) {
 
 function toggleParamPanel(expand) {
     const panel = document.getElementById('paramControlPanel');
-    const backdrop = document.getElementById('paramBackdrop');
     if (!panel) return;
     
     if (expand) {
         panel.classList.remove('collapsed');
-        if (backdrop) backdrop.classList.add('active');
     } else {
         updateParamSummaryText();
         panel.classList.add('collapsed');
-        if (backdrop) backdrop.classList.remove('active');
     }
 }
 

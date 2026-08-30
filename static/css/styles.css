@@ -1520,63 +1520,27 @@ body.dark .loading-overlay {
 }
 
 
-/* ─── FLOATING PARAMETER CONSOLE (Overlays Visuals Just Below Nav) ─── */
-.param-drawer-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(11, 15, 25, 0.45);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  z-index: 92;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.param-drawer-backdrop.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
+/* ─── COLLAPSIBLE PARAMETER CONSOLE (DemandSense Design) ─── */
 .filter-bar-container {
-  position: fixed;
-  top: 4.85rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 95;
-  width: calc(100% - 2.5rem);
-  max-width: 920px;
-  padding: 1rem 1.3rem;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border: 1px solid rgba(13, 148, 136, 0.35);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28), 0 0 20px rgba(13, 148, 136, 0.12);
-  transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              padding 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              border-radius 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.3s ease;
-  max-height: calc(85vh - 5.5rem);
-  overflow-y: auto;
-}
-
-body.dark .filter-bar-container {
-  background: rgba(15, 23, 42, 0.94);
-  border-color: rgba(45, 212, 191, 0.3);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 20px rgba(45, 212, 191, 0.15);
-}
-
-body.nav-scrolled .filter-bar-container {
-  top: 4.25rem;
+  position: relative;
+  width: 100%;
+  margin: 1.5rem 0 2rem;
+  padding: 1.2rem 1.4rem;
+  border-radius: 16px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
 }
 
 .param-header-strip {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.8rem;
 }
 
 .param-collapse-btn {
@@ -1630,7 +1594,7 @@ body.nav-scrolled .filter-bar-container {
 
 .summary-pill-title {
   font-family: var(--display);
-  font-size: 0.84rem;
+  font-size: 0.86rem;
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
@@ -1638,11 +1602,11 @@ body.nav-scrolled .filter-bar-container {
 
 .summary-pill-tags {
   font-family: var(--mono);
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   color: var(--teal);
   background: rgba(13, 148, 136, 0.08);
   border: 1px solid rgba(13, 148, 136, 0.2);
-  padding: 0.15rem 0.55rem;
+  padding: 0.15rem 0.6rem;
   border-radius: 99px;
   white-space: nowrap;
   overflow: hidden;
@@ -1675,31 +1639,26 @@ body.nav-scrolled .filter-bar-container {
   transition: opacity 0.3s ease;
 }
 
-/* Collapsed State: Turn into sleek floating pill */
+/* Collapsed State: Sleek DemandSense floating pill */
 .filter-bar-container.collapsed {
-  top: 4.85rem;
-  height: 42px;
-  max-width: 680px;
-  padding: 0 1rem !important;
+  height: 48px;
+  padding: 0 1.2rem !important;
   border-radius: 99px !important;
-  background: rgba(255, 255, 255, 0.55) !important;
+  background: rgba(255, 255, 255, 0.45) !important;
   backdrop-filter: blur(20px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
   border: 1px solid var(--teal) !important;
-  box-shadow: 0 8px 28px rgba(13, 148, 136, 0.2) !important;
+  box-shadow: 0 4px 20px rgba(13, 148, 136, 0.15) !important;
   overflow: hidden !important;
   display: flex !important;
   align-items: center !important;
+  margin-bottom: 2rem !important;
 }
 
 body.dark .filter-bar-container.collapsed {
-  background: rgba(15, 23, 42, 0.65) !important;
+  background: rgba(15, 23, 42, 0.45) !important;
   border: 1px solid var(--teal) !important;
-  box-shadow: 0 8px 28px rgba(45, 212, 191, 0.25) !important;
-}
-
-body.nav-scrolled .filter-bar-container.collapsed {
-  top: 4.25rem;
+  box-shadow: 0 4px 20px rgba(45, 212, 191, 0.2) !important;
 }
 
 .filter-bar-container.collapsed .param-expanded-body {
@@ -1908,28 +1867,16 @@ body.nav-scrolled .filter-bar-container.collapsed {
   }
 
   .filter-bar-container {
-    top: 3.9rem !important;
-    width: calc(100% - 1.25rem) !important;
-    max-width: 480px !important;
-    padding: 0.8rem 0.85rem !important;
-    max-height: calc(85vh - 4.5rem) !important;
+    padding: 0.85rem 0.9rem !important;
+    margin: 1.2rem 0 1.5rem !important;
     border-radius: 14px !important;
   }
 
-  body.nav-scrolled .filter-bar-container {
-    top: 3.45rem !important;
-  }
-
   .filter-bar-container.collapsed {
-    top: 3.9rem !important;
-    height: 38px !important;
-    max-width: 380px !important;
-    padding: 0 0.75rem !important;
+    height: 42px !important;
+    padding: 0 0.85rem !important;
     border-radius: 99px !important;
-  }
-
-  body.nav-scrolled .filter-bar-container.collapsed {
-    top: 3.45rem !important;
+    margin-bottom: 1.5rem !important;
   }
 
   .summary-pill-title {
@@ -1938,7 +1885,7 @@ body.nav-scrolled .filter-bar-container.collapsed {
 
   .summary-pill-tags {
     font-size: 0.72rem !important;
-    max-width: 160px !important;
+    max-width: 170px !important;
   }
 
   .summary-pill-expand-btn {
