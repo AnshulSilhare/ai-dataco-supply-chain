@@ -167,67 +167,25 @@ input[type=number] {
 }
 
 /* ─── FLOATING PILL CAPSULE NAV (Portfolio Style) ─── */
-nav.top-nav {
+/* ═══ 2. TRI-CAPSULE FLOATING HEADER ISLANDS ═══ */
+header.top-nav {
   position: fixed;
-  top: 1.25rem;
+  top: 1rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1100;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.5rem;
-  height: 54px;
-  max-width: 1100px;
+  padding: 0;
+  height: 48px;
+  max-width: 1200px;
   width: calc(100% - 2.5rem);
   background: transparent;
   border: none;
-  transition: top .4s cubic-bezier(.4, 0, .2, 1), height .4s cubic-bezier(.4, 0, .2, 1);
-}
-
-nav.top-nav::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--nav-glass-bg);
-  border: 1px solid var(--nav-glass-border);
-  border-radius: 99px;
-  
-  /* Dual-stage Optical Blur + Refraction Lens */
-  backdrop-filter: blur(3px) saturate(140%) brightness(1.02);
-  -webkit-backdrop-filter: blur(3px) saturate(140%) brightness(1.02);
-  backdrop-filter: url(#droplet-lens-refract) var(--nav-glass-blur);
-  -webkit-backdrop-filter: url(#droplet-lens-refract) var(--nav-glass-blur);
-
-  /* 5-Layer Specular Glass Lighting Stack */
-  box-shadow:
-    var(--nav-glass-elevation),
-    inset 0 1px 1px 0 var(--nav-glass-rim-top),
-    inset 0 -1px 1px 0 var(--nav-glass-rim-bottom),
-    inset 0 0 14px 1px var(--nav-glass-halo),
-    inset 0 0 18px 0 var(--nav-glass-depth-shadow);
-  transition: background .4s cubic-bezier(.4, 0, .2, 1), box-shadow .4s cubic-bezier(.4, 0, .2, 1), border-color .4s ease;
-}
-
-body.dark nav.top-nav::before {
-  background: var(--nav-glass-bg);
-  border: 1px solid var(--nav-glass-border);
-}
-
-nav.top-nav.scrolled {
-  top: 0.75rem;
-  height: 50px;
-}
-
-nav.top-nav.scrolled::before {
-  background: rgba(255, 255, 255, 0.65);
-  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.12);
-}
-
-body.dark nav.top-nav.scrolled::before {
-  background: rgba(15, 23, 42, 0.65);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
+  pointer-events: none;
+  transition: top .35s cubic-bezier(.4, 0, .2, 1);
 }
 
 .nav-inner {
@@ -235,130 +193,246 @@ body.dark nav.top-nav.scrolled::before {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  gap: 0.75rem;
+  pointer-events: none;
 }
 
-.nav-brand {
+/* ─── 1. Left Island: Brand Capsule ─── */
+.nav-brand-capsule {
+  height: 44px;
+  padding: 0 1.1rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--nav-glass-bg);
+  border: 1px solid var(--nav-glass-border);
+  backdrop-filter: blur(4px) saturate(150%) brightness(1.02);
+  -webkit-backdrop-filter: blur(4px) saturate(150%) brightness(1.02);
+  backdrop-filter: url(#droplet-lens-refract) var(--nav-glass-blur);
+  -webkit-backdrop-filter: url(#droplet-lens-refract) var(--nav-glass-blur);
+  box-shadow: 
+    0 10px 28px rgba(15, 23, 42, 0.14), 
+    inset 0 1px 1px var(--nav-glass-rim-top), 
+    inset 0 0 12px var(--nav-glass-halo);
+  pointer-events: auto;
+  flex-shrink: 0;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nav-brand-capsule:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.18), inset 0 1px 1px var(--nav-glass-rim-top);
+}
+
+body.dark .nav-brand-capsule {
+  background: var(--nav-glass-bg);
+  border-color: var(--nav-glass-border);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), inset 0 1px 1px var(--nav-glass-rim-top);
+}
+
+.brand-title {
   font-family: var(--display);
-  font-size: 1rem;
+  font-size: 0.96rem;
   font-weight: 700;
   color: var(--text);
   letter-spacing: -.01em;
   white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
 }
 
 .brand-version {
   font-family: var(--mono);
-  font-size: .65rem;
-  font-weight: 500;
+  font-size: .62rem;
+  font-weight: 600;
   color: var(--teal);
   background: rgba(13, 148, 136, 0.08);
   border: 1px solid rgba(13, 148, 136, 0.2);
-  padding: .1rem .45rem;
+  padding: .08rem .4rem;
   border-radius: 99px;
   margin-left: .2rem;
 }
 
-.nav-tabs {
+/* ─── 2. Center Island: Desktop Tabs Capsule (Identical to Bottom Nav with Liquid Droplet) ─── */
+.nav-tabs-capsule {
+  height: 44px;
+  padding: 3px;
+  border-radius: 9999px;
   display: flex;
-  gap: 1.1rem;
-  list-style: none;
   align-items: center;
+  position: relative;
+  background: var(--nav-glass-bg);
+  border: 1px solid var(--nav-glass-border);
+  backdrop-filter: blur(4px) saturate(150%) brightness(1.02);
+  -webkit-backdrop-filter: blur(4px) saturate(150%) brightness(1.02);
+  backdrop-filter: url(#droplet-lens-refract) var(--nav-glass-blur);
+  -webkit-backdrop-filter: url(#droplet-lens-refract) var(--nav-glass-blur);
+  box-shadow: 
+    0 10px 28px rgba(15, 23, 42, 0.14), 
+    inset 0 1px 1px var(--nav-glass-rim-top), 
+    inset 0 0 12px var(--nav-glass-halo);
+  pointer-events: auto;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+body.dark .nav-tabs-capsule {
+  background: var(--nav-glass-bg);
+  border-color: var(--nav-glass-border);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), inset 0 1px 1px var(--nav-glass-rim-top);
+}
+
+/* Desktop Liquid Moving Droplet Carrier */
+.nav-tab-indicator {
+  position: absolute !important;
+  top: 3px !important;
+  bottom: 3px !important;
+  left: 0 !important;
+  border-radius: 9999px !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  opacity: 0;
+  will-change: transform, width !important;
+  transition: 
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1.2),
+    width 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s ease !important;
+}
+
+.nav-tab-liquid-blob {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 9999px !important;
+  position: relative !important;
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.22), rgba(56, 189, 248, 0.22)) !important;
+  border: 1px solid rgba(13, 148, 136, 0.45) !important;
+  box-shadow: 
+    0 3px 14px rgba(13, 148, 136, 0.25), 
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.75), 
+    inset 0 -1px 1px rgba(13, 148, 136, 0.2) !important;
+  backdrop-filter: blur(8px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(180%) !important;
+  transform-origin: center center !important;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.nav-tab-liquid-blob::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 18%;
+  right: 18%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
+  border-radius: 99px;
+}
+
+body.dark .nav-tab-liquid-blob {
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.25), rgba(56, 189, 248, 0.28)) !important;
+  border-color: rgba(45, 212, 191, 0.5) !important;
+  box-shadow: 
+    0 4px 16px rgba(45, 212, 191, 0.35), 
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.45), 
+    inset 0 0 10px rgba(45, 212, 191, 0.2) !important;
+}
+
+.nav-tab-liquid-blob.is-squashing {
+  animation: liquidDropletSquash 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .nav-tab {
-  font-family: var(--body);
-  font-size: .84rem;
-  font-weight: 500;
-  color: var(--text2);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: .3rem 0;
-  position: relative;
-  transition: color .2s ease;
+  position: relative !important;
+  z-index: 2 !important;
+  height: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 9999px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 0 0.95rem !important;
+  color: var(--text3) !important;
+  font-family: var(--body) !important;
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: color 0.2s ease, transform 0.15s ease !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
 
-.nav-tab::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--teal), var(--accent2));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform .3s cubic-bezier(0.4, 0, 0.2, 1);
+.nav-tab svg {
+  width: 15px !important;
+  height: 15px !important;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease !important;
 }
 
-.nav-tab:hover,
 .nav-tab.active {
-  color: var(--teal);
-  font-weight: 600;
+  color: var(--teal) !important;
 }
 
-body.dark .nav-tab:hover,
 body.dark .nav-tab.active {
-  color: var(--teal);
+  color: var(--accent2) !important;
 }
 
-.nav-tab:hover::after,
-.nav-tab.active::after {
-  transform: scaleX(1);
+.nav-tab.active svg {
+  transform: scale(1.12) !important;
+  color: var(--teal) !important;
 }
 
-.nav-right {
+body.dark .nav-tab.active svg {
+  color: var(--accent2) !important;
+}
+
+.nav-tab.active span {
+  font-weight: 700 !important;
+  color: var(--text) !important;
+}
+
+/* ─── 3. Right Island: Satellite Action Cluster (Liquid Specular Buttons) ─── */
+.nav-actions-capsule {
+  height: 44px;
+  padding: 0 0.4rem;
+  border-radius: 9999px;
   display: flex;
   align-items: center;
-  gap: .6rem;
+  gap: 0.45rem;
+  background: var(--nav-glass-bg);
+  border: 1px solid var(--nav-glass-border);
+  backdrop-filter: blur(4px) saturate(150%) brightness(1.02);
+  -webkit-backdrop-filter: blur(4px) saturate(150%) brightness(1.02);
+  backdrop-filter: url(#droplet-lens-refract) var(--nav-glass-blur);
+  -webkit-backdrop-filter: url(#droplet-lens-refract) var(--nav-glass-blur);
+  box-shadow: 
+    0 10px 28px rgba(15, 23, 42, 0.14), 
+    inset 0 1px 1px var(--nav-glass-rim-top), 
+    inset 0 0 12px var(--nav-glass-halo);
+  pointer-events: auto;
+  flex-shrink: 0;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.rail-toggle-nav {
-  display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-  padding: .25rem .6rem;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: 99px;
-  color: var(--text2);
-  font-family: var(--mono);
-  font-size: .68rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .25s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.rail-toggle-nav:hover {
-  background: rgba(13, 148, 136, 0.12);
-  border-color: var(--teal);
-  color: var(--teal);
-  transform: translateY(-1px);
+body.dark .nav-actions-capsule {
+  background: var(--nav-glass-bg);
+  border-color: var(--nav-glass-border);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), inset 0 1px 1px var(--nav-glass-rim-top);
 }
 
 .live-badge {
   display: inline-flex;
   align-items: center;
-  gap: .4rem;
+  gap: .35rem;
   font-family: var(--mono);
-  font-size: .65rem;
+  font-size: .62rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: .05em;
+  letter-spacing: .04em;
   color: var(--green);
   background: rgba(22, 163, 74, 0.08);
   border: 1px solid rgba(22, 163, 74, 0.25);
-  padding: .2rem .55rem;
+  padding: .2rem .5rem;
   border-radius: 99px;
 }
 
-.live-badge::before {
-  content: '';
+.badge-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -366,30 +440,64 @@ body.dark .nav-tab.active {
   box-shadow: 0 0 8px var(--green);
 }
 
-.theme-toggle-nav {
-  width: 32px;
+/* Satellite Liquid Droplet Buttons */
+.satellite-pill-btn {
   height: 32px;
-  border-radius: 50%;
-  background: transparent;
-  border: 1px solid var(--border);
-  font-size: .9rem;
-  cursor: pointer;
-  display: flex;
+  border-radius: 9999px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform .25s ease, border-color .25s ease, background .25s ease;
+  gap: 5px;
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.1), rgba(56, 189, 248, 0.1));
+  border: 1px solid rgba(13, 148, 136, 0.35);
+  color: var(--text2);
+  font-family: var(--body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.theme-toggle-nav:hover {
-  transform: scale(1.1);
+.satellite-pill-btn.guide-btn {
+  padding: 0 0.75rem;
+}
+
+.satellite-pill-btn.theme-btn {
+  width: 32px;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+.satellite-pill-btn:hover {
+  transform: scale(1.08) translateY(-1px);
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.2), rgba(56, 189, 248, 0.2));
   border-color: var(--teal);
-  background: var(--bg3);
+  color: var(--teal);
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.3), inset 0 1px 1.5px rgba(255, 255, 255, 0.9);
 }
 
-.theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+.satellite-pill-btn:active {
+  transform: scale(0.9) translateY(1px);
+  transition-duration: 0.1s;
 }
+
+body.dark .satellite-pill-btn {
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.18), rgba(56, 189, 248, 0.22));
+  border-color: rgba(45, 212, 191, 0.45);
+  color: var(--text);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+body.dark .satellite-pill-btn:hover {
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.3), rgba(56, 189, 248, 0.35));
+  border-color: var(--accent2);
+  color: var(--accent2);
+  box-shadow: 0 4px 16px rgba(45, 212, 191, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.5);
+
 
 body.dark .icon-sun { display: block; }
 body.dark .icon-moon { display: none; }
@@ -2061,23 +2169,26 @@ body.dark .chevron-icon {
 }
 
 @media (max-width: 768px) {
-  nav.top-nav {
+  header.top-nav {
     top: 0.65rem;
-    height: 48px;
+    height: 42px;
     width: calc(100% - 1.25rem);
-    padding: 0 0.75rem;
+    padding: 0;
   }
 
-  nav.top-nav .nav-tabs {
+  .nav-tabs-capsule {
     display: none !important;
   }
 
-  .nav-brand {
-    font-size: 0.92rem;
+  .nav-brand-capsule {
+    height: 40px;
+    padding: 0 0.85rem;
   }
 
-  .nav-right {
-    gap: 0.4rem;
+  .nav-actions-capsule {
+    height: 40px;
+    padding: 0 0.3rem;
+    gap: 0.3rem;
   }
 
   .live-badge {
@@ -2095,15 +2206,16 @@ body.dark .chevron-icon {
     height: 8px;
   }
 
-  .rail-toggle-nav {
-    padding: 0.2rem 0.5rem;
+  .satellite-pill-btn.guide-btn {
+    height: 30px;
+    padding: 0 0.55rem;
     font-size: 0.65rem;
   }
 
-  .theme-toggle-nav {
-    width: 28px;
-    height: 28px;
-    font-size: 0.8rem;
+  .satellite-pill-btn.theme-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 0.78rem;
   }
 
   .page-main-container {

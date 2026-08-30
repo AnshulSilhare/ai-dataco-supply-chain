@@ -155,6 +155,35 @@ function updateBottomNavIndicator(targetBtn) {
     }
 }
 
+function updateDesktopTabIndicator(targetBtn) {
+    const nav = document.getElementById('navTabs') || document.querySelector('.nav-tabs-capsule');
+    const indicator = document.getElementById('navTabIndicator');
+    if (!nav || !indicator) return;
+    
+    let activeBtn = targetBtn;
+    if (!activeBtn) {
+        activeBtn = nav.querySelector('.nav-tab.active') || nav.querySelector('.nav-tab');
+    }
+    if (!activeBtn) return;
+    
+    const left = activeBtn.offsetLeft;
+    const width = activeBtn.offsetWidth;
+    
+    if (!width || width === 0) return;
+    
+    indicator.style.setProperty('transform', `translate3d(${left}px, 0, 0)`, 'important');
+    indicator.style.setProperty('width', `${width}px`, 'important');
+    indicator.style.setProperty('opacity', '1', 'important');
+    
+    const blob = indicator.querySelector('.nav-tab-liquid-blob');
+    if (blob) {
+        blob.classList.remove('is-squashing');
+        void blob.offsetWidth; // trigger reflow
+        blob.classList.add('is-squashing');
+        setTimeout(() => blob.classList.remove('is-squashing'), 400);
+    }
+}
+
 function setupTabs() {
     const allTabs = document.querySelectorAll('.nav-tab, .tab-btn, .bnav-btn');
 
@@ -175,6 +204,10 @@ function setupTabs() {
             // Smoothly glide bottom nav liquid indicator
             const activeBnav = document.querySelector(`.bnav-btn[data-tab="${tabId}"]`);
             if (activeBnav) updateBottomNavIndicator(activeBnav);
+            
+            // Smoothly glide desktop top nav liquid indicator
+            const activeNavTab = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
+            if (activeNavTab) updateDesktopTabIndicator(activeNavTab);
             
             // Show corresponding tab pane
             const pane = document.getElementById('tab-' + tabId) || document.getElementById(tabId);
@@ -200,11 +233,21 @@ function setupTabs() {
 
     window.addEventListener('resize', () => {
         updateBottomNavIndicator();
+        updateDesktopTabIndicator();
     });
     window.addEventListener('orientationchange', () => {
-        setTimeout(updateBottomNavIndicator, 150);
+        setTimeout(() => {
+            updateBottomNavIndicator();
+            updateDesktopTabIndicator();
+        }, 150);
     });
-    setTimeout(updateBottomNavIndicator, 150);
+    setTimeout(() => {
+        const initialActiveBnav = document.querySelector('.bottom-nav .bnav-btn.active');
+        if (initialActiveBnav) updateBottomNavIndicator(initialActiveBnav);
+        
+        const initialActiveNavTab = document.querySelector('.nav-tabs-capsule .nav-tab.active') || document.querySelector('.nav-tab.active');
+        if (initialActiveNavTab) updateDesktopTabIndicator(initialActiveNavTab);
+    }, 120);
 }
 
 function setupSliders() {
