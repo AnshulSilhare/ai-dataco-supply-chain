@@ -35,8 +35,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (themeToggle) {
         themeToggle.addEventListener('click', toggleTheme);
     }
+
+    // 8. Set up Adaptive Control Capsule (DemandSense Physics)
+    setupCollapsibleCapsule();
     
-    // 8. Tab Indicator Resize Handler
+    // 9. Tab Indicator Resize Handler
     window.addEventListener('resize', () => {
         document.querySelectorAll('.tab-btn.active').forEach(btn => updateTabIndicator(btn));
     });
@@ -200,34 +203,175 @@ function setupFileUpload() {
     });
 }
 
-function toggleAccordion(id) {
-    const el = document.getElementById(id);
-    if (el) {
-        el.classList.toggle('open');
+let activeScrollAnim = null;
+
+function gracefulScrollTo(targetY, duration = 380, onComplete = null) {
+    if (activeScrollAnim) {
+        cancelAnimationFrame(activeScrollAnim);
+        activeScrollAnim = null;
     }
+
+    const startY = window.scrollY;
+    const diff = targetY - startY;
+    if (Math.abs(diff) < 4) {
+        window.scrollTo({ left: 0, top: targetY, behavior: 'instant' });
+        if (onComplete) onComplete();
+        return;
+    }
+    const startTime = performance.now();
+
+    function step(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        const ease = progress * progress * progress * (progress * (progress * 6 - 15) + 10);
+
+        const currentPos = startY + diff * ease;
+        window.scrollTo({ left: 0, top: currentPos, behavior: 'instant' });
+
+        if (progress < 1) {
+            activeScrollAnim = requestAnimationFrame(step);
+        } else {
+            activeScrollAnim = null;
+            if (onComplete) onComplete();
+        }
+    }
+    activeScrollAnim = requestAnimationFrame(step);
 }
 
-function toggleParamPanel(expand) {
-    const panel = document.getElementById('paramControlPanel');
-    if (!panel) return;
+window.isUserExpanded = true;
+let isScrolledPast = false;
+let autoCollapsedOnScroll = false;
+
+function applyCapsuleState(expanded) {
+    const capsule = document.getElementById('controlCapsule');
+    if (!capsule) return;
+    window.isUserExpanded = expanded;
+    const bodyCard = document.getElementById('capsuleBodyCard');
     
-    if (expand) {
-        panel.classList.remove('collapsed');
+    if (expanded) {
+        capsule.classList.remove('is-collapsed');
+        capsule.classList.add('is-expanded');
+        if (bodyCard) {
+            capsule.style.height = (bodyCard.scrollHeight + 12) + 'px';
+        }
     } else {
-        updateParamSummaryText();
-        panel.classList.add('collapsed');
+        updateCollapsedSummary();
+        capsule.classList.remove('is-expanded');
+        capsule.classList.add('is-collapsed');
+        const isMob = window.innerWidth <= 768;
+        capsule.style.height = isMob ? '44px' : '48px';
     }
 }
 
-function updateParamSummaryText() {
+function updateCapsuleScroll(y) {
+    const capsule = document.getElementById('controlCapsule');
+    if (!capsule) return;
+    
+    const collapseThreshold = 120;
+    const expandThreshold = 15;
+    const past = y > collapseThreshold;
+    
+    if (past !== isScrolledPast) {
+        isScrolledPast = past;
+        capsule.classList.toggle('is-floating', isScrolledPast);
+    }
+    
+    // 1. Smoothly collapse into floating pill on scroll down past controls
+    if (y > collapseThreshold && window.isUserExpanded && !autoCollapsedOnScroll) {
+        autoCollapsedOnScroll = true;
+        applyCapsuleState(false);
+    }
+    
+    // 2. Smoothly expand back to full controls when reaching the very top
+    if (y <= expandThreshold && !window.isUserExpanded && autoCollapsedOnScroll) {
+        autoCollapsedOnScroll = false;
+        applyCapsuleState(true);
+    }
+}
+
+function updateCollapsedSummary() {
     const country = document.getElementById('country')?.value || 'United States';
     const mode = document.getElementById('shippingMode')?.value || 'Standard Class';
     const sales = document.getElementById('sales')?.value || '150';
     const days = document.getElementById('daysScheduled')?.value || '3';
+    const qty = document.getElementById('quantity')?.value || '1';
+    const penalty = document.getElementById('penaltyRate')?.value || '25';
     
-    const summaryEl = document.getElementById('paramSummaryText');
-    if (summaryEl) {
-        summaryEl.textContent = `${country} • ${mode} • $${parseFloat(sales).toFixed(0)} • ${days}d SLA`;
+    if (document.getElementById('pillScenario')) {
+        document.getElementById('pillScenario').textContent = `${country} · ${mode}`;
+    }
+    if (document.getElementById('pillSales')) {
+        document.getElementById('pillSales').textContent = `$${parseFloat(sales).toFixed(2)}`;
+    }
+    if (document.getElementById('pillDays')) {
+        document.getElementById('pillDays').textContent = `${days}d SLA`;
+    }
+    if (document.getElementById('pillQty')) {
+        document.getElementById('pillQty').textContent = `${qty} Unit${parseInt(qty) > 1 ? 's' : ''}`;
+    }
+    if (document.getElementById('pillPenalty')) {
+        document.getElementById('pillPenalty').textContent = `${penalty}% Penalty`;
+    }
+}
+
+function setupCollapsibleCapsule() {
+    const capsule = document.getElementById('controlCapsule');
+    const collapseBtn = document.getElementById('capsuleCollapseBtn');
+    const editBtn = document.getElementById('pillEditBtn');
+
+    capsule?.addEventListener('click', (e) => {
+        if (capsule.classList.contains('is-collapsed')) {
+            applyCapsuleState(true);
+        }
+    });
+
+    editBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        applyCapsuleState(true);
+    });
+
+    collapseBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        applyCapsuleState(false);
+    });
+    
+    document.addEventListener('click', (e) => {
+        if (window.isUserExpanded && capsule && capsule.classList.contains('is-floating') && !capsule.contains(e.target)) {
+            applyCapsuleState(false);
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && capsule?.classList.contains('is-expanded')) {
+            applyCapsuleState(false);
+        }
+    });
+
+    const inputs = ['country', 'shippingMode', 'sales', 'daysScheduled', 'quantity', 'penaltyRate'];
+    inputs.forEach(id => {
+        document.getElementById(id)?.addEventListener('change', updateCollapsedSummary);
+        document.getElementById(id)?.addEventListener('input', updateCollapsedSummary);
+    });
+
+    setTimeout(() => {
+        updateCollapsedSummary();
+        applyCapsuleState(window.scrollY <= 15);
+    }, 200);
+}
+
+function toggleAccordion(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.classList.toggle('open');
+        if (window.isUserExpanded) {
+            setTimeout(() => {
+                const bodyCard = document.getElementById('capsuleBodyCard');
+                const capsule = document.getElementById('controlCapsule');
+                if (capsule && bodyCard) {
+                    capsule.style.height = (bodyCard.scrollHeight + 12) + 'px';
+                }
+            }, 320);
+        }
     }
 }
 
@@ -272,15 +416,16 @@ async function runPrediction(autoCollapse = true) {
         renderChart('timelineChart', data.timeline_chart);
         renderChart('shapChart', data.shap_chart);
 
-        // Auto-collapse parameters to floating summary pill
+        // Auto-collapse parameters to sticky summary pill and gracefully glide to results
         if (autoCollapse) {
-            toggleParamPanel(false);
+            applyCapsuleState(false);
             setTimeout(() => {
                 const verdictEl = document.getElementById('verdictContainer');
                 if (verdictEl) {
-                    verdictEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    const top = verdictEl.getBoundingClientRect().top + window.scrollY - 130;
+                    gracefulScrollTo(Math.max(0, top), 420);
                 }
-            }, 250);
+            }, 180);
         }
     } catch (e) {
         console.error('Prediction error:', e);
@@ -657,17 +802,19 @@ function renderBatchTable(results) {
 }
 
 
-// Add scroll listener for dynamic top nav capsule glassmorphism
+// Add scroll listener for dynamic top nav capsule glassmorphism and adaptive control capsule
 window.addEventListener('scroll', () => {
+    const y = window.scrollY;
     const nav = document.getElementById('topNav');
-    if (window.scrollY > 20) {
+    if (y > 20) {
         if (nav) nav.classList.add('scrolled');
         document.body.classList.add('nav-scrolled');
     } else {
         if (nav) nav.classList.remove('scrolled');
         document.body.classList.remove('nav-scrolled');
     }
-});
+    updateCapsuleScroll(y);
+}, { passive: true });
 
 // Prevent Render from sleeping when user has tab open
 setInterval(() => {

@@ -72,32 +72,48 @@
   <!-- TAB 1: SINGLE ORDER -->
   <div class="tab-content active" id="tab-single">
     
-    <!-- COLLAPSIBLE PARAMETER CONTROL CONSOLE (DemandSense Style) -->
-    <div class="glass-card filter-bar-container collapsed" id="paramControlPanel">
+    <!-- ═══ Adaptive Control Capsule (Unified Dynamic Island & Primary Parameter Hub) ═══ -->
+    <div class="adaptive-control-capsule is-expanded" id="controlCapsule" role="region" aria-label="Global Simulation Controls">
       
-      <!-- Collapsed Compact Floating Pill (shown when collapsed) -->
-      <div class="param-summary-pill" id="paramSummaryPill" onclick="toggleParamPanel(true)">
-        <div class="summary-pill-left">
-          <div class="summary-pill-icon">⚙️</div>
-          <div class="summary-pill-details">
-            <span class="summary-pill-title">Simulation Profile:</span>
-            <span class="summary-pill-tags" id="paramSummaryText">United States • Standard Class • $150 • 3d SLA</span>
-          </div>
+      <!-- 1. Master Capsule Top Bar (Compact Sticky Dynamic Island Pill) -->
+      <div class="capsule-pill-bar" id="capsulePillBar" title="Click to edit simulation parameters">
+        <div class="pill-badge">
+          <span class="pill-dot"></span>
+          <span class="pill-sku-title" id="pillScenario">United States · Standard Class</span>
         </div>
-        <button class="summary-pill-expand-btn" id="expandParamBtn" title="Edit Parameters">
-          <span>Edit Parameters</span>
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        <div class="pill-divider"></div>
+        <div class="pill-metrics" id="pillMetrics">
+          <span class="pill-metric-item" title="Total Order Value"><span class="pill-icon">💵</span><span id="pillSales">$150.00</span></span>
+          <span class="pill-sep">·</span>
+          <span class="pill-metric-item" title="SLA Scheduled Transit Days"><span class="pill-icon">⏱️</span><span id="pillDays">3d SLA</span></span>
+          <span class="pill-sep">·</span>
+          <span class="pill-metric-item" title="Item Quantity"><span class="pill-icon">📦</span><span id="pillQty">1 Unit</span></span>
+          <span class="pill-sep">·</span>
+          <span class="pill-metric-item" title="SLA Penalty Rate"><span class="pill-icon">🎯</span><span id="pillPenalty">25% Penalty</span></span>
+        </div>
+        <button type="button" class="pill-edit-btn" id="pillEditBtn" aria-label="Edit Simulation Controls" title="Edit Parameters">
+          <span class="pill-edit-text">Edit</span>
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         </button>
       </div>
 
-      <!-- Full Parameter Controls (expanded state) -->
-      <div class="param-expanded-body" id="paramExpandedBody">
-        <div class="param-header-strip">
-          <h3 class="form-section-title" style="margin-bottom:0;">Simulation Parameters</h3>
-          <button class="param-collapse-btn" onclick="toggleParamPanel(false)" title="Collapse Panel">
-            <span>Collapse</span>
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
-          </button>
+      <!-- 2. Full Parameter Controls Panel (Expanded at top OR as Floating HUD Modal on scroll) -->
+      <div class="capsule-body-card" id="capsuleBodyCard">
+        <!-- Header: Console Badge, Title, and Done / Collapse button -->
+        <div class="capsule-header" id="capsuleHeader">
+          <div class="capsule-header-left">
+            <div class="console-badge">
+              <span class="pulse-dot"></span>
+              <span>SIMULATION PARAMETERS</span>
+            </div>
+            <h2 class="console-title">Executive Control Console</h2>
+          </div>
+          <div class="capsule-header-right">
+            <button type="button" class="btn-collapse-capsule" id="capsuleCollapseBtn" title="Collapse into Sticky Pill" aria-label="Collapse into Sticky Pill">
+              <span>Done</span>
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </button>
+          </div>
         </div>
         
         <!-- Order Profile -->
