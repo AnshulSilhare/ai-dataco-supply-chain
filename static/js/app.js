@@ -120,31 +120,41 @@ function updateTabIndicator(btn) {
 }
 
 function setupTabs() {
-    // Main Tabs
+    const allTabs = document.querySelectorAll('.tab-btn, .bnav-btn');
+    
+    // Initial setup for desktop indicator
     const mainNav = document.getElementById('mainTabNav');
     if (mainNav) {
-        const btns = mainNav.querySelectorAll('.tab-btn');
-        setTimeout(() => { const a = mainNav.querySelector('.tab-btn.active'); if(a) updateTabIndicator(a); }, 100);
-        
-        btns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                btns.forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.two-col > div > .tab-content, #tab-single, #tab-batch, #tab-architecture, #tab-dictionary').forEach(t => {
-                    if(t.classList.contains('tab-content')) t.classList.remove('active');
-                });
-                
-                btn.classList.add('active');
-                updateTabIndicator(btn);
-                
-                const tabContent = document.getElementById('tab-' + btn.dataset.tab);
-                if (tabContent) tabContent.classList.add('active');
-                
-                if (btn.dataset.tab === 'architecture') {
-                    loadImportanceChart();
-                }
-            });
-        });
+        setTimeout(() => { 
+            const a = mainNav.querySelector('.tab-btn.active'); 
+            if(a) updateTabIndicator(a); 
+        }, 100);
     }
+
+    allTabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.getAttribute('data-tab');
+            
+            // Remove active from all nav buttons
+            allTabs.forEach(b => b.classList.remove('active'));
+            
+            // Hide all tab content panes
+            document.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
+            
+            // Activate clicked buttons (sync top and bottom)
+            document.querySelectorAll(`[data-tab="${tabId}"]`).forEach(b => b.classList.add('active'));
+            
+            // Show corresponding tab pane
+            const pane = document.getElementById('tab-' + tabId) || document.getElementById(tabId);
+            if(pane) pane.classList.add('active');
+            
+            // Update desktop pill indicator if a top button exists
+            const topBtn = document.querySelector(`.tab-nav .tab-btn[data-tab="${tabId}"]`);
+            if (topBtn) updateTabIndicator(topBtn);
+            
+            if(tabId === 'architecture' || tabId === 'tab-arch') loadImportanceChart();
+        });
+    });
 }
 
 function setupSliders() {

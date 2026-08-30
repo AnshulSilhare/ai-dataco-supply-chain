@@ -1363,3 +1363,24 @@ body.dark .loading-overlay {
   .tab-nav { flex-wrap: wrap; }
   .hero { margin-top: 100px; }
 }
+
+/* --- Phase 1 & 2: Accordion & Mobile Navigation Styles --- */
+.accordion-group { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 0.8rem; overflow: hidden; background: var(--surface); }
+.accordion-header { padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; color: var(--text); background: var(--bg3); user-select: none; }
+.accordion-content { display: none; padding: 1rem; }
+.accordion-group.open .accordion-content { display: grid; }
+.accordion-group .chevron { transition: transform 0.3s; }
+.accordion-group.open .chevron { transform: rotate(180deg); }
+.bottom-nav { display: none; }
+@media (max-width: 768px) {
+  .tab-nav-container, .tab-nav { display: none !important; }
+  .bottom-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); backdrop-filter: var(--glass-blur); border-top: 1px solid var(--border); justify-content: space-around; padding: 0.6rem 0 calc(0.6rem + env(safe-area-inset-bottom)); z-index: 1000; box-shadow: 0 -4px 12px rgba(0,0,0,0.05); }
+  body.dark .bottom-nav { background: rgba(30, 41, 59, 0.95); border-top: 1px solid rgba(255,255,255,0.1); }
+  .bnav-btn { background: none; border: none; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text3); font-family: var(--body); font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: color 0.2s; }
+  .bnav-btn.active { color: var(--teal); }
+  .main-content { padding-bottom: 90px; }
+  .accordion-content { grid-template-columns: repeat(2, 1fr) !important; gap: 0.6rem; padding: 0.8rem; }
+  .form-group label { font-size: 0.75rem; margin-bottom: 0.2rem; }
+  .pill-input, .text-input { padding: 0.4rem 0.5rem; font-size: 0.85rem; }
+  .btn-execute { width: 100% !important; padding: 0.8rem !important; font-size: 1rem; }
+}
