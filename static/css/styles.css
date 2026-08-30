@@ -2405,38 +2405,48 @@ body.dark .chevron-icon {
     pointer-events: none !important;
     z-index: 1 !important;
     opacity: 0;
+    will-change: transform, width !important;
+    transform: translate3d(0, 0, 0) !important;
+    
+    /* Fluid Organic Gliding Spring Physics */
+    transition: 
+      transform 0.42s cubic-bezier(0.22, 1, 0.36, 1.2),
+      width 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.2s ease !important;
+  }
+
+  .bnav-liquid-blob {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 9999px !important;
+    position: relative !important;
     
     /* Liquid Specular Droplet Aesthetic */
-    background: linear-gradient(135deg, rgba(13, 148, 136, 0.2), rgba(56, 189, 248, 0.2)) !important;
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.22), rgba(56, 189, 248, 0.22)) !important;
     border: 1px solid rgba(13, 148, 136, 0.45) !important;
     box-shadow: 
-      0 3px 12px rgba(13, 148, 136, 0.25), 
-      inset 0 1px 1px rgba(255, 255, 255, 0.75),
+      0 3px 14px rgba(13, 148, 136, 0.25), 
+      inset 0 1px 1.5px rgba(255, 255, 255, 0.75),
       inset 0 -1px 1px rgba(13, 148, 136, 0.2) !important;
     backdrop-filter: blur(8px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(8px) saturate(180%) !important;
-    
-    /* Fluid Spring Physics with Overshoot */
-    transition: 
-      transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
-      width 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
-      opacity 0.2s ease !important;
     transform-origin: center center !important;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
   }
 
-  .bnav-liquid-indicator::after {
+  .bnav-liquid-blob::after {
     content: '';
     position: absolute;
     top: 1px;
-    left: 20%;
-    right: 20%;
+    left: 18%;
+    right: 18%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
     border-radius: 99px;
   }
 
-  body.dark .bnav-liquid-indicator {
-    background: linear-gradient(135deg, rgba(45, 212, 191, 0.24), rgba(56, 189, 248, 0.28)) !important;
+  body.dark .bnav-liquid-blob {
+    background: linear-gradient(135deg, rgba(45, 212, 191, 0.25), rgba(56, 189, 248, 0.28)) !important;
     border-color: rgba(45, 212, 191, 0.5) !important;
     box-shadow: 
       0 4px 16px rgba(45, 212, 191, 0.35), 
@@ -2444,15 +2454,16 @@ body.dark .chevron-icon {
       inset 0 0 10px rgba(45, 212, 191, 0.2) !important;
   }
 
-  .bnav-liquid-indicator.is-squashing {
-    animation: liquidDropletSquash 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+  .bnav-liquid-blob.is-squashing {
+    animation: liquidDropletSquash 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   @keyframes liquidDropletSquash {
-    0% { transform: scaleX(1) scaleY(1); }
-    30% { transform: scaleX(1.16) scaleY(0.85); }
-    65% { transform: scaleX(0.94) scaleY(1.06); }
-    100% { transform: scaleX(1) scaleY(1); }
+    0% { transform: scale(1, 1); }
+    30% { transform: scale(1.18, 0.84); }
+    65% { transform: scale(0.93, 1.07); }
+    85% { transform: scale(1.03, 0.97); }
+    100% { transform: scale(1, 1); }
   }
 
   .bnav-btn {

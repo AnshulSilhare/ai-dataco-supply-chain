@@ -127,24 +127,29 @@ function populateSelect(id, options, defaultVal) {
 }
 
 function updateBottomNavIndicator(targetBtn) {
-    const nav = document.querySelector('.bottom-nav');
+    const nav = document.getElementById('bottomNav') || document.querySelector('.bottom-nav');
     const indicator = document.getElementById('bnavIndicator');
     if (!nav || !indicator) return;
     
     const activeBtn = targetBtn || nav.querySelector('.bnav-btn.active');
     if (!activeBtn) return;
     
-    const navRect = nav.getBoundingClientRect();
-    const btnRect = activeBtn.getBoundingClientRect();
+    const left = activeBtn.offsetLeft;
+    const width = activeBtn.offsetWidth;
     
-    if (btnRect.width === 0) return;
+    if (!width || width === 0) return;
     
-    const left = btnRect.left - navRect.left;
-    const width = btnRect.width;
-    
-    indicator.style.transform = `translateX(${left}px)`;
+    indicator.style.transform = `translate3d(${left}px, 0, 0)`;
     indicator.style.width = `${width}px`;
     indicator.style.opacity = '1';
+    
+    const blob = indicator.querySelector('.bnav-liquid-blob');
+    if (blob) {
+        blob.classList.remove('is-squashing');
+        void blob.offsetWidth; // trigger reflow
+        blob.classList.add('is-squashing');
+        setTimeout(() => blob.classList.remove('is-squashing'), 400);
+    }
 }
 
 function setupTabs() {
@@ -164,15 +169,7 @@ function setupTabs() {
             // Activate clicked buttons (sync top floating capsule and bottom nav)
             document.querySelectorAll(`[data-tab="${tabId}"]`).forEach(b => b.classList.add('active'));
             
-            // Trigger liquid droplet squash & update indicator
-            const bnavIndicator = document.getElementById('bnavIndicator');
-            if (bnavIndicator) {
-                bnavIndicator.classList.remove('is-squashing');
-                void bnavIndicator.offsetWidth; // trigger reflow to restart animation
-                bnavIndicator.classList.add('is-squashing');
-                setTimeout(() => bnavIndicator.classList.remove('is-squashing'), 380);
-            }
-            
+            // Smoothly glide bottom nav liquid indicator
             const activeBnav = document.querySelector(`.bnav-btn[data-tab="${tabId}"]`);
             if (activeBnav) updateBottomNavIndicator(activeBnav);
             
