@@ -154,6 +154,14 @@ function setupTabs() {
             }
             
             if(tabId === 'architecture' || tabId === 'tab-arch') loadImportanceChart();
+            
+            // Trigger chart resize across visible tab
+            setTimeout(() => {
+                document.querySelectorAll('.chart-container').forEach(c => {
+                    const instance = typeof echarts !== 'undefined' ? echarts.getInstanceByDom(c) : null;
+                    if (instance) instance.resize();
+                });
+            }, 100);
         });
     });
 }
@@ -495,7 +503,7 @@ function renderFinancials(fin) {
 function renderChart(divId, data) {
     if (!data || data.error) {
         const el = document.getElementById(divId);
-        if (el) el.innerHTML = `<p style="color:var(--text3);text-align:center;padding:2rem;">${data ? data.error : 'Chart unavailable'}</p>`;
+        if (el) el.innerHTML = `<p style="color:var(--text3);text-align:center;padding:1.5rem;font-size:0.8rem;">${data ? data.error : 'Chart unavailable'}</p>`;
         return;
     }
     
@@ -506,19 +514,20 @@ function renderChart(divId, data) {
     let chart = echarts.getInstanceByDom(el);
     if (!chart) chart = echarts.init(el);
     
-    const textColor = currentTheme === 'dark' ? '#cbd5e1' : '#475569';
-    const titleColor = currentTheme === 'dark' ? '#f8fafc' : '#0f172a';
-    const splitLineColor = currentTheme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(15,23,42,0.08)';
-    const accentColor = currentTheme === 'dark' ? '#3b82f6' : '#0f766e';
-    const redColor = currentTheme === 'dark' ? '#f87171' : '#dc2626';
-    const greenColor = currentTheme === 'dark' ? '#34d399' : '#16a34a';
+    const isDark = currentTheme === 'dark';
+    const textColor = isDark ? '#cbd5e1' : '#475569';
+    const titleColor = isDark ? '#f8fafc' : '#0f172a';
+    const splitLineColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(15,23,42,0.08)';
+    const accentColor = isDark ? '#38bdf8' : '#0d9488';
+    const redColor = isDark ? '#f87171' : '#dc2626';
+    const greenColor = isDark ? '#34d399' : '#16a34a';
 
     let option = {};
     
     if (divId === 'importanceChart') {
         option = {
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-            grid: { left: '3%', right: '4%', bottom: '3%', top: '5%', containLabel: true },
+            grid: { left: 4, right: 35, bottom: 6, top: 8, containLabel: true },
             xAxis: { type: 'value', show: false, splitLine: { show: false } },
             yAxis: { type: 'category', data: data.labels, axisLine: { lineStyle: { color: splitLineColor } }, axisLabel: { color: textColor, fontSize: 10 } },
             series: [
@@ -530,7 +539,7 @@ function renderChart(divId, data) {
                         itemStyle: { color: i > data.values.length - 4 ? accentColor : '#94A3B8' }
                     })),
                     barWidth: '60%',
-                    label: { show: true, position: 'right', color: textColor, formatter: (p) => data.pct[p.dataIndex].toFixed(1) + '%' }
+                    label: { show: true, position: 'right', color: textColor, fontSize: 10, formatter: (p) => data.pct[p.dataIndex].toFixed(1) + '%' }
                 }
             ]
         };
@@ -539,9 +548,9 @@ function renderChart(divId, data) {
         const color = data.pred === 1 ? redColor : greenColor;
         option = {
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-            grid: { left: '3%', right: '4%', bottom: '15%', top: '15%', containLabel: true },
-            xAxis: { type: 'value', max: mx, splitLine: { show: true, lineStyle: { color: splitLineColor } }, axisLabel: { color: textColor } },
-            yAxis: { type: 'category', data: ['Projected', 'Scheduled SLA'], axisLine: { show: false }, axisLabel: { color: textColor, fontWeight: 'bold' } },
+            grid: { left: 4, right: 45, bottom: 8, top: 8, containLabel: true },
+            xAxis: { type: 'value', max: mx, splitLine: { show: true, lineStyle: { color: splitLineColor } }, axisLabel: { color: textColor, fontSize: 10 } },
+            yAxis: { type: 'category', data: ['Projected', 'Scheduled SLA'], axisLine: { show: false }, axisLabel: { color: textColor, fontWeight: 'bold', fontSize: 11 } },
             series: [
                 {
                     name: 'Days',
@@ -550,8 +559,8 @@ function renderChart(divId, data) {
                         { value: data.proj, itemStyle: { color: color } },
                         { value: data.sched, itemStyle: { color: '#94a3b8' } }
                     ],
-                    barWidth: '40%',
-                    label: { show: true, position: 'right', color: textColor, formatter: '{c} Days' }
+                    barWidth: '42%',
+                    label: { show: true, position: 'right', color: textColor, fontSize: 11, fontWeight: '600', formatter: '{c} Days' }
                 }
             ]
         };
@@ -583,19 +592,19 @@ function renderChart(divId, data) {
                 let tar = params[1].value !== '-' ? params[1] : params[2];
                 return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value.toFixed(4);
             }},
-            grid: { left: '3%', right: '4%', bottom: '3%', top: '5%', containLabel: true },
-            xAxis: { type: 'value', splitLine: { show: true, lineStyle: { color: splitLineColor } }, axisLabel: { color: textColor } },
+            grid: { left: 4, right: 40, bottom: 6, top: 8, containLabel: true },
+            xAxis: { type: 'value', splitLine: { show: true, lineStyle: { color: splitLineColor } }, axisLabel: { color: textColor, fontSize: 10 } },
             yAxis: { type: 'category', data: data.labels, axisLine: { lineStyle: { color: splitLineColor } }, axisLabel: { color: textColor, fontSize: 10 } },
             series: [
                 { name: 'Placeholder', type: 'bar', stack: 'Total', itemStyle: { borderColor: 'transparent', color: 'transparent' }, emphasis: { itemStyle: { borderColor: 'transparent', color: 'transparent' } }, data: transparentData },
-                { name: 'Risk Increase (+)', type: 'bar', stack: 'Total', itemStyle: { color: redColor }, data: positiveData, label: { show: true, position: 'right', formatter: (p) => '+' + p.value.toFixed(2) } },
-                { name: 'Risk Decrease (-)', type: 'bar', stack: 'Total', itemStyle: { color: greenColor }, data: negativeData, label: { show: true, position: 'left', formatter: (p) => '-' + p.value.toFixed(2) } }
+                { name: 'Risk Increase (+)', type: 'bar', stack: 'Total', itemStyle: { color: redColor }, data: positiveData, label: { show: true, position: 'right', fontSize: 10, formatter: (p) => '+' + p.value.toFixed(2) } },
+                { name: 'Risk Decrease (-)', type: 'bar', stack: 'Total', itemStyle: { color: greenColor }, data: negativeData, label: { show: true, position: 'left', fontSize: 10, formatter: (p) => '-' + p.value.toFixed(2) } }
             ]
         };
     } else if (divId === 'batchMapChart') {
         option = {
             tooltip: { trigger: 'item', formatter: '{b}<br/>Delay Rate: {c}%' },
-            visualMap: { min: 0, max: 100, text: ['High', 'Low'], inRange: { color: ['#fee2e2', '#b91c1c'] }, textStyle: { color: textColor } },
+            visualMap: { min: 0, max: 100, text: ['High', 'Low'], inRange: { color: ['#fee2e2', '#b91c1c'] }, textStyle: { color: textColor, fontSize: 10 } },
             series: [
                 {
                     name: 'Delay Rate',
@@ -603,7 +612,7 @@ function renderChart(divId, data) {
                     map: 'world',
                     roam: true,
                     label: { show: false },
-                    itemStyle: { areaColor: currentTheme === 'dark' ? '#1e293b' : '#f1f5f9', borderColor: splitLineColor },
+                    itemStyle: { areaColor: isDark ? '#1e293b' : '#f1f5f9', borderColor: splitLineColor },
                     emphasis: { itemStyle: { areaColor: accentColor } },
                     data: data
                 }
@@ -612,16 +621,16 @@ function renderChart(divId, data) {
     } else if (divId === 'batchRoiChart') {
         option = {
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-            grid: { left: '3%', right: '4%', bottom: '3%', top: '5%', containLabel: true },
-            xAxis: { type: 'value', splitLine: { show: false }, axisLabel: { color: textColor } },
-            yAxis: { type: 'category', data: data.map(d => d.category), axisLine: { lineStyle: { color: splitLineColor } }, axisLabel: { color: textColor } },
+            grid: { left: 4, right: 40, bottom: 6, top: 8, containLabel: true },
+            xAxis: { type: 'value', splitLine: { show: false }, axisLabel: { color: textColor, fontSize: 10 } },
+            yAxis: { type: 'category', data: data.map(d => d.category), axisLine: { lineStyle: { color: splitLineColor } }, axisLabel: { color: textColor, fontSize: 10 } },
             series: [
                 {
                     name: 'Savings ($)',
                     type: 'bar',
                     data: data.map(d => ({ value: d.savings, itemStyle: { color: greenColor } })),
                     barWidth: '60%',
-                    label: { show: true, position: 'right', color: textColor, formatter: (p) => '$' + p.value.toFixed(0) }
+                    label: { show: true, position: 'right', color: textColor, fontSize: 10, formatter: (p) => '$' + p.value.toFixed(0) }
                 }
             ]
         };
@@ -629,8 +638,13 @@ function renderChart(divId, data) {
     
     chart.setOption(option, true);
     
-    // Make responsive
-    window.addEventListener('resize', () => chart.resize());
+    // Auto-ResizeObserver for seamless adaptation to any screen size, orientation & container change
+    if (!el._resizeObserver && typeof ResizeObserver !== 'undefined') {
+        el._resizeObserver = new ResizeObserver(() => {
+            chart.resize();
+        });
+        el._resizeObserver.observe(el);
+    }
 }
 
 async function loadImportanceChart() {

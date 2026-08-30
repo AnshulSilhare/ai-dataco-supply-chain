@@ -812,9 +812,9 @@ input[type=range]::-moz-range-thumb {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  gap: 1.1rem;
+  padding: 1rem 1.15rem;
+  margin-bottom: 1rem;
 }
 
 .verdict-card.high-risk {
@@ -828,8 +828,8 @@ input[type=range]::-moz-range-thumb {
 }
 
 .verdict-ring {
-  width: 90px;
-  height: 90px;
+  width: 76px;
+  height: 76px;
   flex-shrink: 0;
   position: relative;
   display: flex;
@@ -848,34 +848,35 @@ input[type=range]::-moz-range-thumb {
 }
 
 .verdict-label {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   font-weight: 700;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.15rem;
+  letter-spacing: 0.04em;
 }
 
 .verdict-title {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.15rem;
   color: var(--text);
 }
 
 .verdict-subtitle {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text2);
 }
 
 /* 10. KPI Cards */
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  margin-bottom: 1rem;
 }
 
 .kpi-card {
-  padding: 1.2rem 1.4rem;
+  padding: 1rem 1.15rem;
   display: flex;
   flex-direction: column;
 }
@@ -886,53 +887,81 @@ input[type=range]::-moz-range-thumb {
 }
 
 .kpi-label {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   text-transform: uppercase;
   color: var(--text3);
   font-weight: 600;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.03em;
 }
 
 .kpi-value {
-  font-size: 1.6rem;
+  font-size: 1.45rem;
   font-weight: 700;
   color: var(--text);
   line-height: 1.2;
 }
 
 .kpi-sub {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--text3);
-  margin-top: 0.3rem;
+  margin-top: 0.25rem;
 }
 
 /* 11. Chart Container */
 .chart-card {
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding: 1.1rem 1.2rem;
+  margin-bottom: 1rem;
 }
 
 .chart-title {
-  font-size: 0.75rem;
+  font-size: 0.76rem;
   text-transform: uppercase;
   font-weight: 700;
   border-bottom: 1px solid var(--border);
-  padding-bottom: 0.6rem;
-  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.65rem;
   color: var(--text);
+  letter-spacing: 0.03em;
 }
 
 .chart-container {
-  min-height: 280px;
   width: 100%;
   position: relative;
 }
 
+#timelineChart {
+  height: 150px;
+  min-height: 140px;
+}
+
+#shapChart {
+  height: 250px;
+  min-height: 230px;
+}
+
+#importanceChart {
+  height: 270px;
+  min-height: 250px;
+}
+
+#batchMapChart {
+  height: 300px;
+  min-height: 260px;
+}
+
+#batchRoiChart {
+  height: 280px;
+  min-height: 250px;
+}
+
 .chart-hint {
-  font-size: 0.8rem;
+  font-size: 0.73rem;
   color: var(--text2);
-  margin-top: 0.5rem;
-  line-height: 1.6;
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
+  border-top: 1px dashed var(--border);
+  line-height: 1.5;
 }
 
 /* 12. Data Table (.data-table) */
@@ -1281,13 +1310,13 @@ body.dark .brief-drivers .tech-tag {
 .financial-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
+  margin-bottom: 0;
 }
 
 .financial-item {
   background: var(--bg3);
-  padding: 0.8rem;
+  padding: 0.6rem 0.8rem;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   display: flex;
@@ -1295,15 +1324,16 @@ body.dark .brief-drivers .tech-tag {
 }
 
 .financial-label {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   text-transform: uppercase;
   color: var(--text3);
   font-weight: 600;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.15rem;
+  letter-spacing: 0.02em;
 }
 
 .financial-value {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
 }
 .financial-value.positive {
@@ -1492,46 +1522,6 @@ body.dark .loading-overlay {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text2);
-}
-
-/* 25. Responsive */
-@media (max-width: 1024px) {
-  .container {
-    padding: 0 1rem;
-  }
-  .hero {
-    padding: 2rem 0 1.5rem;
-  }
-  .form-card, .chart-card, .verdict-card, .brief-card {
-    padding: 1.2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .two-col {
-    grid-template-columns: 1fr;
-  }
-  .header-content {
-    padding: 0.8rem 1rem;
-    gap: 1rem;
-  }
-  .status-indicator {
-    display: none;
-  }
-  .hero-counters {
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  .verdict-card {
-    flex-direction: column;
-    text-align: center;
-  }
-  .kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .financial-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 480px) {
@@ -2023,10 +2013,15 @@ body.dark .chevron-icon {
 /* ─── RESPONSIVE BREAKPOINTS (Desktop, Tablet, Mobile) ─── */
 @media (max-width: 1024px) {
   .container {
-    padding: 0 1.2rem;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
   }
-  .hero {
-    padding: 5.5rem 0 1.5rem;
+  .form-card, .chart-card, .verdict-card, .brief-card {
+    padding: 0.95rem 1.05rem !important;
+    margin-bottom: 0.85rem !important;
+  }
+  .two-col {
+    gap: 1rem !important;
   }
   .accordion-content {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -2135,6 +2130,83 @@ body.dark .chevron-icon {
 
   .two-col {
     grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  .form-card, .chart-card, .verdict-card, .brief-card {
+    padding: 0.75rem 0.8rem !important;
+    margin-bottom: 0.75rem !important;
+    border-radius: 10px !important;
+  }
+
+  .verdict-card {
+    flex-direction: row !important;
+    text-align: left !important;
+    padding: 0.75rem 0.85rem !important;
+    gap: 0.85rem !important;
+  }
+
+  .verdict-ring {
+    width: 68px !important;
+    height: 68px !important;
+  }
+
+  .verdict-title {
+    font-size: 0.95rem !important;
+  }
+
+  .verdict-subtitle {
+    font-size: 0.74rem !important;
+  }
+
+  .financial-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.45rem !important;
+  }
+
+  .financial-item {
+    padding: 0.5rem 0.65rem !important;
+  }
+
+  .financial-value {
+    font-size: 0.98rem !important;
+  }
+
+  .financial-label {
+    font-size: 0.58rem !important;
+  }
+
+  .chart-title {
+    font-size: 0.72rem !important;
+    margin-bottom: 0.4rem !important;
+    padding-bottom: 0.3rem !important;
+  }
+
+  .chart-hint {
+    font-size: 0.68rem !important;
+    margin-top: 0.35rem !important;
+    padding-top: 0.35rem !important;
+    line-height: 1.4 !important;
+  }
+
+  #timelineChart {
+    height: 140px !important;
+  }
+
+  #shapChart {
+    height: 230px !important;
+  }
+
+  #importanceChart {
+    height: 250px !important;
+  }
+
+  #batchMapChart {
+    height: 270px !important;
+  }
+
+  #batchRoiChart {
+    height: 250px !important;
   }
 
   .adaptive-control-capsule {
