@@ -11,7 +11,7 @@ import io
 import uvicorn
 
 import gc
-HAS_SHAP = True
+HAS_SHAP = False
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_VERSION = "v3.0"
