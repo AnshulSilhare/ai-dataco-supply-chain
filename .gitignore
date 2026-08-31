@@ -7,3 +7,4 @@ __pycache__/
 *.exe
 *.dll
 *.ops
+dataco_rf_model_uncompressed.joblib
