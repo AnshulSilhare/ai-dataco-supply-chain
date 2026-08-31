@@ -524,7 +524,6 @@ async function runPrediction(autoCollapse = true) {
         
         renderVerdict(data);
         renderFinancials(data.financials);
-        renderPrescriptiveStrategy(data.financials);
         renderChart('timelineChart', data.timeline_chart);
         renderChart('shapChart', data.shap_chart);
 
@@ -554,6 +553,7 @@ function renderVerdict(data) {
     const probPct = Math.round(data.probability * 100);
     const dashOffset = 440 - (440 * data.probability);
     const color = isRisk ? 'var(--red)' : 'var(--green)';
+    const bg = isRisk ? 'rgba(220,38,38,0.12)' : 'rgba(22,163,74,0.12)';
     const subtitle = isRisk ? 'Predicted to violate SLA delivery windows' : 'Predicted to meet SLA schedule';
     
     const container = document.getElementById('verdictContainer');
@@ -583,92 +583,59 @@ function renderFinancials(fin) {
     const isInterventionRec = fin.intervention_recommended === 'Yes';
     const epColor = fin.expected_profit < 0 ? 'var(--red)' : 'var(--green)';
     const epiColor = fin.expected_profit_with_intervention < 0 ? 'var(--red)' : 'var(--green)';
-    const penaltyPct = fin.sales > 0 ? Math.round((fin.penalty_loss / fin.sales) * 100) : 25;
-    const penaltyAmt = (fin.delay_probability * fin.penalty_loss).toFixed(2);
+    const profitSavings = Math.abs(fin.expected_profit_with_intervention - fin.expected_profit).toFixed(2);
     
     const container = document.getElementById('financialContainer');
     if (!container) return;
 
     container.innerHTML = `
-        <div class="glass-card form-card financial-breakdown-card" style="margin-bottom: 1rem;">
+        <div class="glass-card form-card prescriptive-result-card" style="margin-bottom: 1rem;">
             <div class="card-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-                <span>Financial Impact &amp; Liability Matrix</span>
-                <span style="font-family:var(--mono); font-size:0.65rem; color:var(--text3); text-transform:none;">SLA Penalty: ${penaltyPct}%</span>
+                <span>Prescriptive Strategy & Decision</span>
+                <span class="prescriptive-badge ${isInterventionRec ? 'badge-intervene' : 'badge-absorb'}">
+                    ${isInterventionRec ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>INTERVENTION RECOMMENDED' : '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>ABSORB OPERATIONAL RISK'}
+                </span>
             </div>
             
-            <div class="financial-grid" style="grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); margin-top: 0.5rem; gap: 0.65rem;">
+            <div class="prescriptive-action-box ${isInterventionRec ? 'box-intervene' : 'box-absorb'}">
+                <div class="prescriptive-action-header">
+                    ${isInterventionRec ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Action: Expedite Shipping Freight' : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Action: Maintain Standard Fulfillment'}
+                </div>
+                <div class="prescriptive-action-desc">
+                    ${isInterventionRec 
+                        ? `Expedited freight protects <strong>$${fin.sales.toFixed(2)}</strong> order revenue from a potential <strong>$${fin.penalty_loss.toFixed(2)}</strong> SLA violation penalty, delivering a net profit gain of <strong>+$${profitSavings}</strong> over inaction.` 
+                        : `SLA delay liability is lower than the expedited freight cost. Standard shipping yields the highest expected net profit margin of <strong>$${fin.expected_profit.toFixed(2)}</strong>.`
+                    }
+                </div>
+            </div>
+
+            <div class="financial-grid" style="grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); margin-top: 0.85rem; gap: 0.65rem;">
                 <div class="financial-item">
                     <div class="financial-label">Base Order Profit</div>
                     <div class="financial-value" style="color:var(--text); font-size:1.05rem;">$${fin.profit.toFixed(2)}</div>
-                    <span style="font-size:0.62rem; color:var(--text3); margin-top:2px;">Baseline margin</span>
                 </div>
                 <div class="financial-item">
                     <div class="financial-label">Penalty Loss Liability</div>
                     <div class="financial-value" style="color:var(--red); font-size:1.05rem;">-$${fin.penalty_loss.toFixed(2)}</div>
-                    <span style="font-size:0.62rem; color:var(--text3); margin-top:2px;">${penaltyPct}% of $${fin.sales.toFixed(2)} sales</span>
                 </div>
                 <div class="financial-item">
                     <div class="financial-label">Exp. Profit (No Action)</div>
                     <div class="financial-value" style="color:${epColor}; font-size:1.05rem;">$${fin.expected_profit.toFixed(2)}</div>
-                    <span style="font-size:0.62rem; color:var(--text3); margin-top:2px;">-$${penaltyAmt} risk exposure</span>
                 </div>
                 <div class="financial-item" style="border: 1px solid ${isInterventionRec ? 'rgba(13,148,136,0.45)' : 'var(--border)'}; background: ${isInterventionRec ? 'rgba(13,148,136,0.08)' : 'var(--bg3)'};">
                     <div class="financial-label">Exp. Profit (Expedited)</div>
                     <div class="financial-value" style="color:${epiColor}; font-size:1.05rem;">$${fin.expected_profit_with_intervention.toFixed(2)}</div>
-                    <span style="font-size:0.62rem; color:var(--text3); margin-top:2px;">Net expedited freight</span>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function renderPrescriptiveStrategy(fin) {
-    const isInterventionRec = fin.intervention_recommended === 'Yes';
-    const profitSavings = Math.abs(fin.expected_profit_with_intervention - fin.expected_profit).toFixed(2);
-    const probPct = Math.round(fin.delay_probability * 100);
-    
-    const container = document.getElementById('prescriptiveContainer');
-    if (!container) return;
-
-    container.innerHTML = `
-        <div class="glass-card form-card prescriptive-result-card" style="margin-bottom: 0.5rem;">
-            <div class="card-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-                <span>Prescriptive Decision Strategy</span>
-                <span class="prescriptive-badge ${isInterventionRec ? 'badge-intervene' : 'badge-absorb'}">
-                    ${isInterventionRec 
-                        ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>INTERVENTION RECOMMENDED' 
-                        : '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>ABSORB OPERATIONAL RISK'
-                    }
-                </span>
-            </div>
-            
-            <div class="prescriptive-action-box ${isInterventionRec ? 'box-intervene' : 'box-absorb'}" style="margin-bottom: 0.8rem;">
-                <div class="prescriptive-action-header" style="font-size:0.88rem; margin-bottom: 0.35rem;">
-                    ${isInterventionRec 
-                        ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Executive Callout: Expedite Shipping Freight' 
-                        : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Executive Callout: Maintain Standard Fulfillment'
-                    }
-                </div>
-                <div class="prescriptive-action-desc" style="font-size: 0.78rem; line-height: 1.55;">
-                    ${isInterventionRec 
-                        ? `Expedited freight protects <strong>$${fin.sales.toFixed(2)}</strong> order revenue against a potential <strong>$${fin.penalty_loss.toFixed(2)}</strong> SLA penalty violation, yielding a net profit savings gain of <strong>+$${profitSavings}</strong> over inaction.` 
-                        : `SLA delay risk liability is lower than the expedited freight cost. Standard fulfillment yields the highest expected net profit margin of <strong>$${fin.expected_profit.toFixed(2)}</strong> vs <strong>$${fin.expected_profit_with_intervention.toFixed(2)}</strong>.`
-                    }
                 </div>
             </div>
 
-            <div style="background:var(--bg3); padding:0.65rem 0.8rem; border-radius:var(--radius); border:1px solid var(--border); font-family:var(--mono); font-size:0.68rem; margin-bottom:0.8rem; color:var(--text2); line-height:1.6;">
-                <div style="font-weight:700; color:var(--text); margin-bottom:4px; font-family:var(--body); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.03em;">Optimization Logic Breakdown</div>
-                <div>• Exp. Profit (No Action) = $${fin.profit.toFixed(2)} - (${probPct}% × $${fin.penalty_loss.toFixed(2)}) = <strong style="color:${fin.expected_profit < 0 ? 'var(--red)' : 'var(--teal)'};">$${fin.expected_profit.toFixed(2)}</strong></div>
-                <div>• Exp. Profit (Expedited) = $${fin.profit.toFixed(2)} - Expedite Fee = <strong style="color:${fin.expected_profit_with_intervention < 0 ? 'var(--red)' : 'var(--teal)'};">$${fin.expected_profit_with_intervention.toFixed(2)}</strong></div>
-                <div style="margin-top:3px; color:var(--text3);">→ <strong>Optimal Strategy:</strong> ${isInterventionRec ? 'Expedite Freight (+$' + profitSavings + ' net ROI)' : 'Absorb Risk (Avoids unnecessary expedite expense)'}</div>
-            </div>
-
-            <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
-                <span class="tech-tag">RandomForest v3.0</span>
-                <span class="tech-tag">71.9% Validation AUC</span>
-                <span class="tech-tag">SHAP TreeExplainer</span>
-                <span class="tech-tag">Prescriptive Optimization</span>
+            <!-- Strategy Formula & Technical Meta -->
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem; margin-top:0.85rem; padding-top:0.65rem; border-top:1px solid var(--border);">
+                <span style="font-size:0.7rem; color:var(--text3);">Decision Rule: <code>Expected Profit (No Action) &lt; Expected Profit (Expedited)</code></span>
+                <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+                    <span class="tech-tag">RandomForest v3.0</span>
+                    <span class="tech-tag">71.9% AUC</span>
+                    <span class="tech-tag">SHAP TreeExplainer</span>
+                </div>
             </div>
         </div>
     `;

@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/styles.css?v=3.3.0">
+  <link rel="stylesheet" href="/static/css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   <script src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
   <link rel="icon" type="image/jpeg" href="/static/favicon.jpg?v=3">
@@ -246,15 +246,29 @@
 
     <!-- MAIN DASHBOARD CONTENT -->
     <div class="two-col">
-      <!-- LEFT COLUMN: Primary Prediction Verdict, Financials & Timeline -->
+      <!-- LEFT COLUMN: Primary Prediction Verdict & Timeline -->
       <div>
         <h3 class="form-section-title">Prediction Output</h3>
         
         <!-- Verdict Card (Risk % Donut Ring & Verdict Badge) -->
-        <div id="verdictContainer"></div>
-        
-        <!-- Scenario Financial Analysis -->
-        <div id="financialContainer"></div>
+        <div id="verdictContainer">
+          <div class="glass-card verdict-card high-risk">
+            <div class="verdict-ring">
+              <svg viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="70" fill="none" stroke="var(--border2)" stroke-width="12"/>
+                <circle cx="80" cy="80" r="70" fill="none" stroke="var(--red)" stroke-width="12"
+                  stroke-dasharray="440" stroke-dashoffset="118.8" stroke-linecap="round"
+                  style="transition:stroke-dashoffset 1s ease-out;transform:rotate(-90deg);transform-origin:center;"/>
+              </svg>
+              <div class="verdict-ring-value" style="color:var(--red);">73%</div>
+            </div>
+            <div class="verdict-info">
+              <div class="verdict-label" style="color:var(--red);">HIGH RISK</div>
+              <div class="verdict-title">Risk Probability: 73%</div>
+              <div class="verdict-subtitle">Predicted to violate SLA delivery windows</div>
+            </div>
+          </div>
+        </div>
 
         <!-- Delivery Timeline Projection Chart -->
         <div class="glass-card chart-card">
@@ -263,9 +277,61 @@
         </div>
       </div>
       
-      <!-- RIGHT COLUMN: Explainable AI & Decision Drivers -->
+      <!-- RIGHT COLUMN: Prescriptive Strategy & Decision Intelligence -->
       <div>
-        <h3 class="form-section-title">Decision Intelligence</h3>
+        <h3 class="form-section-title">Prescriptive Intelligence</h3>
+
+        <!-- Dynamic Prescriptive Decision Strategy & 4-Metric Financial Grid -->
+        <div id="financialContainer">
+          <div class="glass-card form-card prescriptive-result-card" style="margin-bottom: 1.25rem;">
+            <div class="card-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+              <span>Prescriptive Strategy &amp; Decision</span>
+              <span class="prescriptive-badge badge-absorb">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>ABSORB OPERATIONAL RISK
+              </span>
+            </div>
+            
+            <!-- Executive Prescriptive Action Callout -->
+            <div class="prescriptive-action-box box-absorb">
+              <div class="prescriptive-action-header">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Action: Maintain Standard Fulfillment
+              </div>
+              <div class="prescriptive-action-desc">
+                SLA delay liability is lower than the expedited freight cost. Standard shipping yields the highest expected net profit margin of <strong>-$7.38</strong>.
+              </div>
+            </div>
+
+            <!-- 4-Metric Financial Breakdown Grid -->
+            <div class="financial-grid" style="grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); margin-top: 0.85rem; gap: 0.65rem;">
+              <div class="financial-item">
+                <div class="financial-label">Base Order Profit</div>
+                <div class="financial-value" style="color:var(--text); font-size:1.05rem;">$20.00</div>
+              </div>
+              <div class="financial-item">
+                <div class="financial-label">Penalty Loss Liability</div>
+                <div class="financial-value" style="color:var(--red); font-size:1.05rem;">-$37.50</div>
+              </div>
+              <div class="financial-item">
+                <div class="financial-label">Exp. Profit (No Action)</div>
+                <div class="financial-value" style="color:var(--red); font-size:1.05rem;">-$7.38</div>
+              </div>
+              <div class="financial-item" style="border: 1px solid var(--border); background: var(--bg3);">
+                <div class="financial-label">Exp. Profit (Expedited)</div>
+                <div class="financial-value" style="color:var(--red); font-size:1.05rem;">-$30.00</div>
+              </div>
+            </div>
+
+            <!-- Strategy Formula & Technical Meta -->
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem; margin-top:0.85rem; padding-top:0.65rem; border-top:1px solid var(--border);">
+              <span style="font-size:0.7rem; color:var(--text3);">Decision Rule: <code>Expected Profit (No Action) &lt; Expected Profit (Expedited)</code></span>
+              <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+                <span class="tech-tag">RandomForest v3.0</span>
+                <span class="tech-tag">71.9% AUC</span>
+                <span class="tech-tag">SHAP TreeExplainer</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- Top Risk Factor Drivers (SHAP) -->
         <div class="glass-card chart-card">
@@ -275,9 +341,6 @@
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg><strong>Driver Impact:</strong> <span style="color:var(--red);font-weight:600;">Red columns (+)</span> elevate late delivery probability; <span style="color:var(--green);font-weight:600;">Green columns (-)</span> pull probability down towards on-time fulfillment.
           </div>
         </div>
-
-        <!-- Dynamic Prescriptive Decision Strategy Container -->
-        <div id="prescriptiveContainer"></div>
       </div>
     </div>
   </div>
@@ -620,6 +683,6 @@
     </button>
   </nav>
 
-<script src="/static/js/app.js?v=3.3.0"></script>
+<script src="/static/js/app.js"></script>
 </body>
 </html>
