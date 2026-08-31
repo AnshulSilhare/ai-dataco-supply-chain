@@ -589,7 +589,7 @@ function renderFinancials(fin) {
     if (!container) return;
 
     container.innerHTML = `
-        <div class="glass-card form-card prescriptive-result-card" style="margin-bottom: 1rem;">
+        <div class="glass-card form-card prescriptive-result-card" style="margin-bottom: 1.25rem;">
             <div class="card-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
                 <span>Prescriptive Strategy & Decision</span>
                 <span class="prescriptive-badge ${isInterventionRec ? 'badge-intervene' : 'badge-absorb'}">
@@ -597,19 +597,26 @@ function renderFinancials(fin) {
                 </span>
             </div>
             
+            <!-- Executive Prescriptive Action Callout -->
             <div class="prescriptive-action-box ${isInterventionRec ? 'box-intervene' : 'box-absorb'}">
+                <div class="prescriptive-action-tag">EXECUTIVE PRESCRIPTIVE ACTION CALLOUT</div>
                 <div class="prescriptive-action-header">
-                    ${isInterventionRec ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Action: Expedite Shipping Freight' : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Action: Maintain Standard Fulfillment'}
+                    ${isInterventionRec ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:6px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Action: Expedite Shipping Freight' : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:6px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Action: Maintain Standard Fulfillment'}
                 </div>
                 <div class="prescriptive-action-desc">
                     ${isInterventionRec 
-                        ? `Expedited freight protects <strong>$${fin.sales.toFixed(2)}</strong> order revenue from a potential <strong>$${fin.penalty_loss.toFixed(2)}</strong> SLA violation penalty, delivering a net profit gain of <strong>+$${profitSavings}</strong> over inaction.` 
+                        ? `Expedited freight fee protects <strong>$${fin.sales.toFixed(2)}</strong> order revenue from a potential <strong>$${fin.penalty_loss.toFixed(2)}</strong> SLA violation penalty, delivering a net profit gain of <strong>+$${profitSavings}</strong> over inaction.` 
                         : `SLA delay liability is lower than the expedited freight cost. Standard shipping yields the highest expected net profit margin of <strong>$${fin.expected_profit.toFixed(2)}</strong>.`
                     }
                 </div>
             </div>
 
-            <div class="financial-grid" style="grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); margin-top: 0.85rem; gap: 0.65rem;">
+            <!-- 4-Metric Financial Breakdown Grid -->
+            <div class="prescriptive-grid-title">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span>4-Metric Financial Breakdown</span>
+            </div>
+            <div class="financial-grid" style="grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); gap: 0.65rem;">
                 <div class="financial-item">
                     <div class="financial-label">Base Order Profit</div>
                     <div class="financial-value" style="color:var(--text); font-size:1.05rem;">$${fin.profit.toFixed(2)}</div>

@@ -1513,28 +1513,69 @@ body.dark .brief-drivers .tech-tag {
 
 .prescriptive-action-box {
   border-radius: var(--radius);
-  padding: 0.75rem 0.9rem;
-  margin-top: 0.5rem;
+  padding: 0.85rem 1rem;
+  margin-top: 0.6rem;
   font-size: 0.8rem;
-  line-height: 1.5;
+  line-height: 1.55;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.prescriptive-action-tag {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+  display: inline-block;
+}
+
+.box-intervene .prescriptive-action-tag {
+  color: var(--teal);
+}
+
+.box-absorb .prescriptive-action-tag {
+  color: var(--amber);
 }
 
 .box-intervene {
-  background: rgba(13, 148, 136, 0.08);
+  background: rgba(13, 148, 136, 0.09);
   border-left: 3px solid var(--teal);
+  border-top: 1px solid rgba(13, 148, 136, 0.18);
+  border-right: 1px solid rgba(13, 148, 136, 0.18);
+  border-bottom: 1px solid rgba(13, 148, 136, 0.18);
   color: var(--text2);
 }
 
 .box-absorb {
-  background: rgba(217, 119, 6, 0.08);
+  background: rgba(217, 119, 6, 0.09);
   border-left: 3px solid var(--amber);
+  border-top: 1px solid rgba(217, 119, 6, 0.18);
+  border-right: 1px solid rgba(217, 119, 6, 0.18);
+  border-bottom: 1px solid rgba(217, 119, 6, 0.18);
   color: var(--text2);
 }
 
 .prescriptive-action-header {
+  font-size: 0.88rem;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+}
+
+.prescriptive-grid-title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text3);
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 /* 21. Batch Info Box (.info-box) */
