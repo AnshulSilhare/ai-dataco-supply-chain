@@ -2426,6 +2426,25 @@ body.dark .chevron-icon {
     font-size: 0.74rem !important;
   }
 
+  .prescriptive-action-box {
+    padding: 0.65rem 0.75rem !important;
+    margin-top: 0.45rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .prescriptive-action-header {
+    font-size: 0.82rem !important;
+  }
+
+  .prescriptive-action-tag {
+    font-size: 0.54rem !important;
+  }
+
+  .prescriptive-grid-title {
+    font-size: 0.6rem !important;
+    margin-top: 0.75rem !important;
+  }
+
   .financial-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 0.45rem !important;
